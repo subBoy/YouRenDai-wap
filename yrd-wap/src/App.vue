@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @touchmove.prevent>
     <keep-alive>
       <router-view></router-view>
     </keep-alive>

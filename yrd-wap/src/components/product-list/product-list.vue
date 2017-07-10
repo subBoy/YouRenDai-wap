@@ -3,11 +3,16 @@
     <div class="product-grounp">
       <m-header :titleTxt="titleTxt" :isIndex="isIndex"></m-header>
       <div class="product-wrapper">
-        <scroll class="product-body" :data="nowDataList" :probe-type="probeType" :pullup="pullup" :listen-scroll="listenScroll" @touchend="startLoad">
+        <scroll ref="productBody"
+                class="product-body"
+                :data="productList"
+                :pullup="pullup"
+                @scrollToEnd="startLoad"
+        >
           <div class="product-body-wr">
             <div class="list-top"></div>
             <div class="list-box">
-              <div class="pro-list" v-for="(item, index) in nowDataList">
+              <div class="pro-list" v-for="item in productList">
                 <div class="list-tit">
                   <a class="pro-name">{{item.project_name}}</a>
                   <div class="table">
@@ -31,12 +36,9 @@
                   </li>
                 </ul>
               </div>
-            </div>
-            <div class="loading-wrapper">
-              <loading :title="loadTitle" v-show="loadingState"></loading>
+              <loading :title="loadTitle" v-show="hasMore"></loading>
             </div>
           </div>
-          <loading v-show="!nowDataList.length"></loading>
         </scroll>
       </div>
       <tab></tab>
@@ -51,112 +53,123 @@
   import Tab from 'components/tab/tab'
   import {getProjectList} from 'api/product'
 
-  const DATA_LEN = 10
+  const DATA_LEN = 5
 
   export default {
     data () {
       return {
+        page: 1,
+        pullup: true,
+        hasMore: true,
         titleTxt: '列表页',
-        loadTitle: '松手加载更多...',
+        loadTitle: '正在加载更多...',
         isIndex: false,
-        productList: [],
-        nowDataList: [],
-        loadingState: false,
-        proPage: 0,
-        nowPage: 0
+        productList: []
       }
     },
     created () {
-      this.probeType = 3
-      this.listenScroll = true
-      this.pullup = true
-      this._getProjectList(1, DATA_LEN)
+      this._getProjectList()
     },
     methods: {
-      _getProjectList (page, row) {
-        getProjectList(page, row).then((res) => {
-          this.productList = []
-          this.productList = res.rows
-          this.proPage = Math.ceil(res.cnt / DATA_LEN)
+      _getProjectList () {
+        this.page = 1
+        this.hasMore = true
 
-          /**
-             * projects[i].caozuo
-             * qidai  期待中
-             * ok   终审完成，可投资
-             * overdue  结束不可投资
-             * checking  复核中
-             * repayment  还款中
-             * finishd   结束
-             */
-
-          let _this = this
-          for (let i = 0; i < _this.productList.length; i++) {
-            let obj = {}
-
-            switch (_this.productList[i].caozuo) {
-              case 'qidai':
-                obj = {
-                  btnTxt: '敬请期待',
-                  btnClass: false,
-                  surplus: 0
-                }
-                break
-              case 'ok':
-                obj = {
-                  btnTxt: '去加入',
-                  btnClass: true,
-                  surplus: _this.productList[i].current_finance_money - _this.productList[i].investMoney
-                }
-                break
-              case 'overdue':
-                obj = {
-                  btnTxt: '已结束',
-                  btnClass: false,
-                  surplus: 0
-                }
-                break
-              case 'checking':
-                obj = {
-                  btnTxt: '复核中',
-                  btnClass: false,
-                  surplus: 0
-                }
-                break
-              case 'repayment':
-                obj = {
-                  btnTxt: '还款中',
-                  btnClass: false,
-                  surplus: 0
-                }
-                break
-              case 'finishd':
-                obj = {
-                  btnTxt: '已结束',
-                  btnClass: false,
-                  surplus: 0
-                }
-                break
-              default:
-                obj = {
-                  btnTxt: '去加入',
-                  btnClass: true,
-                  surplus: _this.productList[i].current_finance_money - _this.productList[i].investMoney
-                }
-            }
-            _this.productList[i] = Object.assign(_this.productList[i], obj)
-            _this.nowDataList.push(_this.productList[i])
-          }
-
-          this.nowPage = this.nowPage - 0 + 1
+        getProjectList(this.page, DATA_LEN).then((res) => {
+          this.productList = this._genResult(res.rows)
+          this._checkMore(res)
         })
       },
       startLoad () {
-        if (this.nowPage < this.proPage) {
-          let _page = this.nowPage - 0 + 1
-          this._getProjectList(_page, DATA_LEN)
-        } else {
-          return false
+        if (!this.hasMore) {
+          return
         }
+        this.page++
+        getProjectList(this.page, DATA_LEN).then((res) => {
+          this.productList = this.productList.concat(this._genResult(res.rows))
+          this._checkMore(res)
+        })
+      },
+      _genResult (data) {
+        let ret = []
+        /**
+           * projects[i].caozuo
+           * qidai  期待中
+           * ok   终审完成，可投资
+           * overdue  结束不可投资
+           * checking  复核中
+           * repayment  还款中
+           * finishd   结束
+           */
+        for (let i = 0; i < data.length; i++) {
+          let obj = {}
+
+          switch (data[i].caozuo) {
+            case 'qidai':
+              obj = {
+                btnTxt: '敬请期待',
+                btnClass: false,
+                surplus: 0
+              }
+              break
+            case 'ok':
+              obj = {
+                btnTxt: '去加入',
+                btnClass: true,
+                surplus: data[i].current_finance_money - data[i].investMoney
+              }
+              break
+            case 'overdue':
+              obj = {
+                btnTxt: '已结束',
+                btnClass: false,
+                surplus: 0
+              }
+              break
+            case 'checking':
+              obj = {
+                btnTxt: '复核中',
+                btnClass: false,
+                surplus: 0
+              }
+              break
+            case 'repayment':
+              obj = {
+                btnTxt: '还款中',
+                btnClass: false,
+                surplus: 0
+              }
+              break
+            case 'finishd':
+              obj = {
+                btnTxt: '已结束',
+                btnClass: false,
+                surplus: 0
+              }
+              break
+            default:
+              obj = {
+                btnTxt: '去加入',
+                btnClass: true,
+                surplus: data[i].current_finance_money - data[i].investMoney
+              }
+          }
+          data[i] = Object.assign(data[i], obj)
+          ret.push(data[i])
+        }
+
+        return ret
+      },
+      _checkMore (data) {
+        const rows = data.rows
+        if (!rows.length || (this.productList.length >= data.cnt)) {
+          this.hasMore = false
+        }
+      }
+    },
+    watch: {
+      productList () {
+        this.$forceUpdate()
       }
     },
     components: {
