@@ -3,16 +3,15 @@
     <div class="product-grounp">
       <m-header :titleTxt="titleTxt" :isIndex="isIndex"></m-header>
       <div class="product-wrapper">
-        <scroll ref="productBody"
-                class="product-body"
-                :data="productList"
-                :pullup="pullup"
-                @scrollToEnd="startLoad"
+        <scroll class="product-body"
+          :data="productList"
+          :pullup="pullup"
+          @scrollToEnd="startLoad"
         >
           <div class="product-body-wr">
             <div class="list-top"></div>
             <div class="list-box">
-              <div class="pro-list" v-for="item in productList">
+              <div class="pro-list" v-for="(item, index) in productList">
                 <div class="list-tit">
                   <a class="pro-name">{{item.project_name}}</a>
                   <div class="table">
@@ -154,8 +153,8 @@
                 surplus: data[i].current_finance_money - data[i].investMoney
               }
           }
-          data[i] = Object.assign(data[i], obj)
-          ret.push(data[i])
+
+          ret.push(Object.assign(data[i], obj))
         }
 
         return ret
@@ -165,11 +164,6 @@
         if (!rows.length || (this.productList.length >= data.cnt)) {
           this.hasMore = false
         }
-      }
-    },
-    watch: {
-      productList () {
-        this.$forceUpdate()
       }
     },
     components: {

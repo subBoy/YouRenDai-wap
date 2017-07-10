@@ -3,7 +3,7 @@ import axios from 'axios'
 const debug = process.env.NODE_ENV !== 'production'
 let url = ''
 
-export function getNoticeList () {
+export function getNoticeList (page, rows) {
   if (debug) {
     url = '/api/getNoticeList'
   } else {
@@ -12,8 +12,8 @@ export function getNoticeList () {
 
   const data = Object.assign({}, {
     cmd: 'wapNotice',
-    page: 1,
-    rows: 10
+    page,
+    rows
   })
 
   return axios.get(url, {

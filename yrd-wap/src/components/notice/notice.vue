@@ -3,7 +3,11 @@
     <div class="tran-ani">
       <m-header :titleTxt="titleTxt" :isShow="isShow" :isIndex="isIndex"></m-header>
       <div class="notice-wrapper" ref="noticeWrapper">
-        <scroll class="notice-content" :data="nowList" :listen-scroll="listenScroll" :probe-type="probeType" @scroll="loadData" @touchend="startLoad">
+        <scroll class="notice-content"
+          :data="nowList"
+          :pullup="pullup"
+          @scrollToEnd="startLoad"
+        >
           <div class="notice-group">
             <div class="notice-list">
               <a class="notice-item border-1px" v-for="(item, index) in nowList" ref="noticeItem" :href="item.content_url">
@@ -14,9 +18,8 @@
                 <p class="time">{{item.create_date}}</p>
               </a>
             </div>
-            <loading :title="loadTitle" v-show="loadingState"></loading>
+            <loading :title="loadTitle" v-show="hasMore"></loading>
           </div>
-          <loading v-show="!nowList.length"></loading>
         </scroll>
       </div>
     </div>
@@ -34,92 +37,68 @@
   export default {
     data () {
       return {
+        page: 1,
+        pullup: true,
+        hasMore: true,
         titleTxt: '公告列表',
         loadTitle: '松手加载更多...',
         isShow: false,
         isIndex: false,
-        noticeList: [],
-        nowList: [],
-        loadingState: false,
-        proHeight: 0,
-        clientHeight: 0,
-        proPage: 0,
-        nowPage: 0,
-        scrollY: 0
+        nowList: []
       }
     },
     created () {
-      this.probeType = 3
-      this.listenScroll = true
-      this._getNoticeList(1, DATA_LEN)
+      this._getNoticeList()
     },
     methods: {
-      _getNoticeList (page, row) {
-        getNoticeList(page, row).then((res) => {
-          this.noticeList = res.notice
-          this.proPage = Math.ceil(res.size / DATA_LEN)
-
-          let _this = this
-          for (let i = 0; i < _this.noticeList.length; i++) {
-            let obj = {}
-
-            let formatTxt = _this.noticeList[i].content_title
-            if (formatTxt.indexOf('【') === 0 && formatTxt.indexOf('】') !== 0) {
-              obj = {
-                formatTitle: formatTxt.substr(0, formatTxt.indexOf('】') + 1),
-                formatDesc: formatTxt.substr(formatTxt.indexOf('】') + 1)
-              }
-            } else {
-              obj = {
-                formatTitle: '',
-                formatDesc: formatTxt
-              }
-            }
-
-            _this.noticeList[i] = Object.assign(_this.noticeList[i], obj)
-            _this.nowList.push(_this.noticeList[i])
-          }
-          console.log(_this.nowList)
-          this.nowPage = this.nowPage - 0 + 1
-          this.scrollY = 0
+      _getNoticeList () {
+        this.page = 1
+        this.hasMore = true
+        getNoticeList(this.page, DATA_LEN).then((res) => {
+          this.nowList = this._genResult(res.notice)
+          this._checkMore(res)
         })
       },
       startLoad () {
-        if (this.scrollY >= 100) {
-          if (this.nowPage < this.proPage) {
-            let _page = this.nowPage - 0 + 1
-            this._getNoticeList(_page, DATA_LEN)
-          }
-        } else {
+        if (!this.hasMore) {
           return
         }
+
+        this.page++
+        getNoticeList(this.page, DATA_LEN).then((res) => {
+          this.nowList = this.nowList.concat(this._genResult(res.notice))
+          this._checkMore(res)
+        })
       },
-      loadData (pos) {
-        let btY = -pos.y
-        let intervalY = this.proHeight - this.clientHeight
-        this.scrollY = btY - intervalY
-        if (this.scrollY >= 50) {
-          if (this.nowPage === this.proPage) {
-            this.loadTitle = '已全部加载完毕！'
+      _genResult (data) {
+        let ret = []
+
+        for (let i = 0; i < data.length; i++) {
+          let obj = {}
+
+          let formatTxt = data[i].content_title
+          if (formatTxt.indexOf('【') === 0 && formatTxt.indexOf('】') !== 0) {
+            obj = {
+              formatTitle: formatTxt.substr(0, formatTxt.indexOf('】') + 1),
+              formatDesc: formatTxt.substr(formatTxt.indexOf('】') + 1)
+            }
+          } else {
+            obj = {
+              formatTitle: '',
+              formatDesc: formatTxt
+            }
           }
-          this.loadingState = true
-        } else {
-          this.loadingState = false
+
+          ret.push(Object.assign(data[i], obj))
         }
-      }
-    },
-    watch: {
-      noticeList () {
-        setTimeout(() => {
-          let _this = this
-          let height = 0
-          this.clientHeight = this.$refs.noticeWrapper.clientHeight
-          for (let i = 0; i < _this.$refs.noticeItem.length; i++) {
-            let item = _this.$refs.noticeItem[i]
-            height += (item.clientHeight - 0)
-          }
-          this.proHeight = height
-        }, 20)
+
+        return ret
+      },
+      _checkMore (data) {
+        const rows = data.notice
+        if (!rows.length || (this.nowList.length >= data.size)) {
+          this.hasMore = false
+        }
       }
     },
     components: {

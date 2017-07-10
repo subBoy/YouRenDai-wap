@@ -3,7 +3,7 @@ import axios from 'axios'
 const debug = process.env.NODE_ENV !== 'production'
 let url = ''
 
-export function getProjectList (page, row) {
+export function getProjectList (page, rows) {
   if (debug) {
     url = '/api/getProjectList'
   } else {
@@ -12,8 +12,8 @@ export function getProjectList (page, row) {
 
   const data = Object.assign({}, {
     cmd: 'commonProject201702',
-    page: page,
-    rows: row
+    page,
+    rows
   })
 
   return axios.get(url, {
