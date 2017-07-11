@@ -2,9 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Recommend from 'components/recommend/recommend'
-import Singer from 'components/singer/singer'
-import Rank from 'components/rank/rank'
-import Search from 'components/search/search'
+import Assets from 'components/assets/assets'
+import Usercenter from 'components/user-center/user-center'
 import Notice from 'components/notice/notice'
 import Productlist from 'components/product-list/product-list'
 
@@ -21,16 +20,12 @@ export default new Router({
       component: Recommend
     },
     {
-      path: '/singer',
-      component: Singer
+      path: '/assets',
+      component: Assets
     },
     {
-      path: '/rank',
-      component: Rank
-    },
-    {
-      path: '/search',
-      component: Search
+      path: '/user-center',
+      component: Usercenter
     },
     {
       path: '/notice',

@@ -1,42 +1,35 @@
 <template>
   <transition name="slide">
-    <div class="product-grounp">
+    <div class="product-wrapper">
       <m-header :titleTxt="titleTxt" :isIndex="isIndex"></m-header>
-      <div class="product-wrapper">
-        <scroll class="product-body"
+      <div class="product">
+        <scroll class="product-scroll"
           :data="productList"
           :pullup="pullup"
-          @scrollToEnd="startLoad"
+          @scrollToEnd="loadMore"
         >
-          <div class="product-body-wr">
-            <div class="list-top"></div>
-            <div class="list-box">
-              <div class="pro-list" v-for="(item, index) in productList">
-                <div class="list-tit">
-                  <a class="pro-name">{{item.project_name}}</a>
-                  <div class="table">
-                    <span class="txt">中秋专享</span>
+          <div class="product-grounp">
+            <div class="banner"></div>
+            <ul class="product-list">
+              <li class="product-item" v-for="(item, index) in productList">
+                <h3 class="name">{{item.project_name}} <span class="label">中秋专享</span></h3>
+                <div class="item-info">
+                  <div class="rate-info">
+                    <p class="txt">预期年化收益</p>
+                    <p class="rate-desc">{{item.year_rate}}<span class="muti">%</span></p>
+                  </div>
+                  <div class="loan-info">
+                    <p class="txt">借款期限</p>
+                    <p class="loan-desc"><span class="month">{{item.loanTerm}}</span>个月</p>
+                  </div>
+                  <div class="surplus-info">
+                    <p class="txt">剩余{{item.surplus}}元</p>
+                    <div class="detail-btn" :class="{'not-click': !item.btnClass}">{{item.btnTxt}}</div>
                   </div>
                 </div>
-                <ul class="list-ul">
-                  <li class="list-income">
-                    <p class="list-p1">预期年化收益</p>
-                    <p class="list-p2">{{item.year_rate}}<span class="muti">%</span></p>
-                  </li>
-                  <li>
-                    <p class="list-p1">借款期限</p>
-                    <p class="list-p3">{{(item.rongzilimit / 30).toFixed(0)}}个月</p>
-                  </li>
-                  <li>
-                    <p class="list-p1 styl">剩余{{item.surplus}}元</p>
-                    <div class="detail-btn" :class="{'not-click': !item.btnClass}">
-                      <span class="btn-txt">{{item.btnTxt}}</span>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <loading :title="loadTitle" v-show="hasMore"></loading>
-            </div>
+              </li>
+            </ul>
+            <loading :title="loadTitle" v-show="hasMore"></loading>
           </div>
         </scroll>
       </div>
@@ -47,9 +40,9 @@
 
 <script>
   import MHeader from 'components/m-header/m-header'
-  import Loading from 'base/loading/loading'
   import Scroll from 'base/scroll/scroll'
   import Tab from 'components/tab/tab'
+  import Loading from 'base/loading/loading'
   import {getProjectList} from 'api/product'
 
   const DATA_LEN = 5
@@ -57,12 +50,12 @@
   export default {
     data () {
       return {
-        page: 1,
+        titleTxt: '列表页',
+        loadTitle: '正在载入更多...',
+        isIndex: false,
         pullup: true,
         hasMore: true,
-        titleTxt: '列表页',
-        loadTitle: '正在加载更多...',
-        isIndex: false,
+        page: 1,
         productList: []
       }
     },
@@ -70,6 +63,17 @@
       this._getProjectList()
     },
     methods: {
+      loadMore () {
+        if (!this.hasMore) {
+          return
+        }
+
+        this.page++
+        getProjectList(this.page, DATA_LEN).then((res) => {
+          this.productList = this.productList.concat(this._genResult(res.rows))
+          this._checkMore(res)
+        })
+      },
       _getProjectList () {
         this.page = 1
         this.hasMore = true
@@ -79,84 +83,78 @@
           this._checkMore(res)
         })
       },
-      startLoad () {
-        if (!this.hasMore) {
-          return
-        }
-        this.page++
-        getProjectList(this.page, DATA_LEN).then((res) => {
-          this.productList = this.productList.concat(this._genResult(res.rows))
-          this._checkMore(res)
-        })
-      },
       _genResult (data) {
         let ret = []
         /**
-           * projects[i].caozuo
-           * qidai  期待中
-           * ok   终审完成，可投资
-           * overdue  结束不可投资
-           * checking  复核中
-           * repayment  还款中
-           * finishd   结束
-           */
+          * projects[i].caozuo
+          * qidai  期待中
+          * ok   终审完成，可投资
+          * overdue  结束不可投资
+          * checking  复核中
+          * repayment  还款中
+          * finishd   结束
+          **/
         for (let i = 0; i < data.length; i++) {
           let obj = {}
-
           switch (data[i].caozuo) {
             case 'qidai':
               obj = {
                 btnTxt: '敬请期待',
                 btnClass: false,
-                surplus: 0
+                surplus: 0,
+                loanTerm: (data[i].rongzilimit / 30).toFixed(0)
               }
               break
             case 'ok':
               obj = {
                 btnTxt: '去加入',
                 btnClass: true,
-                surplus: data[i].current_finance_money - data[i].investMoney
+                surplus: data[i].current_finance_money - data[i].investMoney,
+                loanTerm: (data[i].rongzilimit / 30).toFixed(0)
               }
               break
             case 'overdue':
               obj = {
                 btnTxt: '已结束',
                 btnClass: false,
-                surplus: 0
+                surplus: 0,
+                loanTerm: (data[i].rongzilimit / 30).toFixed(0)
               }
               break
             case 'checking':
               obj = {
                 btnTxt: '复核中',
                 btnClass: false,
-                surplus: 0
+                surplus: 0,
+                loanTerm: (data[i].rongzilimit / 30).toFixed(0)
               }
               break
             case 'repayment':
               obj = {
                 btnTxt: '还款中',
                 btnClass: false,
-                surplus: 0
+                surplus: 0,
+                loanTerm: (data[i].rongzilimit / 30).toFixed(0)
               }
               break
             case 'finishd':
               obj = {
                 btnTxt: '已结束',
                 btnClass: false,
-                surplus: 0
+                surplus: 0,
+                loanTerm: (data[i].rongzilimit / 30).toFixed(0)
               }
               break
             default:
               obj = {
                 btnTxt: '去加入',
                 btnClass: true,
-                surplus: data[i].current_finance_money - data[i].investMoney
+                surplus: data[i].current_finance_money - data[i].investMoney,
+                loanTerm: (data[i].rongzilimit / 30).toFixed(0)
               }
           }
-
           ret.push(Object.assign(data[i], obj))
         }
-
         return ret
       },
       _checkMore (data) {
@@ -168,9 +166,9 @@
     },
     components: {
       MHeader,
-      Loading,
       Scroll,
-      Tab
+      Tab,
+      Loading
     }
   }
 </script>
@@ -179,112 +177,103 @@
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 
-  .product-grounp
-    position: fixed
-    left: 0
-    top: 0
-    width: 100%
-    height: 100%
-    .product-wrapper
-      position: fixed
-      left: 0
-      right: 0
-      top: 45px
-      bottom: 50px
   .slide-enter-active, .slide-leave-active
     transition: all 0.3s
   .slide-enter, .slide-leave-to
     transform: translate3d(100%, 0, 0)
-  .product-body
-    height: 100%
-    overflow: hidden
-    .product-body-wr
-      position: relative
-      .list-top
-        margin-top: 5px
-        padding-top: 13%
-        bg-image('bank')
-        background-size: 100%
-      .list-box
-        padding-bottom: 5px
-      .loading-wrapper
-        position: absolute
+  .product-wrapper
+    position: fixed
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+    .product
+      position: absolute
+      top: 44px
+      right: 0
+      bottom: 50px
+      left: 0
+      .product-scroll
         width: 100%
-        left: 0
-        bottom: -50px
-      .pro-list
-        background: #fff
-        padding: 24px 20px
+        height: 100%
         overflow: hidden
-        margin-bottom: 5px
-      .list-tit
-        position: relative
-        overflow: hidden
-        padding-bottom: 20px
-        .pro-name
-          display: block
-          line-height: 14px
-          font-size: $font-size-small
-          color: $color-tle
-        .table
-          position: absolute
-          right: 0
-          top: 1px
-          width: 50px
-          height: 12px
-          bg-image('table')
-          background-size: 50px 12px
-          .txt
-            display: block
-            position: absolute
-            left: 0
-            top: 0
-            line-height: 24px
-            transform: scale(0.5) translate3d(-50%, -50%, 0)
-            width: 200%
-            text-align: center
-            font-size: $font-size-medium-x
-            color: $color-text
-          &.no-click
-            bg-image('c-table')
-      .list-ul
-        overflow: hidden
-        clear: both
-        li
-          float: left
-          width: 30%
-          .list-p1
-            font-size: $font-size-small
-            color: $color-q
-            &.styl
-              text-align: right
-          .list-p2
-            font-size: 36px
-            color: $color-theme
-            padding-top: 20px
-            .muti
-              font-size: $font-size-medium
-          .list-p3
-            font-size: $font-size-medium-x
-            color: $color-tle
-            padding-top: 35px
-          .detail-btn
-            float: right
-            margin-top: 25px
-            margin-right: -3px
-            width: 84px
-            height: 37px
-            bg-image('y-btn-bg')
-            background-size: 84px 37px
-            .btn-txt
-              display: block
-              width: 100%
-              line-height: 32px
-              text-align: center
-              color: $color-text
-              font-size: $font-size-medium
-            &.not-click
-              bg-image('n-btn-bg')
-          &.list-income
-            width: 40%
+        .product-grounp
+          padding-top: 5px
+          .banner
+            padding-top: 13%
+            bg-image('bank')
+            background-size: 100%
+          .product-list
+            padding-bottom: 1px
+            .product-item
+              margin-bottom: 5px
+              padding: 20px 20px 15px 20px
+              background-color: $color-text
+              &:last-child
+                margin-bottom: 4px
+              .name
+                position: relative
+                padding-right: 60px
+                line-height: 22px
+                height: 22px
+                color: $color-tle
+                font-size: 12px
+                .label
+                  display: block
+                  position: absolute
+                  right: 0
+                  top: 5px
+                  line-height: 24px
+                  width: 100px
+                  height: 24px
+                  font-size: $font-size-medium-x
+                  text-align: center
+                  bg-image('table')
+                  background-size: 100%
+                  color: $color-text
+                  transform: scale(0.5)
+                  transform-origin: 100% 0
+              .item-info
+                display: flex
+                .txt
+                  line-height: 42px
+                  color: $color-q
+                  font-size: $font-size-small
+                .rate-info
+                  flex: 1
+                  .rate-desc
+                    padding-top: 5px
+                    color: $color-theme
+                    font-size: 36px
+                    .muti
+                      font-size: $font-size-medium
+                .loan-info
+                  width: 60px
+                  flex: 0 0 60px
+                  font-size: 0
+                  .loan-desc
+                    padding-top: 20px
+                    line-height: 16px
+                    color: $color-tle
+                    font-size: $font-size-medium
+                    .month
+                      display: inline-block
+                      font-size: $font-size-medium-x
+                .surplus-info
+                  flex: 1
+                  text-align: right
+                  .detail-btn
+                    display: inline-block
+                    margin-top: 13px
+                    margin-right: -5px
+                    width: 84px
+                    height: 37px
+                    bg-image('y-btn-bg')
+                    background-size: 84px 37px
+                    line-height: 32px
+                    text-align: center
+                    color: $color-text
+                    font-size: $font-size-medium
+                    &.not-click
+                      bg-image('n-btn-bg')
 </style>

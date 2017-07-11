@@ -9,11 +9,11 @@
         <div class="tab-icon tab-icon-2"></div>
         <span class="tab-link">列表</span>
       </router-link>
-      <router-link tag="div" class="tab-item" to="/rank">
+      <router-link tag="div" class="tab-item" to="/assets">
         <div class="tab-icon tab-icon-3"></div>
         <span class="tab-link">资产</span>
       </router-link>
-      <router-link tag="div" class="tab-item" to="/search">
+      <router-link tag="div" class="tab-item" to="/user">
         <div class="tab-icon tab-icon-4"></div>
         <span class="tab-link">我的</span>
       </router-link>
@@ -48,7 +48,7 @@
           padding: 3px 0
           color: $color-tle
         .tab-icon
-          margin-top: 4px;
+          margin-top: 6px;
           height: 25px
           background-size: auto 28px
           background-position: center

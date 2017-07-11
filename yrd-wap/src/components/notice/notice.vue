@@ -2,7 +2,7 @@
   <transition name="slide">
     <div class="tran-ani">
       <m-header :titleTxt="titleTxt" :isShow="isShow" :isIndex="isIndex"></m-header>
-      <div class="notice-wrapper" ref="noticeWrapper">
+      <div class="notice-wrapper">
         <scroll class="notice-content"
           :data="nowList"
           :pullup="pullup"
