@@ -1,12 +1,18 @@
 <template>
-  <div class="m-header">
+  <div class="m-header" :class="{sign : isSignIn || isSignUp || isForget}" :style="bgColor">
     <div class="icon" :class="{black: isIndex}" @click="gobackAndNotice"></div>
     <h1 class="text">{{titleTxt}}</h1>
     <div v-if="isShow" class="right-core">
-      <div class="user-center" v-if="signIn">
+      <div class="user-center" v-if="signIned">
         <router-link tag="div" class="mine" to="/user">
           <i class="icon-mine"></i>
         </router-link>
+      </div>
+      <div class="sign" v-else-if="isSignIn">
+        <router-link tag="div" class="btns" to="/signUp">立即去注册</router-link>
+      </div>
+      <div class="sign" v-else-if="isSignUp">
+        <router-link tag="div" class="btns" to="/signIn">立即去登录</router-link>
       </div>
       <div class="sign" v-else>
         <router-link tag="div" class="btns" to="/signIn">登录</router-link>
@@ -21,7 +27,7 @@
   export default {
     props: {
       titleTxt: '',
-      signIn: {
+      signIned: {
         type: Boolean,
         default: false
       },
@@ -32,6 +38,27 @@
       isShow: {
         type: Boolean,
         default: true
+      },
+      isSignIn: {
+        type: Boolean,
+        default: false
+      },
+      isSignUp: {
+        type: Boolean,
+        default: false
+      },
+      isForget: {
+        type: Boolean,
+        default: false
+      },
+      opcity: {
+        type: Number,
+        default: 0
+      }
+    },
+    computed: {
+      bgColor () {
+        return `background-color: rgba(255, 255, 255, ${this.opcity})`
       }
     },
     methods: {
@@ -57,10 +84,16 @@
     color: $color-tle
     font-size: 0
     background-color: $color-text
+    z-index: 9999
+    &.sign
+      color: $color-text
+      background-color: $color-text-s
+      .icon
+         bg-image('b-fff')
     .icon
       extend-click()
       position: absolute
-      left: 12px
+      left: 15px
       top: 12px
       width: 20px
       height: 20px
@@ -76,16 +109,14 @@
     .sign
       position: absolute
       top: 0
-      right: 12px
+      right: 15px
       line-height: 44px
       .btns
         float: left
         font-size: $font-size-medium
-        color: $color-tle
       .hr
         float: left
         font-size: $font-size-medium
-        color: $color-tle
     .mine
       position: absolute
       top: 12px

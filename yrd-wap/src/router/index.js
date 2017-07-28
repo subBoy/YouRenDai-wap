@@ -6,6 +6,9 @@ import Assets from 'components/assets/assets'
 import Usercenter from 'components/user-center/user-center'
 import Notice from 'components/notice/notice'
 import Productlist from 'components/product-list/product-list'
+import SignIn from 'components/sign-in/sign-in'
+import SignUp from 'components/sign-up/sign-up'
+import Forget from 'components/forget/forget'
 
 Vue.use(Router)
 
@@ -34,6 +37,22 @@ export default new Router({
     {
       path: '/product-list',
       component: Productlist
+    },
+    {
+      path: '/signIn',
+      component: SignIn
+    },
+    {
+      path: '/signUp',
+      component: SignUp
+    },
+    {
+      path: '/signUp/:id',
+      component: SignUp
+    },
+    {
+      path: '/forget',
+      component: Forget
     }
   ]
 })

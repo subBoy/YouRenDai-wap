@@ -1,8 +1,8 @@
 <template>
   <div>
-    <m-header :titleTxt="titleTxt" :isIndex="isIndex"></m-header>
+    <m-header :titleTxt="titleTxt" :isIndex="isIndex" :opcity="opcity"></m-header>
     <div class="recommend">
-      <scroll class="recommend-content" ref="scroll" :data="disclist">
+      <scroll class="recommend-content" ref="scroll" :data="disclist" :listenScroll="listenScroll" :probeType="probeType" @scroll="scroll">
         <div>
           <div v-if="recommends.length" class="swiper-wrapper-c">
             <div class="swiper-content-c">
@@ -48,31 +48,26 @@
             </ul>
           </div>
           <router-link tag="div" class="recommed-new-user" to="/new-user-activity"></router-link>
-          <div v-if="disclist.length" class="slider-wrapper">
-            <div class="slider-content">
-              <slider ref="slider">
-                <div class="product-message-item swiper-slide" v-for="item in disclist">
-                  <span class="pro-bz">中秋<br/>专享</span>
-                  <h3 class="name">
-                    智甄投资
-                    <router-link class="list-btn" to="/product-list">查看更多</router-link>
-                  </h3>
-                  <p class="return"><span class="num">{{item.year_rate}}</span>%</p>
-                  <div class="info">
-                    <span class="desc">{{item.limit_month}}个月</span>
-                    <span class="desc">剩余{{item.balance}}元</span>
-                    <span class="desc">{{item.minimum_investment}}元起投</span>
+          <div class="project-wrapper">
+            <h3 class="name">智甄投资<router-link class="list-btn" to="/product-list">查看更多</router-link></h3>
+            <div v-if="disclist.length" class="slider-wrapper">
+              <div class="slider-content">
+                <slider ref="slider">
+                  <div class="product-message-item swiper-slide swiper-no-swiping" v-for="item in disclist">
+                    <span class="pro-bz">中秋<br/>专享</span>
+                    <p class="return"><span class="num">{{item.year_rate}}</span>%</p>
+                    <div class="info">
+                      <span class="desc">{{item.limit_month}}个月</span>
+                      <span class="desc">剩余{{item.balance}}元</span>
+                      <span class="desc">{{item.minimum_investment}}元起投</span>
+                    </div>
+                    <router-link tag="div" class="details-btn" to="/details">
+                      <span class="btn-txt">立即投资</span>
+                    </router-link>
                   </div>
-                  <router-link tag="div" class="details-btn" to="/details">
-                    <span class="btn-txt">立即投资</span>
-                  </router-link>
-                  <div class="next-btn"></div>
-                </div>
-              </slider>
+                </slider>
+              </div>
             </div>
-          </div>
-          <div class="slider-next-btn">
-            <span class="btn-bg" @click="nextPro"></span>
           </div>
           <div class="scroll-ft-desc">
             <p class="desc-txt">Copyright @ Reserved 2013 </p>
@@ -107,29 +102,32 @@
   export default {
     data () {
       return {
-        titleTxt: '有人贷',
+        titleTxt: '',
         isIndex: true,
+        listenScroll: true,
         recommends: [],
         disclist: [],
         checkLoaded: false,
         hbNum: 0,
-        newsNum: 0
+        newsNum: 0,
+        opcity: 0,
+        probeType: 3
       }
     },
     created () {
       this._getRecommendBanner()
       this._getRecommendPro()
     },
+    activated () {
+      this.$refs.scroll.refresh()
+    },
     methods: {
-      _getRecommendBanner () {
-        getRecommendBanner().then((res) => {
-          this.recommends = res.bannerList
-        })
-      },
-      _getRecommendPro () {
-        getRecommendPro().then((res) => {
-          this.disclist = res.allArray
-        })
+      scroll (pos) {
+        if (pos.y < 0) {
+          this.opcity = Math.abs(pos.y / 44)
+        } else {
+          this.opcity = 0
+        }
       },
       loadImage () {
         if (!this.checkLoaded) {
@@ -150,6 +148,16 @@
             location.href = 'http://www.yourendai.com/app_download/YouRenDai.apk'
           }
         };
+      },
+      _getRecommendBanner () {
+        getRecommendBanner().then((res) => {
+          this.recommends = res.bannerList
+        })
+      },
+      _getRecommendPro () {
+        getRecommendPro().then((res) => {
+          this.disclist = res.allArray
+        })
       }
     },
     components: {
@@ -169,7 +177,7 @@
   .recommend
     position: fixed
     width: 100%
-    top: 44px
+    top: 0
     bottom: 60px
     .recommend-content
       height: 100%
@@ -178,7 +186,7 @@
         position: relative
         width: 100%
         height: 0
-        padding-top: 42.5%
+        padding-top: 53%
         overflow: hidden
         background: $color-text
         .swiper-content-c
@@ -187,104 +195,111 @@
           left: 0
           width: 100%
           height: 100%
-      .slider-wrapper
-        position: relative
-        border-top: 5px solid $color-background
-        width: 100%
-        height: 220px
-        overflow: hidden
-        background: $color-text
-        .slider-content
-          position: absolute
-          top: 0
-          left: 0
-          width: 100%
-          height: 100%
-          .product-message-item
-            position: relative
+      .project-wrapper
+        .name
+          position: relative
+          line-height: 18px
+          padding: 10px 0 25px 0
+          font-size: $font-size-large
+          text-align: center
+          .list-btn
+            extend-click
+            position: absolute
+            right: 0
+            top: 10px
+            display: inline-block
+            width: auto
+            padding-right: 10px
+            margin-right: 18px
+            color: $color-q
+            font-size: $font-size-small-s
+            bg-image('more')
+            background-size: 8px 10px
+            background-position: right center
+        .slider-wrapper
+          position: relative
+          padding-bottom: 15px
+          margin: 0 15px
+          height: 170px
+          .slider-content
+            position: absolute
+            top: 0
+            left: 0
             width: 100%
-            .pro-bz
-              position: absolute
-              left: 20px
-              top: -4px
-              display: block
-              padding-top: 6px
-              line-height: 14px
-              width: 45px
-              height: 53px
-              bg-image('ic-n')
-              background-position: top center
-              background-size: 45px 53px
-              color: $color-text
-              font-size: $font-size-small-s
-              text-align: center
-            .name
+            height: 170px
+            background: $color-text
+            border-radius: 10px
+            box-shadow: 0px 5px 15px -4px #ccc
+            .product-message-item
               position: relative
-              line-height: 18px
-              padding: 30px 0
-              font-size: $font-size-large
+              width: 100%
               text-align: center
-              .list-btn
-                extend-click
+              margin-bottom: 1px
+              .pro-bz
                 position: absolute
-                right: 0
-                top: 30px
-                display: inline-block
-                width: auto
-                padding-right: 10px
-                margin-right: 18px
-                color: $color-q
-                font-size: $font-size-small-s
-                bg-image('more')
-                background-size: 8px 10px
-                background-position: right center
-            .return
-              padding-bottom: 25px
-              font-size: $font-size-medium
-              color: #fe7800
-              .num
-                font-size: 40px
-            .info
-              padding-bottom: 20px
-              font-size: 0
-              .desc
-                display: inline-block
-                padding: 0 10px
-                font-size: $font-size-small-s
-            .details-btn
-              position: relative
-              width: 50%
-              height: 0
-              margin: 0 auto
-              padding-top: 7%
-              bg-image('btn-bg')
-              background-size: 100% auto
-              .btn-txt
+                right: 20px
+                top: -4px
                 display: block
-                position: absolute
-                left: 0
-                top: 50%
-                width: 100%
-                transform: translate3d(0, -50%, 0)
-                font-size: $font-size-medium
+                padding-top: 6px
+                line-height: 14px
+                width: 45px
+                height: 53px
+                bg-image('ic-n')
+                background-position: top center
+                background-size: 45px 53px
                 color: $color-text
+                font-size: $font-size-small-s
                 text-align: center
-      .slider-next-btn
-        height: 45px
-        background-color: $color-text
-        .btn-bg
-          display: block
-          margin: 0 auto
-          extend-click()
-          width: 18px
-          height: 19px
-          bg-image('next')
-          background-size: 18px 19px
+              .name
+                position: relative
+                line-height: 18px
+                padding: 30px 0
+                font-size: $font-size-large
+                text-align: center
+                .list-btn
+                  extend-click
+                  position: absolute
+                  right: 0
+                  top: 30px
+                  display: inline-block
+                  width: auto
+                  padding-right: 20px
+                  color: $color-q
+                  font-size: $font-size-small-s
+              .return
+                padding: 25px 0
+                font-size: $font-size-medium
+                color: #fe7800
+                .num
+                  font-size: 40px
+              .info
+                padding-bottom: 20px
+                font-size: 0
+                .desc
+                  display: inline-block
+                  padding: 0 10px
+                  font-size: $font-size-small-s
+              .details-btn
+                position: relative
+                width: 50%
+                height: 0
+                margin: 0 auto
+                padding-top: 7%
+                bg-image('btn-bg')
+                background-size: 100% auto
+                .btn-txt
+                  display: block
+                  position: absolute
+                  left: 0
+                  top: 50%
+                  width: 100%
+                  transform: translate3d(0, -50%, 0)
+                  font-size: $font-size-medium
+                  color: $color-text
+                  text-align: center
       .scroll-ft-desc
-        padding: 16px 0
+        padding: 10px 0 20px 0
         text-align: center
-        background-color: $color-text
-        border-1px(#f0f0f0)
         .desc-txt
           width: 200%
           line-height: 16px
@@ -297,10 +312,16 @@
         top: 50%
         transform: translateY(-50%)
       .recommed-group
-        background-color: $color-text
-        padding-top: 10px
+        position: relative
+        z-index: 10
+        transform: translateY(-40%)
+        padding: 0 15px
         .recommed-group-list
+          background-color: $color-text
           display: flex
+          padding: 15px
+          border-radius: 10px
+          box-shadow: 0px 1px 15px -2px #ccc
           .recommed-group-item
             flex: 1
             text-align: center
@@ -339,17 +360,18 @@
               font-size: $font-size-small
               color: $color-tle
       .recommed-new-user
-        background-color: $color-text
-        padding-top: 40%
+        margin: 0 10px
+        margin-top: -8%;
+        padding-top: 27.2%
+        padding-bottom: 15px
         bg-image('new-user')
-        background-position: center
-        background-size: 86% auto
+        background-size: 100% auto
   .recommend-footer
     position: fixed
     left: 0
     bottom: 0
     width: 100%
-    box-shadow: 0px -1px 1px -1px #f0f0f0
+    box-shadow: 0px -1px 15px -2px #ccc
     height: 60px;
     background-color: $color-text
     .re-ft-item

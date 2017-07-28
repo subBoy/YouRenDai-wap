@@ -1,0 +1,91 @@
+<template>
+  <transition name="slide">
+    <div class="sign-wrapper">
+      <m-header :isSignIn="isSignIn"></m-header>
+      <sign
+        ref="sign"
+        :signBtnTxt="signBtnTxt"
+        :isSignIn="isSignIn"
+        :errTxt="errTxt"
+        :isImgVerify="isImgVerify"
+        @signMethods="signMethods"
+        @signErr="signErr"
+        @ifImgcode="ifImgcode"
+        @imgCodeOk="imgCodeOk"
+      ></sign>
+    </div>
+  </transition>
+</template>
+
+<script>
+  import MHeader from 'components/m-header/m-header'
+  import Sign from 'base/sign/sign'
+  import {encryption, compareEncrypt} from 'common/js/bcrypt'
+  import {encode64} from 'common/js/util'
+  import {signIn} from 'api/sign'
+
+  export default {
+    data() {
+      return {
+        isSignIn: true,
+        isImgVerify: false,
+        signBtnTxt: '立即登录',
+        errTxt: '',
+        userName: '',
+        password: ''
+      }
+    },
+    methods: {
+      signMethods (phoneNumber, passWord, _id, verificationCode, userType, imgVerify) {
+        // 加盐、加密
+        encryption(phoneNumber, (hash) => {
+          // this.userName = hash
+        })
+        // 匹配
+        compareEncrypt(passWord, this.password, (res) => {
+          // console.log(res)
+        })
+        signIn(encode64(phoneNumber), encode64(passWord), imgVerify).then((res) => {
+          if (res.flag) {
+            this.$router.push('/')
+          } else {
+            this.$refs.sign.changeVerify()
+            this.imgCodeOk()
+            this.signErr(res.msg)
+          }
+          console.log(res)
+        })
+      },
+      signErr (errTxt) {
+        this.errTxt = errTxt
+      },
+      ifImgcode () {
+        this.$refs.sign.needCode()
+      },
+      imgCodeOk () {
+        this.isImgVerify = true
+      }
+    },
+    components: {
+      MHeader,
+      Sign
+    }
+  }
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+  .slide-enter-active, .slide-leave-active
+    transition: all 0.3s
+  .slide-enter, .slide-leave-to
+    transform: translate3d(100%, 0, 0)
+    z-index: 100
+  .sign-wrapper
+    position: fixed
+    left: 0
+    top: 0
+    width: 100%
+    height: 100%
+    background-image: url(sign-bg.jpg)
+    background-repeat: no-repeat
+    background-size: cover
+</style>

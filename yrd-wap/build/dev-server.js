@@ -11,6 +11,7 @@ var express = require('express')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
+var bodyParser = require('body-parser')
 var axios = require('axios')
 
 // default port where dev server listens for incoming traffic
@@ -22,6 +23,9 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 var apiRoutes = express.Router()
 
@@ -78,6 +82,162 @@ apiRoutes.get('/getProjectList', function (req, res) {
       host: 'www.yourendai.com'
     },
     params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/checkTel', function (req, res) {
+  var url = 'http://119.80.183.190:8089/front/register.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: 'http://119.80.183.190:8089',
+      host: '119.80.183.190:8089'
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/getCode', function (req, res) {
+  var url = 'http://119.80.183.190:8089/front/register.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: 'http://119.80.183.190:8089',
+      host: '119.80.183.190:8089'
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/getRecommend', function (req, res) {
+  var url = 'http://119.80.183.190:8089/front/searchrecommend.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: 'http://119.80.183.190:8089',
+      host: '119.80.183.190:8089'
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/getImgCode', function (req, res) {
+  var url = 'http://119.80.183.190:8089/front/register.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: 'http://119.80.183.190:8089',
+      host: '119.80.183.190:8089'
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/signIn', function (req, res) {
+  var url = 'http://119.80.183.190:8089/front/register.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: 'http://119.80.183.190:8089',
+      host: '119.80.183.190:8089'
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/signUp', function (req, res) {
+  var url = 'http://119.80.183.190:8089/front/register.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: 'http://119.80.183.190:8089',
+      host: '119.80.183.190:8089'
+    }
   }).then((response) => {
     res.json(response.data)
   }).catch((e) => {

@@ -1,0 +1,101 @@
+<template>
+  <transition name="slide">
+    <div class="sign-wrapper">
+      <m-header :isSignUp="isSignUp"></m-header>
+      <sign
+        ref="sign"
+        :signBtnTxt="signBtnTxt"
+        :isSignUp="isSignUp"
+        :mdNum="mdNum"
+        :errTxt="errTxt"
+        @signMethods="signMethods"
+        @signErr="signErr"
+        @blurTel="blurTel"
+        @blurPassword="blurPassword"
+      ></sign>
+    </div>
+  </transition>
+</template>
+
+<script>
+  import MHeader from 'components/m-header/m-header'
+  import Sign from 'base/sign/sign'
+  import {encryption, compareEncrypt} from 'common/js/bcrypt'
+  import {checkTel, signUp} from 'api/sign'
+
+  export default {
+    data() {
+      return {
+        isSignUp: true,
+        signBtnTxt: '立即注册',
+        errTxt: '',
+        userName: '',
+        password: '',
+        mdNum: ''
+      }
+    },
+    methods: {
+      signMethods (phoneNumber, passWord, _id, verificationCode, userType, imgVerify) {
+        // 加盐、加密
+        encryption(phoneNumber, (hash) => {
+          // this.userName = hash
+        })
+        // 匹配
+        compareEncrypt(passWord, this.password, (res) => {
+          // console.log(res)
+        })
+
+        signUp(phoneNumber, verificationCode, _id, userType, passWord).then((res) => {
+          if (res.flag) {
+            this.$router.push('/')
+          } else {
+            this.signErr(res.msg)
+          }
+        })
+      },
+      signErr (errTxt) {
+        this.errTxt = errTxt
+      },
+      blurTel (tel) {
+        if (!this.$refs.sign._phone()) {
+          return
+        }
+
+        // 验证手机号
+        checkTel(tel).then((res) => {
+          if (!res.status) {
+            this.signErr(res.msg)
+          } else {
+            this.mdNum = res.mdNum
+          }
+          console.log(res)
+        })
+      },
+      blurPassword (password) {
+        if (!this.$refs.sign._password()) {
+          return
+        }
+      }
+    },
+    components: {
+      MHeader,
+      Sign
+    }
+  }
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+  .slide-enter-active, .slide-leave-active
+    transition: all 0.3s
+  .slide-enter, .slide-leave-to
+    transform: translate3d(100%, 0, 0)
+  .sign-wrapper
+    position: fixed
+    left: 0
+    top: 0
+    width: 100%
+    height: 100%
+    background-image: url(sign-bg.jpg)
+    background-repeat: no-repeat
+    background-size: cover
+</style>

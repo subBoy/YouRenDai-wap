@@ -1,41 +1,39 @@
 <template>
-  <transition name="slide">
-    <div class="product-wrapper">
-      <m-header :titleTxt="titleTxt" :isIndex="isIndex"></m-header>
-      <div class="product">
-        <scroll class="product-scroll"
-          :data="productList"
-          :pullup="pullup"
-          @scrollToEnd="loadMore"
-        >
-          <div class="product-grounp">
-            <div class="banner"></div>
-            <ul class="product-list">
-              <li class="product-item" v-for="(item, index) in productList">
-                <h3 class="name">{{item.project_name}} <span class="label">中秋专享</span></h3>
-                <div class="item-info">
-                  <div class="rate-info">
-                    <p class="txt">预期年化收益</p>
-                    <p class="rate-desc">{{item.year_rate}}<span class="muti">%</span></p>
-                  </div>
-                  <div class="loan-info">
-                    <p class="txt">借款期限</p>
-                    <p class="loan-desc"><span class="month">{{item.loanTerm}}</span>个月</p>
-                  </div>
-                  <div class="surplus-info">
-                    <p class="txt">剩余{{item.surplus}}元</p>
-                    <div class="detail-btn" :class="{'not-click': !item.btnClass}">{{item.btnTxt}}</div>
-                  </div>
+  <div class="product-wrapper">
+    <m-header :titleTxt="titleTxt" :isIndex="isIndex"></m-header>
+    <div class="product">
+      <scroll class="product-scroll"
+        :data="productList"
+        :pullup="pullup"
+        @scrollToEnd="loadMore"
+      >
+        <div class="product-grounp">
+          <div class="banner"></div>
+          <ul class="product-list">
+            <li class="product-item" v-for="(item, index) in productList">
+              <h3 class="name">{{item.project_name}} <span class="label">中秋专享</span></h3>
+              <div class="item-info">
+                <div class="rate-info">
+                  <p class="txt">预期年化收益</p>
+                  <p class="rate-desc">{{item.year_rate}}<span class="muti">%</span></p>
                 </div>
-              </li>
-            </ul>
-            <loading :title="loadTitle" v-show="hasMore"></loading>
-          </div>
-        </scroll>
-      </div>
-      <tab></tab>
+                <div class="loan-info">
+                  <p class="txt">借款期限</p>
+                  <p class="loan-desc"><span class="month">{{item.loanTerm}}</span>个月</p>
+                </div>
+                <div class="surplus-info">
+                  <p class="txt">剩余{{item.surplus}}元</p>
+                  <div class="detail-btn" :class="{'not-click': !item.btnClass}">{{item.btnTxt}}</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+          <loading :title="loadTitle" v-show="hasMore"></loading>
+        </div>
+      </scroll>
     </div>
-  </transition>
+    <tab></tab>
+  </div>
 </template>
 
 <script>
@@ -177,10 +175,6 @@
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 
-  .slide-enter-active, .slide-leave-active
-    transition: all 0.3s
-  .slide-enter, .slide-leave-to
-    transform: translate3d(100%, 0, 0)
   .product-wrapper
     position: fixed
     top: 0
