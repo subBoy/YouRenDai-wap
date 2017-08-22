@@ -4,6 +4,7 @@
       <div class="swiper-wrapper">
         <slot></slot>
       </div>
+      <div class="swiper-pagination"></div>
     </div>
   </div>
 </template>
@@ -28,10 +29,12 @@
         this.mySwiper = new Swiper('#swiper-x', {
           loop: true,
           autoplay: 40000,
-          slidesPerView: 'auto',
-          centeredSlides: !0,
-          watchSlidesProgress: !0,
-          paginationClickable: !0,
+          pagination: '.swiper-pagination',
+          // slidesPerView: 'auto',
+          // centeredSlides: !0,
+          // watchSlidesProgress: !0,
+          // paginationClickable: !0,
+          autoplayDisableOnInteraction: false,
           spaceBetween: 0
           // onProgress: function(a) {
           //   var b, c, d, scale, es
@@ -72,10 +75,21 @@
       -moz-transform-style: preserve-3d
       -ms-transform-style: preserve-3d
       transform-style: preserve-3d
-      .main-img
-        width: 100%
-        margin: 0 auto
+      .main-banner-link
         display: block
-        border-radius: 10px
-        box-shadow: 0 0 20px -1px #ccc
+        position: relative
+        padding-top: 53.333333%
+        width: 100%
+        height: 0
+        .main-img
+          position: absolute
+          top: 0
+          left: 0
+          height: 100%
+          width: 100%
+          margin: 0 auto
+          display: block
+          box-shadow: 0 0 20px -1px #ccc
+    .swiper-pagination-bullet-active
+      background-color: #fff
 </style>

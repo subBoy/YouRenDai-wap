@@ -1,18 +1,12 @@
 <template>
-  <div class="m-header" :class="{sign : isSignIn || isSignUp || isForget}" :style="bgColor">
+  <div class="m-header" :class="{colorIcon : whiteIcon}" :style="bgColor">
     <div class="icon" :class="{black: isIndex}" @click="gobackAndNotice"></div>
     <h1 class="text">{{titleTxt}}</h1>
     <div v-if="isShow" class="right-core">
       <div class="user-center" v-if="signIned">
-        <router-link tag="div" class="mine" to="/user">
+        <router-link tag="div" class="mine" to="/user-center">
           <i class="icon-mine"></i>
         </router-link>
-      </div>
-      <div class="sign" v-else-if="isSignIn">
-        <router-link tag="div" class="btns" to="/signUp">立即去注册</router-link>
-      </div>
-      <div class="sign" v-else-if="isSignUp">
-        <router-link tag="div" class="btns" to="/signIn">立即去登录</router-link>
       </div>
       <div class="sign" v-else>
         <router-link tag="div" class="btns" to="/signIn">登录</router-link>
@@ -20,17 +14,16 @@
         <router-link tag="div" class="btns" to="/signUp">注册</router-link>
       </div>
     </div>
+    <slot v-if="signIned || isSignIn || isSignUp"></slot>
   </div>
 </template>
 
 <script>
+  import {getLoginState} from 'api/sign'
+
   export default {
     props: {
       titleTxt: '',
-      signIned: {
-        type: Boolean,
-        default: false
-      },
       isIndex: {
         type: Boolean,
         default: false
@@ -51,10 +44,24 @@
         type: Boolean,
         default: false
       },
+      whiteIcon: {
+        type: Boolean,
+        default: false
+      },
       opcity: {
         type: Number,
         default: 0
       }
+    },
+    data () {
+      return {
+        signIned: true
+      }
+    },
+    created () {
+      setTimeout(() => {
+        this._getLoginState()
+      }, 20)
     },
     computed: {
       bgColor () {
@@ -64,10 +71,18 @@
     methods: {
       gobackAndNotice () {
         if (this.isIndex) {
-          this.$router.push('notice')
+          this.$router.push('/recommend/notice')
         } else {
           this.$router.back()
         }
+      },
+      _getLoginState () {
+        getLoginState().then((res) => {
+          console.log(res.isLogin)
+          if (res.isLogin === 'true') {
+            this.signIned = true
+          }
+        })
       }
     }
   }
@@ -84,8 +99,8 @@
     color: $color-tle
     font-size: 0
     background-color: $color-text
-    z-index: 9999
-    &.sign
+    z-index: 997
+    &.colorIcon
       color: $color-text
       background-color: $color-text-s
       .icon

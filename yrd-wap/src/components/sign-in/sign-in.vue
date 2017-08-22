@@ -1,7 +1,11 @@
 <template>
   <transition name="slide">
     <div class="sign-wrapper">
-      <m-header :isSignIn="isSignIn"></m-header>
+      <m-header :isSignIn="isSignIn">
+        <div class="sign">
+          <router-link tag="div" class="btns" to="/signUp">立即去注册</router-link>
+        </div>
+      </m-header>
       <sign
         ref="sign"
         :signBtnTxt="signBtnTxt"

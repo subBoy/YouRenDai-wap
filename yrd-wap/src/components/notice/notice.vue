@@ -118,6 +118,8 @@
     top: 0
     width: 100%
     height: 100%
+    z-index: 9999
+    background: $color-text
   .slide-enter-active, .slide-leave-active
     transition: all 0.3s
   .slide-enter, .slide-leave-to

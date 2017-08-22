@@ -22,3 +22,23 @@ export function getProjectList (page, rows) {
     return Promise.resolve(res.data)
   })
 }
+
+export function getSubscribeData (projectId, userId) {
+  if (debug) {
+    url = '/api/getSubscribeData'
+  } else {
+    url = '/app/project.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'wapProjectdetail',
+    project_id: projectId,
+    user_id: userId
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}

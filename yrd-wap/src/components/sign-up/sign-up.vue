@@ -1,7 +1,11 @@
 <template>
   <transition name="slide">
     <div class="sign-wrapper">
-      <m-header :isSignUp="isSignUp"></m-header>
+      <m-header :isSignUp="isSignUp">
+        <div class="sign">
+          <router-link tag="div" class="btns" to="/signIn">立即去登录</router-link>
+        </div>
+      </m-header>
       <sign
         ref="sign"
         :signBtnTxt="signBtnTxt"
@@ -12,6 +16,7 @@
         @signErr="signErr"
         @blurTel="blurTel"
         @blurPassword="blurPassword"
+        @getPhoneCode="getPhoneCode"
       ></sign>
     </div>
   </transition>
@@ -21,7 +26,7 @@
   import MHeader from 'components/m-header/m-header'
   import Sign from 'base/sign/sign'
   import {encryption, compareEncrypt} from 'common/js/bcrypt'
-  import {checkTel, signUp} from 'api/sign'
+  import {getCodeNumber, checkTel, signUp} from 'api/sign'
 
   export default {
     data() {
@@ -75,6 +80,15 @@
         if (!this.$refs.sign._password()) {
           return
         }
+      },
+      getPhoneCode (phoneNumber, mdNum) {
+        getCodeNumber(phoneNumber, mdNum).then((res) => {
+          if (res.flag) {
+            this.$refs.sign.setInterFuc()
+          } else {
+            this.$refs.sign.codeClickOk()
+          }
+        })
       }
     },
     components: {

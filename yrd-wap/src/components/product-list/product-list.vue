@@ -1,6 +1,6 @@
 <template>
   <div class="product-wrapper">
-    <m-header :titleTxt="titleTxt" :isIndex="isIndex"></m-header>
+    <m-header :titleTxt="titleTxt" :opcity="opcity"></m-header>
     <div class="product">
       <scroll class="product-scroll"
         :data="productList"
@@ -11,7 +11,7 @@
           <div class="banner"></div>
           <ul class="product-list">
             <li class="product-item" v-for="(item, index) in productList">
-              <h3 class="name">{{item.project_name}} <span class="label">中秋专享</span></h3>
+              <h3 class="name">{{item.project_name}} <span class="label" :class="{'activity-over': !item.btnClass}">中秋专享</span></h3>
               <div class="item-info">
                 <div class="rate-info">
                   <p class="txt">预期年化收益</p>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="surplus-info">
                   <p class="txt">剩余{{item.surplus}}元</p>
-                  <div class="detail-btn" :class="{'not-click': !item.btnClass}">{{item.btnTxt}}</div>
+                  <div class="detail-btn" @click="selectItem(item)" :class="{'not-click': !item.btnClass}">{{item.btnTxt}}</div>
                 </div>
               </div>
             </li>
@@ -33,6 +33,7 @@
       </scroll>
     </div>
     <tab></tab>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -50,10 +51,10 @@
       return {
         titleTxt: '列表页',
         loadTitle: '正在载入更多...',
-        isIndex: false,
         pullup: true,
         hasMore: true,
         page: 1,
+        opcity: 1,
         productList: []
       }
     },
@@ -61,6 +62,11 @@
       this._getProjectList()
     },
     methods: {
+      selectItem (item) {
+        this.$router.push({
+          path: `/product-list/subscribe/${item.project_id}`
+        })
+      },
       loadMore () {
         if (!this.hasMore) {
           return
@@ -227,6 +233,8 @@
                   color: $color-text
                   transform: scale(0.5)
                   transform-origin: 100% 0
+                  &.activity-over
+                    bg-image('c-table')
               .item-info
                 display: flex
                 .txt
@@ -260,14 +268,14 @@
                     display: inline-block
                     margin-top: 13px
                     margin-right: -5px
-                    width: 84px
-                    height: 37px
-                    bg-image('y-btn-bg')
-                    background-size: 84px 37px
-                    line-height: 32px
+                    width: 75px
+                    height: 30px
+                    background-color: $btn-clo
+                    line-height: 30px
                     text-align: center
                     color: $color-text
                     font-size: $font-size-medium
+                    border-radius: 15px
                     &.not-click
-                      bg-image('n-btn-bg')
+                      background-color: $not-c
 </style>

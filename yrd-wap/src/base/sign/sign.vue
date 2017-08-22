@@ -50,9 +50,9 @@
 
 <script>
   import Scroll from 'base/scroll/scroll'
-  import {getCodeNumber, getRecommend, getImgCode} from 'api/sign'
+  import {getRecommend, getImgCode} from 'api/sign'
 
-  const windowHei = document.documentElement.clientHeight
+  // const windowHei = document.documentElement.clientHeight
   const debug = process.env.NODE_ENV !== 'production'
 
   export default {
@@ -128,7 +128,7 @@
       focus () {
         setTimeout(() => {
           this.$emit('signErr', '')
-          this.$refs.signBox.style.height = windowHei - 44 + 'px'
+          // this.$refs.signBox.style.height = windowHei - 44 + 'px'
           this.$refs.scroll.refresh()
         }, 20)
       },
@@ -169,20 +169,13 @@
           return
         }
 
-        this.$emit('blurTel', this.phoneNumber)
-
         if (!this.mdNum || this.mdNum.length <= 0) {
           return
         }
 
         this.codeClick = false
-        getCodeNumber(this.phoneNumber, this.mdNum).then((res) => {
-          if (res.flag) {
-            this.setInter = setInterval(this._setval, 1000)
-          } else {
-            this.codeClick = true
-          }
-        })
+
+        this.$emit('getPhoneCode', this.phoneNumber, this.mdNum)
       },
       needCode () {
         getImgCode().then((res) => {
@@ -192,6 +185,25 @@
           }
           console.log(res)
         })
+      },
+      codeClickOk () {
+        this.codeClick = true
+      },
+      codeClickErr () {
+        this.codeClick = false
+      },
+      setInterFuc () {
+        this.setInter = setInterval(this.setval, 1000)
+      },
+      setval () {
+        this.codeTime--
+        this.codeTxt = `${this.codeTime}秒后重试`
+        if (this.codeTime < 1) {
+          clearInterval(this.setInter)
+          this.codeTime = 60
+          this.codeTxt = '点击发送'
+          this.codeClickOk()
+        }
       },
       _getRecommend () {
         let _id = this.$route.params.id
@@ -252,16 +264,6 @@
           this.$emit('signErr', '')
         }
         return true
-      },
-      _setval () {
-        this.codeTime--
-        this.codeTxt = `${this.codeTime}秒后重试`
-        if (this.codeTime < 1) {
-          clearInterval(this.setInter)
-          this.codeTime = 60
-          this.codeTxt = '点击发送'
-          this.codeClick = true
-        }
       }
     },
     components: {
@@ -281,7 +283,7 @@
     bottom: 0
     .sign-box
       position: relative
-      margin: 10px 30px 0
+      margin: 10px 20px 0
       min-height: 100%
       .title
         text-align: center

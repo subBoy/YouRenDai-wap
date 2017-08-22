@@ -13,7 +13,7 @@
         <div class="tab-icon tab-icon-3"></div>
         <span class="tab-link">资产</span>
       </router-link>
-      <router-link tag="div" class="tab-item" to="/user">
+      <router-link tag="div" class="tab-item" to="/user-center">
         <div class="tab-icon tab-icon-4"></div>
         <span class="tab-link">我的</span>
       </router-link>
