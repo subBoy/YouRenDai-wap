@@ -1,60 +1,61 @@
 <template>
-  <transition name="slide">
-    <div class="subscribe-wrapper">
-      <m-header :titleTxt="titleTxt" :opcity="opcity" :whiteIcon="whiteIcon"></m-header>
-      <div class="subscribe-grounp" ref="subscribeGrounp">
-        <scroll class="subscribe-scroll" :listenScroll="listenScroll" :probeType="probeType" @scroll="scroll" ref="scroll">
-          <div>
-            <div class="subscribe-bar-wrapper">
-              <div class="subscribe-bar">
-                <progress-circle :percent="percent">
-                  <div class="subscribe-return">
-                    <h3 class="return">{{subscribe.yearRate}}<span class="unti">%</span></h3>
-                    <p class="desc">预期年化收益</p>
-                  </div>
-                </progress-circle>
-              </div>
-              <div class="subscribe-info">
-                <p class="desc-info">借款期限 {{subscribe.limit}}个月</p>
-                <p class="desc-info styl-flex">起投金额 {{subscribe.ascendmoney}}元</p>
-                <p class="desc-info">剩余投资额 {{conversion(subscribe.surplus)}}万元</p>
-              </div>
-            </div>
-            <div class="expected-income">
-              <div class="income-bar-wrapper"><span class="income-bar"></span></div>
-              <div class="expected-income-list" ref="expectedIncomeList">
-                <span class="item" v-for="item in incomeList"><em class="icon"></em>{{formatMoney(item)}} <span class="until" v-show="item === incomeList[incomeList.length - 1]">(元)</span></span>
-              </div>
-              <div class="icon-b">
-                <p class="desc-text">{{income.toFixed(2)}}(预期收益)</p>
-              </div>
-            </div>
-            <div class="invest-amount">
-              <div class="invest-input">
-                <div class="btn-remove" :class="{remove: !removeBool}" @click="removeInvest"></div>
-                <div class="input-wrapper">
-                  <input class="input-self" :disabled="parseInt(subscribe.surplus) === 0" @blur="investBlur" @keyup="investBlur" type="tel" v-model="investAmount">
+  <div class="subscribe-wrapper" ref="subscribeWrapper" @touchstart="lineBlur">
+    <m-header :titleTxt="titleTxt" :opcity="opcity" :whiteIcon="whiteIcon"></m-header>
+    <div class="subscribe-grounp" ref="subscribeGrounp">
+      <scroll class="subscribe-scroll" :listenScroll="listenScroll" :probeType="probeType" @scroll="scroll" ref="scroll">
+        <div>
+          <div class="subscribe-bar-wrapper">
+            <div class="subscribe-bar">
+              <progress-circle :percent="percent">
+                <div class="subscribe-return">
+                  <h3 class="return">{{subscribe.yearRate}}<span class="unti">%</span></h3>
+                  <p class="desc">预期年化收益</p>
                 </div>
-                <div class="btn-add" :class="{add: !addBool}" @click="addInvest"></div>
-              </div>
-              <p class="input-desc">请输入投资金额，{{subscribe.minmoney}}元的整数倍</p>
+              </progress-circle>
             </div>
-            <ul class="product-info">
-              <li class="info-item info-item-1" @click="httpTxt">协议范本</li>
-              <li class="info-item info-item-2" @click="productInfo">项目信息</li>
-              <li class="info-item info-item-3" @click="productRepayment">还款计划</li>
-              <li class="info-item info-item-4" @click="riskWarning">风险提示</li>
-            </ul>
+            <div class="subscribe-info">
+              <p class="desc-info">借款期限 {{subscribe.limit}}个月</p>
+              <p class="desc-info styl-flex">起投金额 {{subscribe.ascendmoney}}元</p>
+              <p class="desc-info">剩余投资额 {{conversion(subscribe.surplus)}}万元</p>
+            </div>
           </div>
-        </scroll>
-      </div>
-      <div class="subscribe-btn" ref="subscribeBtn">
-        <div class="btn-wrapper">
-          <span class="btn-txt" :class="{'click-err': !subscribe.btnClass}" @click="subscribeSubmit"><em class="desc">{{subscribe.btnTxt}}</em></span>
+          <div class="expected-income">
+            <div class="income-bar-wrapper" ref="inputSelf"><span class="income-bar"></span></div>
+            <div class="expected-income-list" ref="expectedIncomeList">
+              <span class="item" v-for="item in incomeList"><em class="icon"></em>{{formatMoney(item)}} <span class="until" v-show="item === incomeList[incomeList.length - 1]">(元)</span></span>
+            </div>
+            <div class="icon-b">
+              <p class="desc-text">{{income.toFixed(2)}}(预期收益)</p>
+            </div>
+          </div>
+          <div class="invest-amount">
+            <div class="invest-input">
+              <div class="btn-remove" :class="{remove: !removeBool}" @click="removeInvest"></div>
+              <div class="input-wrapper">
+                <input class="input-self" ref="inputWrapper" :disabled="parseInt(subscribe.surplus) === 0" @blur="investBlur" @keyup.prevent="investKeyup" type="tel" v-model="investAmount">
+              </div>
+              <div class="btn-add" :class="{add: !addBool}" @click="addInvest"></div>
+            </div>
+            <p class="input-desc">请输入投资金额，{{subscribe.minmoney}}元的整数倍</p>
+          </div>
+          <ul class="product-info">
+            <li class="info-item info-item-1" @click="httpTxt">协议范本</li>
+            <li class="info-item info-item-2" @click="productInfo">项目信息</li>
+            <li class="info-item info-item-3" @click="productRepayment">还款计划</li>
+            <li class="info-item info-item-4" @click="riskWarning">风险提示</li>
+          </ul>
         </div>
+      </scroll>
+    </div>
+    <div class="subscribe-btn" ref="subscribeBtn">
+      <div class="btn-wrapper">
+        <span class="btn-txt" :class="{'click-err': !subscribe.btnClass}" @click="subscribeSubmit"><em class="desc">{{subscribe.btnTxt}}</em></span>
       </div>
     </div>
-  </transition>
+    <transition name="slide">
+      <router-view></router-view>
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -68,6 +69,7 @@
   const ERR_OK = 1
   const ITEM_WIDTH = 70
   const transform = prefixStyle('transform')
+  const windowHei = document.documentElement.clientHeight
 
   export default {
     data () {
@@ -85,7 +87,8 @@
         addBool: true,
         removeBool: true,
         project_id: '',
-        user_id: ''
+        user_id: '',
+        screenHeight: document.documentElement.clientHeight
       }
     },
     created () {
@@ -110,6 +113,9 @@
       }, 200))
     },
     methods: {
+      lineBlur () {
+        this.$refs.inputWrapper.blur()
+      },
       scroll (pos) {
         if (pos.y < 0) {
           this.opcity = Math.abs(pos.y / 44)
@@ -137,7 +143,7 @@
         }
         this.investAmount = this.investAmount + this.subscribe.minmoney
       },
-      investBlur () {
+      investKeyup () {
         if (parseInt(parseInt(this.investAmount) / 100) === parseInt(parseInt(this.investAmount) / 100)) {
           this.investAmount = parseInt(parseInt(this.investAmount) / 100) * 100
         } else {
@@ -154,23 +160,47 @@
         }
         this._invest()
       },
+      investBlur () {
+        this.investKeyup()
+        this.$refs.subscribeWrapper.style.top = 0
+      },
+      investFocus () {
+        this.$refs.subscribeWrapper.style.height = windowHei + 'px'
+        this.$refs.subscribeWrapper.style.top = '-55%'
+      },
       subscribeSubmit () {
         if (!this.subscribe.btnClass) {
           return
         }
-        alert('gaitijiaole')
+        this.$router.push({
+          path: `${this.$route.path}/subscription`
+        })
       },
       httpTxt () {
-        location.href = this.subscribe.contractModeUrl
+        if (this.subscribe.limit !== 12) {
+          this.$router.push({
+            path: `${this.$route.path}/contract-6`
+          })
+        } else {
+          this.$router.push({
+            path: `${this.$route.path}/contract`
+          })
+        }
       },
       productInfo () {
-        location.href = `/newApp/project-Introduction.shtml?projectId=${this.project_id}`
+        this.$router.push({
+          path: `${this.$route.path}/project-info/${this.project_id}`
+        })
       },
       productRepayment () {
-        location.href = `/newApp/repayment-plan.shtml?projectId=${this.project_id}`
+        this.$router.push({
+          path: `${this.$route.path}/repayment-plan/${this.project_id}`
+        })
       },
       riskWarning () {
-        location.href = '/newApp/risk_warning.shtml'
+        this.$router.push({
+          path: `${this.$route.path}/risk-warning`
+        })
       },
       _genResult (data) {
         /**
@@ -284,6 +314,31 @@
     mounted () {
       const bottom = this.$refs.subscribeBtn.clientHeight
       this.$refs.subscribeGrounp.style.bottom = `${bottom}px`
+
+      const _this = this
+      window.onresize = () => {
+        return (() => {
+          window.screenHeight = document.documentElement.clientHeight
+          _this.screenHeight = window.screenHeight
+        })()
+      }
+    },
+    watch: {
+      screenHeight (newVal, oldVal) {
+        if (!this.timer) {
+          this.screenHeight = newVal
+          this.timer = true
+          let _this = this
+          setTimeout(() => {
+            if (oldVal < newVal) {
+              _this.lineBlur()
+            } else {
+              _this.investFocus()
+            }
+            _this.timer = false
+          }, 20)
+        }
+      }
     },
     components: {
       MHeader,
@@ -416,7 +471,7 @@
             font-size: $font-size-small
             color: $color-tle
       .invest-amount
-        margin: 35px 15px
+        padding: 35px 15px
         .invest-input
           display: flex
           .btn-remove

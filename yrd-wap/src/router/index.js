@@ -1,26 +1,56 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Recommend from 'components/recommend/recommend'
-import Assets from 'components/assets/assets'
-import Usercenter from 'components/user-center/user-center'
-import Notice from 'components/notice/notice'
-import Productlist from 'components/product-list/product-list'
-import SignIn from 'components/sign-in/sign-in'
-import SignUp from 'components/sign-up/sign-up'
-import Forget from 'components/forget/forget'
-import productSubscribe from 'components/product-subscribe/product-subscribe'
-import setUser from 'components/set-user/set-user'
-import investRecord from 'components/invest-record/invest-record'
-import Packs from 'components/packs/packs'
-import Invite from 'components/invite/invite'
-import Disclosure from 'components/disclosure/disclosure'
-import CustomerService from 'components/customer-service/customer-service'
+const Recommend = () => import('components/recommend/recommend')
+const Assets = () => import('components/assets/assets')
+const Usercenter = () => import('components/user-center/user-center')
+const Notice = () => import('components/notice/notice')
+const Productlist = () => import('components/product-list/product-list')
+const SignIn = () => import('components/sign-in/sign-in')
+const SignUp = () => import('components/sign-up/sign-up')
+const Forget = () => import('components/forget/forget')
+const productSubscribe = () => import('components/product-subscribe/product-subscribe')
+const setUser = () => import('components/set-user/set-user')
+const investRecord = () => import('components/invest-record/invest-record')
+const Packs = () => import('components/packs/packs')
+const Invite = () => import('components/invite/invite')
+const Disclosure = () => import('components/disclosure/disclosure')
+const CustomerService = () => import('components/customer-service/customer-service')
+const Undefind = () => import('components/undefind/400')
+const serverError = () => import('components/undefind/500')
+const Recharge = () => import('components/recharge/recharge')
+const Withdraw = () => import('components/withdraw/withdraw')
+const RealName = () => import('components/real-name/real-name')
+const RechargeSuccess = () => import('components/recharge-success/recharge-success')
+const WithdrawSuccess = () => import('components/withdraw-success/withdraw-success')
+const ToUser = () => import('components/to-user/to-user')
+const LatestNews = () => import('components/latest-news/latest-news')
+const NewsDetails = () => import('components/news-details/news-details')
+const BillList = () => import('components/bill-list/bill-list')
+const BillDetails = () => import('components/bill-details/bill-details')
+const Platform = () => import('components/platform/platform')
+const ShareBack = () => import('components/share-back/share-back')
+const NoticeDetails = () => import('components/notice-details/notice-details')
+const Contract = () => import('components/contract/contract')
+const Contract6 = () => import('components/contract-6/contract-6')
+const ProjectInfo = () => import('components/project-info/project-info')
+const RepaymentPlan = () => import('components/repayment-plan/repayment-plan')
+const RiskWarning = () => import('components/risk-warning/risk-warning')
+const Report = () => import('components/report/report')
+const Subscription = () => import('components/subscription/subscription')
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '*',
+      component: Undefind
+    },
+    {
+      path: '/server-error',
+      component: serverError
+    },
     {
       path: '/',
       redirect: '/recommend'
@@ -31,17 +61,111 @@ export default new Router({
       children: [
         {
           path: 'subscribe/:id',
-          component: productSubscribe
+          component: productSubscribe,
+          children: [
+            {
+              path: 'contract',
+              component: Contract
+            },
+            {
+              path: 'contract-6',
+              component: Contract6
+            },
+            {
+              path: 'project-info/:projectId',
+              component: ProjectInfo
+            },
+            {
+              path: 'repayment-plan/:projectId',
+              component: RepaymentPlan
+            },
+            {
+              path: 'risk-warning',
+              component: RiskWarning
+            },
+            {
+              path: 'subscription',
+              component: Subscription
+            }
+          ]
         },
         {
           path: 'notice',
-          component: Notice
+          component: Notice,
+          children: [
+            {
+              path: ':id',
+              component: NoticeDetails
+            }
+          ]
+        },
+        {
+          path: 'to-user',
+          component: ToUser
+        },
+        {
+          path: 'latest-news',
+          component: LatestNews,
+          children: [
+            {
+              path: 'news-details',
+              component: NewsDetails
+            },
+            {
+              path: 'bill-details',
+              component: BillDetails
+            }
+          ]
+        },
+        {
+          path: 'platform',
+          component: Platform
+        },
+        {
+          path: 'packs',
+          component: Packs
+        },
+        {
+          path: 'share-back',
+          component: ShareBack
         }
       ]
     },
     {
       path: '/assets',
-      component: Assets
+      component: Assets,
+      children: [
+        {
+          path: 'recharge',
+          component: Recharge,
+          children: [
+            {
+              path: 'recharge-success',
+              component: RechargeSuccess
+            }
+          ]
+        },
+        {
+          path: 'withdraw',
+          component: Withdraw,
+          children: [
+            {
+              path: 'withdraw-success',
+              component: WithdrawSuccess
+            }
+          ]
+        },
+        {
+          path: 'bill-list',
+          component: BillList,
+          children: [
+            {
+              path: 'bill-details',
+              component: BillDetails
+            }
+          ]
+        }
+      ]
     },
     {
       path: '/user-center',
@@ -49,7 +173,39 @@ export default new Router({
       children: [
         {
           path: 'assets',
-          component: Assets
+          component: Assets,
+          children: [
+            {
+              path: 'recharge',
+              component: Recharge,
+              children: [
+                {
+                  path: 'recharge-success',
+                  component: RechargeSuccess
+                }
+              ]
+            },
+            {
+              path: 'withdraw',
+              component: Withdraw,
+              children: [
+                {
+                  path: 'withdraw-success',
+                  component: WithdrawSuccess
+                }
+              ]
+            },
+            {
+              path: 'bill-list',
+              component: BillList,
+              children: [
+                {
+                  path: 'bill-details',
+                  component: BillDetails
+                }
+              ]
+            }
+          ]
         },
         {
           path: 'set-user',
@@ -69,11 +225,41 @@ export default new Router({
         },
         {
           path: 'disclosure',
-          component: Disclosure
+          component: Disclosure,
+          children: [
+            {
+              path: 'report',
+              component: Report
+            }
+          ]
         },
         {
           path: 'customer-service',
           component: CustomerService
+        },
+        {
+          path: 'recharge',
+          component: Recharge,
+          children: [
+            {
+              path: 'recharge-success',
+              component: RechargeSuccess
+            }
+          ]
+        },
+        {
+          path: 'withdraw',
+          component: Withdraw,
+          children: [
+            {
+              path: 'withdraw-success',
+              component: WithdrawSuccess
+            }
+          ]
+        },
+        {
+          path: 'real-name',
+          component: RealName
         }
       ]
     },
@@ -83,7 +269,33 @@ export default new Router({
       children: [
         {
           path: 'subscribe/:id',
-          component: productSubscribe
+          component: productSubscribe,
+          children: [
+            {
+              path: 'contract',
+              component: Contract
+            },
+            {
+              path: 'contract-6',
+              component: Contract6
+            },
+            {
+              path: 'project-info/:projectId',
+              component: ProjectInfo
+            },
+            {
+              path: 'repayment-plan/:projectId',
+              component: RepaymentPlan
+            },
+            {
+              path: 'risk-warning',
+              component: RiskWarning
+            },
+            {
+              path: 'subscription',
+              component: Subscription
+            }
+          ]
         }
       ]
     },

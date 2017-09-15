@@ -11,8 +11,8 @@
                 <p class="desc">账户余额</p>
               </div>
               <div class="btns-wrapper">
-                <span class="withdraw btn">提现</span>
-                <span class="recharge btn">立即充值</span>
+                <router-link tag="span" class="withdraw btn" to="/assets/withdraw">提现</router-link>
+                <router-link tag="span" class="recharge btn" to="/assets/recharge">立即充值</router-link>
               </div>
             </div>
           </div>
@@ -43,7 +43,7 @@
               <div class="assets-operate-group bg-1">
                 <div class="operate-group-text">
                   <p class="desc">我的电子账单</p>
-                  <span class="btn">立即查看</span>
+                  <span class="btn" @click="billList">立即查看</span>
                 </div>
               </div>
             </li>
@@ -51,7 +51,7 @@
               <div class="assets-operate-group bg-2">
                 <div class="operate-group-text">
                   <p class="desc">不知如何优化资产分配？</p>
-                  <span class="btn">咨询客服</span>
+                  <span class="btn" @click="callMe">咨询客服</span>
                 </div>
               </div>
             </li>
@@ -63,6 +63,7 @@
     <transition name="slide">
       <router-view></router-view>
     </transition>
+    <call ref="call"></call>
   </div>
 </template>
 
@@ -70,6 +71,7 @@
   import MHeader from 'components/m-header/m-header'
   import Scroll from 'base/scroll/scroll'
   import Tab from 'components/tab/tab'
+  import Call from 'base/call/call'
   export default {
     data() {
       return {
@@ -78,7 +80,8 @@
         listenScroll: true,
         probeType: 3,
         opcity: 0,
-        titleTxt: '我的资产'
+        titleTxt: '我的资产',
+        showFlag: true
       }
     },
     methods: {
@@ -90,12 +93,19 @@
           this.opcity = 0
           this.whiteIcon = true
         }
+      },
+      billList () {
+        this.$router.push('/assets/bill-list')
+      },
+      callMe () {
+        this.$refs.call.show()
       }
     },
     components: {
       MHeader,
       Scroll,
-      Tab
+      Tab,
+      Call
     }
   }
 </script>

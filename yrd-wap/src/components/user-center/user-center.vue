@@ -1,7 +1,7 @@
 <template>
   <div class="user-wrapper">
-    <m-header :isShow="isShow" :opcity="opcity" :whiteIcon="whiteIcon">
-      <div class="user-install" @click="setUser"></div>
+    <m-header :isShow="isShow" :opcity="opcity" :whiteIcon="whiteIcon" @logined="logined">
+      <div class="user-install" @click="setUser" v-if="signed"></div>
     </m-header>
     <div class="user-grounp">
       <scroll class="user-scroll" :listenScroll="listenScroll" :probeType="probeType" @scroll="scroll" ref="scroll">
@@ -16,8 +16,8 @@
                 </div>
               </div>
               <div class="btns-wrapper">
-                <span class="withdraw btn">提现</span>
-                <span class="recharge btn">立即充值</span>
+                <router-link tag="span" class="withdraw btn" to="/user-center/withdraw">提现</router-link>
+                <router-link tag="span" class="recharge btn" to="/user-center/recharge">立即充值</router-link>
               </div>
             </div>
           </div>
@@ -36,6 +36,7 @@
       </scroll>
     </div>
     <tab></tab>
+    <confirm ref="customerConfirm" @confirm="confirm" :text="text" :confirmBtnText="confirmBtnText" :btnTxt="btnTxt" :winDesc="winDesc" :realClass="realClass"></confirm>
     <transition name="slide">
       <router-view></router-view>
     </transition>
@@ -46,6 +47,8 @@
   import MHeader from 'components/m-header/m-header'
   import Scroll from 'base/scroll/scroll'
   import Tab from 'components/tab/tab'
+  import Confirm from 'base/confirm/confirm'
+
   export default {
     data() {
       return {
@@ -55,6 +58,8 @@
         probeType: 3,
         opcity: 0,
         currentIndex: -1,
+        realName: false,
+        signed: false,
         applicationList: [
           {
             path: 'assets',
@@ -89,6 +94,19 @@
         ]
       }
     },
+    created () {
+      this.text = '您还未实名认证！'
+      this.confirmBtnText = '实名认证'
+      this.btnTxt = '请先完成'
+      this.winDesc = '为保障您的投资安全'
+      this.realClass = true
+      setTimeout(() => {
+        if (!this.realName) {
+          this.$refs.customerConfirm.show()
+          console.log(0)
+        }
+      }, 20)
+    },
     methods: {
       scroll (pos) {
         if (pos.y < 0) {
@@ -108,12 +126,19 @@
       },
       setUser () {
         this.$router.push('user-center/set-user')
+      },
+      confirm () {
+        this.$router.push('user-center/real-name')
+      },
+      logined () {
+        this.signed = true
       }
     },
     components: {
       MHeader,
       Scroll,
-      Tab
+      Tab,
+      Confirm
     }
   }
 </script>

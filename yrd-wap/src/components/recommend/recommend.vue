@@ -25,13 +25,13 @@
           <div class="recommed-group">
             <ul class="recommed-group-list">
               <li class="recommed-group-item">
-                <router-link tag="div" to="/aboutUs">
+                <router-link tag="div" to="/recommend/platform">
                   <div class="item-icons item-icons-1"></div>
                   <p class="item-text">了解平台</p>
                 </router-link>
               </li>
               <li class="recommed-group-item">
-                <router-link tag="div" to="/aboutUs">
+                <router-link tag="div" to="/recommend/packs">
                   <div class="item-icons item-icons-2">
                     <span class="item-new-num">{{hbNum}}</span>
                   </div>
@@ -39,18 +39,18 @@
                 </router-link>
               </li>
               <li class="recommed-group-item">
-                <router-link tag="div" to="/aboutUs">
+                <router-link tag="div" to="/recommend/share-back">
                   <div class="item-icons item-icons-3"></div>
                   <p class="item-text">分享返现</p>
                 </router-link>
               </li>
               <li class="recommed-group-item">
-                <router-link tag="div" to="/aboutUs">
+                <div @click="latestNews">
                   <div class="item-icons item-icons-4">
                     <span class="item-new-num">{{newsNum}}</span>
                   </div>
                   <p class="item-text">最新消息</p>
-                </router-link>
+                </div>
               </li>
             </ul>
           </div>
@@ -100,7 +100,9 @@
         <a class="item-txt icon-2">下载有人贷客户端</a>
       </div>
     </div>
-    <router-view></router-view>
+    <transition name="slide">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -111,6 +113,7 @@
   import Swiper from 'base/swiper/swiper'
   import {getRecommendBanner, getRecommendPro} from 'api/recommend'
   import {_UA} from 'common/js/ua'
+  import {getLoginState} from 'api/sign'
 
   export default {
     data () {
@@ -170,6 +173,15 @@
       reception () {
         location.href = '/loan/activity/app-reception.shtml'
       },
+      latestNews () {
+        getLoginState().then((res) => {
+          if (res.isLogin === 'true') {
+            this.$router.push('/recommend/latest-news')
+          } else {
+            this.$router.push('/recommend/to-user')
+          }
+        })
+      },
       _getRecommendBanner () {
         getRecommendBanner().then((res) => {
           this.recommends = res.bannerList
@@ -193,7 +205,10 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
-
+  .slide-enter-active, .slide-leave-active
+    transition: all 0.3s
+  .slide-enter, .slide-leave-to
+    transform: translate3d(100%, 0, 0)
   .recommend
     position: fixed
     width: 100%

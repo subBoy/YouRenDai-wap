@@ -22,3 +22,23 @@ export function getNoticeList (page, rows) {
     return Promise.resolve(res.data)
   })
 }
+
+export function getNoticeDetails (contentId) {
+  if (debug) {
+    url = '/api/getNoticeDetails'
+  } else {
+    url = '/app/index.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'approachHtml',
+    content_id: contentId,
+    type: 'gonggao'
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}

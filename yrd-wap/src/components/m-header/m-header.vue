@@ -14,7 +14,7 @@
         <router-link tag="div" class="btns" to="/signUp">注册</router-link>
       </div>
     </div>
-    <slot v-if="signIned || isSignIn || isSignUp"></slot>
+    <slot></slot>
   </div>
 </template>
 
@@ -55,10 +55,10 @@
     },
     data () {
       return {
-        signIned: true
+        signIned: false
       }
     },
-    created () {
+    activated () {
       setTimeout(() => {
         this._getLoginState()
       }, 20)
@@ -78,9 +78,10 @@
       },
       _getLoginState () {
         getLoginState().then((res) => {
-          console.log(res.isLogin)
+          console.log(res)
           if (res.isLogin === 'true') {
             this.signIned = true
+            this.$emit('logined')
           }
         })
       }

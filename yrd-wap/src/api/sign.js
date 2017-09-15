@@ -340,7 +340,7 @@ export function getLoginState () {
 }
 
 // 退出登录
-export function signOut (page, rows) {
+export function signOut () {
   if (debug) {
     url = '/api/signOut'
   } else {

@@ -16,13 +16,14 @@
             <a class="tel-txt" href="tel:400-663-9190">400-663-9190</a>
           </span>
         </div>
-        <div class="login-out-btn"><span class="btn-txt">退出账号</span></div>
+        <div class="login-out-btn"><span class="btn-txt" @click="_singOut">退出账号</span></div>
       </div>
     </div>
   </transition>
 </template>
 <script>
   import MHeader from 'components/m-header/m-header'
+  import {signOut} from 'api/sign'
 
   export default {
     data() {
@@ -30,6 +31,13 @@
         titleTxt: '设置',
         isShow: false,
         opcity: 1
+      }
+    },
+    methods: {
+      _singOut() {
+        signOut().then(() => {
+          this.$router.push('/')
+        })
       }
     },
     components: {

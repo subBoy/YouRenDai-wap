@@ -1,7 +1,7 @@
 <template>
   <transition name="slide">
     <div class="sign-wrapper">
-      <m-header :isSignUp="isSignUp">
+      <m-header :isShow="isShow">
         <div class="sign">
           <router-link tag="div" class="btns" to="/signIn">立即去登录</router-link>
         </div>
@@ -32,6 +32,7 @@
     data() {
       return {
         isSignUp: true,
+        isShow: false,
         signBtnTxt: '立即注册',
         errTxt: '',
         userName: '',

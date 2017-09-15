@@ -42,3 +42,41 @@ export function getSubscribeData (projectId, userId) {
     return Promise.resolve(res.data)
   })
 }
+
+export function getRepaymentPlan (projectId) {
+  if (debug) {
+    url = '/api/getRepaymentPlan'
+  } else {
+    url = '/app/projectDetail.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'appRepaymentPlan',
+    projectId
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+export function getProjectInfo (projectId) {
+  if (debug) {
+    url = '/api/getProjectInfo'
+  } else {
+    url = '/app/projectDetail.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'appProjectInformation',
+    projectId
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}

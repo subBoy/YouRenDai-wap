@@ -29,12 +29,15 @@ app.use(bodyParser.json())
 
 var apiRoutes = express.Router()
 
+var refererTxt = 'http://pre.yourendai.com:8080/'
+var hostTxt = 'pre.yourendai.com:8080'
+
 apiRoutes.get('/getRecommendBanner', function (req, res) {
-  var url = 'http://pre.yourendai.com/app/index.do'
+  var url = refererTxt + '/app/index.do'
   axios.get(url, {
     headers: {
-      referer: 'http://pre.yourendai.com/',
-      host: 'pre.yourendai.com'
+      referer: refererTxt,
+      host: hostTxt
     },
     params: req.query
   }).then((response) => {
@@ -45,11 +48,11 @@ apiRoutes.get('/getRecommendBanner', function (req, res) {
 })
 
 apiRoutes.get('/getRecommendPro', function (req, res) {
-  var url = 'http://pre.yourendai.com/front/productMessage.do'
+  var url = refererTxt + '/front/productMessage.do'
   axios.get(url, {
     headers: {
-      referer: 'http://pre.yourendai.com/',
-      host: 'pre.yourendai.com'
+      referer: refererTxt,
+      host: hostTxt
     },
     params: req.query
   }).then((response) => {
@@ -60,11 +63,26 @@ apiRoutes.get('/getRecommendPro', function (req, res) {
 })
 
 apiRoutes.get('/getNoticeList', function (req, res) {
-  var url = 'http://pre.yourendai.com/app/index.do'
+  var url = refererTxt + '/app/index.do'
   axios.get(url, {
     headers: {
-      referer: 'http://pre.yourendai.com/',
-      host: 'pre.yourendai.com'
+      referer: refererTxt,
+      host: hostTxt
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.get('/getNoticeDetails', function (req, res) {
+  var url = refererTxt + '/app/index.do'
+  axios.get(url, {
+    headers: {
+      referer: refererTxt,
+      host: hostTxt
     },
     params: req.query
   }).then((response) => {
@@ -75,11 +93,11 @@ apiRoutes.get('/getNoticeList', function (req, res) {
 })
 
 apiRoutes.get('/getProjectList', function (req, res) {
-  var url = 'http://pre.yourendai.com/front/projectList.do'
+  var url = refererTxt + '/front/projectList.do'
   axios.get(url, {
     headers: {
-      referer: 'http://pre.yourendai.com',
-      host: 'pre.yourendai.com'
+      referer: refererTxt + '',
+      host: hostTxt
     },
     params: req.query
   }).then((response) => {
@@ -90,11 +108,41 @@ apiRoutes.get('/getProjectList', function (req, res) {
 })
 
 apiRoutes.get('/getSubscribeData', function (req, res) {
-  var url = 'http://pre.yourendai.com/app/project.do'
+  var url = refererTxt + '/app/project.do'
   axios.get(url, {
     headers: {
-      referer: 'http://pre.yourendai.com',
-      host: 'pre.yourendai.com'
+      referer: refererTxt + '',
+      host: hostTxt
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.get('/getRepaymentPlan', function (req, res) {
+  var url = refererTxt + '/app/projectDetail.do'
+  axios.get(url, {
+    headers: {
+      referer: refererTxt + '',
+      host: hostTxt
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.get('/getProjectInfo', function (req, res) {
+  var url = refererTxt + '/app/projectDetail.do'
+  axios.get(url, {
+    headers: {
+      referer: refererTxt + '',
+      host: hostTxt
     },
     params: req.query
   }).then((response) => {
@@ -105,11 +153,11 @@ apiRoutes.get('/getSubscribeData', function (req, res) {
 })
 
 apiRoutes.get('/getLoginState', function (req, res) {
-  var url = 'http://pre.yourendai.com/validateUser.jsp'
+  var url = refererTxt + '/validateUser.jsp'
   axios.get(url, {
     headers: {
-      referer: 'http://pre.yourendai.com',
-      host: 'pre.yourendai.com'
+      referer: refererTxt + '',
+      host: hostTxt
     },
     params: req.query
   }).then((response) => {
@@ -120,11 +168,11 @@ apiRoutes.get('/getLoginState', function (req, res) {
 })
 
 apiRoutes.get('/signOut', function (req, res) {
-  var url = 'http://pre.yourendai.com/front/logout.do'
+  var url = refererTxt + '/front/logout.do'
   axios.get(url, {
     headers: {
-      referer: 'http://pre.yourendai.com',
-      host: 'pre.yourendai.com'
+      referer: refererTxt + '',
+      host: hostTxt
     },
     params: req.query
   }).then((response) => {
@@ -135,7 +183,7 @@ apiRoutes.get('/signOut', function (req, res) {
 })
 
 apiRoutes.post('/checkTel', function (req, res) {
-  var url = 'http://pre.yourendai.com/front/register.do'
+  var url = refererTxt + '/front/register.do'
   axios({
     url,
     method: 'post',
@@ -150,8 +198,8 @@ apiRoutes.post('/checkTel', function (req, res) {
     }],
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      referer: 'http://pre.yourendai.com',
-      host: 'pre.yourendai.com'
+      referer: refererTxt + '',
+      host: hostTxt
     }
   }).then((response) => {
     res.json(response.data)
@@ -161,7 +209,7 @@ apiRoutes.post('/checkTel', function (req, res) {
 })
 
 apiRoutes.post('/getCode', function (req, res) {
-  var url = 'http://pre.yourendai.com/front/register.do'
+  var url = refererTxt + '/front/register.do'
   axios({
     url,
     method: 'post',
@@ -176,8 +224,8 @@ apiRoutes.post('/getCode', function (req, res) {
     }],
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      referer: 'http://pre.yourendai.com',
-      host: 'pre.yourendai.com'
+      referer: refererTxt + '',
+      host: hostTxt
     }
   }).then((response) => {
     res.json(response.data)
@@ -187,7 +235,7 @@ apiRoutes.post('/getCode', function (req, res) {
 })
 
 apiRoutes.post('/getRecommend', function (req, res) {
-  var url = 'http://pre.yourendai.com/front/searchrecommend.do'
+  var url = refererTxt + '/front/searchrecommend.do'
   axios({
     url,
     method: 'post',
@@ -202,8 +250,8 @@ apiRoutes.post('/getRecommend', function (req, res) {
     }],
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      referer: 'http://pre.yourendai.com',
-      host: 'pre.yourendai.com'
+      referer: refererTxt + '',
+      host: hostTxt
     }
   }).then((response) => {
     res.json(response.data)
@@ -213,7 +261,7 @@ apiRoutes.post('/getRecommend', function (req, res) {
 })
 
 apiRoutes.post('/getImgCode', function (req, res) {
-  var url = 'http://pre.yourendai.com/front/register.do'
+  var url = refererTxt + '/front/register.do'
   axios({
     url,
     method: 'post',
@@ -228,8 +276,8 @@ apiRoutes.post('/getImgCode', function (req, res) {
     }],
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      referer: 'http://pre.yourendai.com',
-      host: 'pre.yourendai.com'
+      referer: refererTxt + '',
+      host: hostTxt
     }
   }).then((response) => {
     res.json(response.data)
@@ -239,7 +287,7 @@ apiRoutes.post('/getImgCode', function (req, res) {
 })
 
 apiRoutes.post('/signIn', function (req, res) {
-  var url = 'http://pre.yourendai.com/front/register.do'
+  var url = refererTxt + '/front/register.do'
   axios({
     url,
     method: 'post',
@@ -254,8 +302,8 @@ apiRoutes.post('/signIn', function (req, res) {
     }],
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      referer: 'http://pre.yourendai.com',
-      host: 'pre.yourendai.com'
+      referer: refererTxt + '',
+      host: hostTxt
     }
   }).then((response) => {
     res.json(response.data)
@@ -265,7 +313,7 @@ apiRoutes.post('/signIn', function (req, res) {
 })
 
 apiRoutes.post('/signUp', function (req, res) {
-  var url = 'http://pre.yourendai.com/front/register.do'
+  var url = refererTxt + '/front/register.do'
   axios({
     url,
     method: 'post',
@@ -280,8 +328,8 @@ apiRoutes.post('/signUp', function (req, res) {
     }],
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      referer: 'http://pre.yourendai.com',
-      host: 'pre.yourendai.com'
+      referer: refererTxt + '',
+      host: hostTxt
     }
   }).then((response) => {
     res.json(response.data)

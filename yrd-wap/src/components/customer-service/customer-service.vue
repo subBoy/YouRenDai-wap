@@ -18,7 +18,7 @@
       </div>
       <div class="bind-operate-btn" @click.stop="bindCustomer">立即绑定</div>
     </div>
-    <confirm ref="customerConfirm" @confirm="confirm" :text="text" :confirmBtnText="confirmBtnText" :operateState="operateState"></confirm>
+    <confirm ref="customerConfirm" @confirm="confirm" :text="text" :confirmBtnText="confirmBtnText" :btnTxt="btnTxt" :operateState="operateState"></confirm>
   </div>
 </template>
 <script>
@@ -35,8 +35,9 @@
         customerNumber: '',
         errClass: '',
         text: '',
+        btnTxt: '',
         confirmBtnText: '',
-        operateState: true
+        operateState: false
       }
     },
     methods: {
@@ -46,8 +47,8 @@
           return
         }
 
-        // this._bindErr()
-        this._bindOk()
+        this._bindErr()
+        // this._bindOk()
       },
       confirm() {
         if (this.operateState) { // 绑定成功回调
@@ -64,6 +65,7 @@
       _bindErr() {
         this.text = '很遗憾本次操作失败！'
         this.confirmBtnText = '继续完成绑定'
+        this.btnTxt = '返回上一步'
         this.$refs.customerConfirm.show()
       },
       _errClass() {

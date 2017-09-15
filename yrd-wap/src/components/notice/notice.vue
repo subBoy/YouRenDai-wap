@@ -1,29 +1,30 @@
 <template>
-  <transition name="slide">
-    <div class="tran-ani">
-      <m-header :titleTxt="titleTxt" :isShow="isShow" :isIndex="isIndex"></m-header>
-      <div class="notice-wrapper">
-        <scroll class="notice-content"
-          :data="nowList"
-          :pullup="pullup"
-          @scrollToEnd="startLoad"
-        >
-          <div class="notice-group">
-            <div class="notice-list">
-              <a class="notice-item border-1px" v-for="(item, index) in nowList" ref="noticeItem" :href="item.content_url">
-                <p class="name-title">
-                  <span class="name" v-if="item.formatTitle.length">{{item.formatTitle}}</span>
-                  <span class="desc" :class="{styl: !item.formatTitle.length}">{{item.formatDesc}}</span>
-                </p>
-                <p class="time">{{item.create_date}}</p>
-              </a>
+  <div class="tran-ani">
+    <m-header :titleTxt="titleTxt" :isShow="isShow" :isIndex="isIndex"></m-header>
+    <div class="notice-wrapper">
+      <scroll class="notice-content"
+        :data="nowList"
+        :pullup="pullup"
+        @scrollToEnd="startLoad"
+      >
+        <div class="notice-group">
+          <div class="notice-list">
+            <div class="notice-item border-1px" v-for="(item, index) in nowList" ref="noticeItem" @click="noticeDetails(item.content_url)">
+              <p class="name-title">
+                <span class="name" v-if="item.formatTitle.length">{{item.formatTitle}}</span>
+                <span class="desc" :class="{styl: !item.formatTitle.length}">{{item.formatDesc}}</span>
+              </p>
+              <p class="time">{{item.create_date}}</p>
             </div>
-            <loading :title="loadTitle" v-show="hasMore"></loading>
           </div>
-        </scroll>
-      </div>
+          <loading :title="loadTitle" v-show="hasMore"></loading>
+        </div>
+      </scroll>
     </div>
-  </transition>
+    <transition name="slide">
+      <router-view></router-view>
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -44,13 +45,34 @@
         loadTitle: '松手加载更多...',
         isShow: false,
         isIndex: false,
-        nowList: []
+        nowList: [],
+        content_id: ''
       }
     },
     created () {
       this._getNoticeList()
     },
     methods: {
+      noticeDetails(url) {
+        this.content_id = this._getParam(url, 'content_id')
+        this.$router.push({
+          path: `/recommend/notice/${this.content_id}`
+        })
+      },
+      _getParam (url, name) {
+        let paraString = url.substring(url.indexOf('?') + 1, url.length).split('&')
+        let paraObj = {}
+        for (let i = 0; i <= paraString.length; i++) {
+          let j = paraString[i] + ''
+          paraObj[j.substring(0, j.indexOf('=')).toLowerCase()] = j.substring(j.indexOf('=') + 1, j.length)
+        }
+        let returnValue = paraObj[name.toLowerCase()]
+        if (typeof (returnValue) === 'undefined') {
+          return ''
+        } else {
+          return returnValue
+        }
+      },
       _getNoticeList () {
         this.page = 1
         this.hasMore = true
@@ -112,6 +134,10 @@
 <style lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
+  .slide-enter-active, .slide-leave-active
+    transition: all 0.3s
+  .slide-enter, .slide-leave-to
+    transform: translate3d(100%, 0, 0)
   .tran-ani
     position: fixed
     left: 0
@@ -120,10 +146,6 @@
     height: 100%
     z-index: 9999
     background: $color-text
-  .slide-enter-active, .slide-leave-active
-    transition: all 0.3s
-  .slide-enter, .slide-leave-to
-    transform: translate3d(100%, 0, 0)
   .notice-wrapper
     position: absolute
     width: 100%

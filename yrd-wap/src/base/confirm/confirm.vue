@@ -1,15 +1,16 @@
 <template>
   <transition name="confirm-fade">
-    <div class="confirm" v-show="showFlag" @click.stop>
+    <div class="confirm" v-show="showFlag" @click.stop="hide">
       <div class="confirm-wrapper">
         <div class="confirm-content">
-          <div class="icon" :class="{stateOk: operateState}"></div>
+          <div class="icon" :class="{stateOk: operateState, 'real-class': realClass}"></div>
           <p class="text">
             {{text}}
-            <span class="back-btn" v-if="!operateState" @click="hide">返回上一步</span>
+            <span class="win-desc">{{winDesc}}</span>
+            <span class="back-btn" @click="hide">{{btnTxt}}</span>
           </p>
           <div class="operate">
-            <div class="operate-btn"><span class="btn-box" @click="confirm">{{confirmBtnText}}</span></div>
+            <div class="operate-btn"><span class="btn-box" @click.stop="confirm">{{confirmBtnText}}</span></div>
           </div>
         </div>
       </div>
@@ -24,11 +25,23 @@
         type: String,
         default: ''
       },
+      winDesc: {
+        type: String,
+        default: ''
+      },
+      btnTxt: {
+        type: String,
+        default: ''
+      },
       confirmBtnText: {
         type: String,
         default: '确定'
       },
       operateState: {
+        type: Boolean,
+        default: true
+      },
+      realClass: {
         type: Boolean,
         default: true
       }
@@ -77,16 +90,18 @@
       z-index: 999
       .confirm-content
         width: 270px
-        padding: 45px 0
+        padding: 35px 0
         border-radius: 13px
         background: $color-text
         .icon
-          height: 45px
+          height: 43px
           bg-image('err')
-          background-size: 45px 45px
+          background-size: 43px 43px
           background-position: bottom center
           &.stateOk
            bg-image('suc')
+          &.real-class
+            bg-image('real')
         .text
           position: relative
           padding: 28px 15px 58px 15px
@@ -94,14 +109,25 @@
           text-align: center
           font-size: $font-size-large-z
           color: $color-tle
-          .back-btn
+          .win-desc
             position: absolute
             left: 0
-            bottom: 15px
+            top: 58px
             display: block
+            line-height: 12px
             width: 100%
             text-align: center
             font-size: $font-size-medium
+            color: $color-q
+          .back-btn
+            position: absolute
+            left: 0
+            bottom: 10px
+            display: block
+            line-height: 12px
+            width: 100%
+            text-align: center
+            font-size: $font-size-small
             color: $color-q
         .operate
           display: flex
