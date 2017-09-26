@@ -24,6 +24,7 @@
 <script>
   import MHeader from 'components/m-header/m-header'
   import {signOut} from 'api/sign'
+  import {mapActions} from 'vuex'
 
   export default {
     data() {
@@ -36,9 +37,13 @@
     methods: {
       _singOut() {
         signOut().then(() => {
+          this.changeLoginState('')
           this.$router.push('/')
         })
-      }
+      },
+      ...mapActions([
+        'changeLoginState'
+      ])
     },
     components: {
       MHeader

@@ -1,6 +1,6 @@
 <template>
   <div class="loading">
-    <img width="24" height="24" src="./loading.gif">
+    <img class="loading-icon" width="24" height="24" src="./loading.gif">
     <p class="desc">{{title}}</p>
   </div>
 </template>
@@ -21,6 +21,8 @@
     width: 100%
     padding-top: 10px
     text-align: center
+    .loading-icon
+      margin: 0 auto
     .desc
       line-height: 20px
       font-size: $font-size-small

@@ -38,6 +38,8 @@ const RepaymentPlan = () => import('components/repayment-plan/repayment-plan')
 const RiskWarning = () => import('components/risk-warning/risk-warning')
 const Report = () => import('components/report/report')
 const Subscription = () => import('components/subscription/subscription')
+const Guide = () => import('components/guide/guide')
+const InvestorNotice = () => import('components/investor-notice/investor-notice')
 
 Vue.use(Router)
 
@@ -84,8 +86,12 @@ export default new Router({
               component: RiskWarning
             },
             {
-              path: 'subscription',
+              path: 'subscription/:loanMoney/:surplus',
               component: Subscription
+            },
+            {
+              path: 'investor-notice/:loanMoney/:surplus',
+              component: InvestorNotice
             }
           ]
         },
@@ -292,8 +298,12 @@ export default new Router({
               component: RiskWarning
             },
             {
-              path: 'subscription',
+              path: 'subscription/:loanMoney/:surplus',
               component: Subscription
+            },
+            {
+              path: 'investor-notice/:loanMoney/:surplus',
+              component: InvestorNotice
             }
           ]
         }
@@ -314,7 +324,12 @@ export default new Router({
     {
       path: '/forget',
       component: Forget
+    },
+    {
+      path: '/guide',
+      component: Guide
     }
+
   ]
 })
 

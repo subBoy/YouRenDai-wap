@@ -9,16 +9,33 @@
 
 <script>
   import News from 'base/news/news'
+  import {getLatestNews} from 'api/notice'
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
       return {
-        titleTxt: '最新消息'
+        titleTxt: '最新消息',
+        page: 1,
+        rows: 5
       }
+    },
+    created () {
+      this._getLatestNews()
+    },
+    computed: {
+      ...mapGetters([
+        'changeLoginState'
+      ])
     },
     methods: {
       readAllNews () {
         console.log('readAllNews')
+      },
+      _getLatestNews () {
+        getLatestNews(this.page, this.rows, this.changeLoginState).then((res) => {
+          console.log(res)
+        })
       }
     },
     components: {

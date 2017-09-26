@@ -1,6 +1,6 @@
 <template>
   <div class="user-wrapper">
-    <m-header :isShow="isShow" :opcity="opcity" :whiteIcon="whiteIcon" @logined="logined">
+    <m-header :isShow="isShow" :opcity="opcity" :whiteIcon="whiteIcon" @logined="logined" @noLogin="noLogin">
       <div class="user-install" @click="setUser" v-if="signed"></div>
     </m-header>
     <div class="user-grounp">
@@ -11,8 +11,11 @@
               <div class="user-info">
                 <div class="avatar"></div>
                 <div class="user-info-center">
-                  <p class="name">131****2100<span class="vip"></span></p>
-                  <p class="balance">账户余额 <span class="sum">￥10000.00</span></p>
+                  <div v-if="signed">
+                    <p class="name">{{userInfo.username}}<span class="vip" :class="countVip(userInfo.level)"><span class="num">{{userInfo.level}}</span></span></p>
+                    <p class="balance">账户余额 <span class="sum">￥{{userInfo.activity}}</span></p>
+                  </div>
+                  <router-link tag="div" class="user-no-login" to="/signIn" v-else>立即登录</router-link>
                 </div>
               </div>
               <div class="btns-wrapper">
@@ -48,6 +51,7 @@
   import Scroll from 'base/scroll/scroll'
   import Tab from 'components/tab/tab'
   import Confirm from 'base/confirm/confirm'
+  import {userCenter} from 'api/user'
 
   export default {
     data() {
@@ -58,8 +62,14 @@
         probeType: 3,
         opcity: 0,
         currentIndex: -1,
-        realName: false,
         signed: false,
+        text: '您还未实名认证！',
+        confirmBtnText: '实名认证',
+        btnTxt: '请先完成',
+        winDesc: '为保障您的投资安全',
+        realClass: true,
+        user_id: '',
+        userInfo: {},
         applicationList: [
           {
             path: 'assets',
@@ -95,17 +105,7 @@
       }
     },
     created () {
-      this.text = '您还未实名认证！'
-      this.confirmBtnText = '实名认证'
-      this.btnTxt = '请先完成'
-      this.winDesc = '为保障您的投资安全'
-      this.realClass = true
-      setTimeout(() => {
-        if (!this.realName) {
-          this.$refs.customerConfirm.show()
-          console.log(0)
-        }
-      }, 20)
+
     },
     methods: {
       scroll (pos) {
@@ -130,8 +130,36 @@
       confirm () {
         this.$router.push('user-center/real-name')
       },
-      logined () {
+      logined (res) {
+        console.log(res)
+        if (res.usernameCh === '') {
+          this._real()
+        }
+        this.user_id = res.user_Id
+        this._getUser()
         this.signed = true
+      },
+      noLogin (res) {
+        this._real()
+        this.signed = false
+      },
+      countVip (num) {
+        if (num < 4) {
+          return 'vip1-3'
+        } else if (num < 7) {
+          return 'vip4-6'
+        }
+        return 'vip7-9'
+      },
+      _real () {
+        setTimeout(() => {
+          this.$refs.customerConfirm.show()
+        }, 20)
+      },
+      _getUser () {
+        userCenter(this.user_id).then((res) => {
+          this.userInfo = res.ret_set
+        })
       }
     },
     components: {
@@ -207,17 +235,28 @@
                 font-size: $font-size-medium
                 color: $color-text
                 .name
-                  line-height: 14px
+                  line-height: 16px
                   margin: 5px 0
                   .vip
                     display: inline-block
                     margin-left: 5px
                     vertical-align: top
-                    width: 35px
-                    height: 14px
-                    bg-image('vip-bg')
-                    background-size: 35px 13px
+                    width: 50px
+                    height: 16px
+                    background-size: auto 16px
                     background-position: center
+                    &.vip1-3
+                      bg-image('vip1-3')
+                    &.vip4-6
+                      bg-image('vip4-6')
+                    &.vip7-9
+                      bg-image('vip7-9')
+                    .num
+                      display: inline-block
+                      float: right
+                      line-height: 16px
+                      font-size: $font-size-small
+                      padding-right: 13px
                 .balance
                   .sum
                     font-weight: bold

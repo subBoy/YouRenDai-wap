@@ -3,7 +3,7 @@
     <div class="icon" :class="{black: isIndex}" @click="gobackAndNotice"></div>
     <h1 class="text">{{titleTxt}}</h1>
     <div v-if="isShow" class="right-core">
-      <div class="user-center" v-if="signIned">
+      <div class="user-center" v-if="changeLoginState && changeLoginState !== ''">
         <router-link tag="div" class="mine" to="/user-center">
           <i class="icon-mine"></i>
         </router-link>
@@ -20,6 +20,7 @@
 
 <script>
   import {getLoginState} from 'api/sign'
+  import {mapGetters} from 'vuex'
 
   export default {
     props: {
@@ -53,10 +54,10 @@
         default: 0
       }
     },
-    data () {
-      return {
-        signIned: false
-      }
+    created () {
+      setTimeout(() => {
+        this._getLoginState()
+      }, 20)
     },
     activated () {
       setTimeout(() => {
@@ -66,7 +67,10 @@
     computed: {
       bgColor () {
         return `background-color: rgba(255, 255, 255, ${this.opcity})`
-      }
+      },
+      ...mapGetters([
+        'changeLoginState'
+      ])
     },
     methods: {
       gobackAndNotice () {
@@ -77,13 +81,17 @@
         }
       },
       _getLoginState () {
-        getLoginState().then((res) => {
-          console.log(res)
-          if (res.isLogin === 'true') {
-            this.signIned = true
-            this.$emit('logined')
-          }
-        })
+        console.log(this.changeLoginState)
+        if (this.changeLoginState && this.changeLoginState !== '') {
+          getLoginState(this.changeLoginState).then((res) => {
+            console.log(res)
+            if (res.isLogin === 'true') {
+              this.$emit('logined', res)
+            } else {
+              this.$emit('noLogin', res)
+            }
+          })
+        }
       }
     }
   }

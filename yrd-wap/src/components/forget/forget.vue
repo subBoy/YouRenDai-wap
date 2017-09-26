@@ -21,7 +21,7 @@
 <script>
   import MHeader from 'components/m-header/m-header'
   import Sign from 'base/sign/sign'
-  import {encryption, compareEncrypt} from 'common/js/bcrypt'
+  // import {encryption, compareEncrypt} from 'common/js/bcrypt'
   import {getPassCodeNumber, checkTelPass, forgetPassword} from 'api/sign'
 
   export default {
@@ -40,13 +40,13 @@
     methods: {
       signMethods (phoneNumber, passWord, _id, verificationCode, userType, imgVerify) {
         // 加盐、加密
-        encryption(phoneNumber, (hash) => {
-          // this.userName = hash
-        })
+        // encryption(phoneNumber, (hash) => {
+        //   // this.userName = hash
+        // })
         // 匹配
-        compareEncrypt(passWord, this.password, (res) => {
-          // console.log(res)
-        })
+        // compareEncrypt(passWord, this.password, (res) => {
+        //   // console.log(res)
+        // })
 
         forgetPassword(phoneNumber, verificationCode, this.mdNum, passWord).then((res) => {
           if (res.flag) {

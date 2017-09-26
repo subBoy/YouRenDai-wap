@@ -14,6 +14,8 @@ var webpackConfig = require('./webpack.dev.conf')
 var bodyParser = require('body-parser')
 var axios = require('axios')
 
+axios.defaults.withCredentials = true
+
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
 // automatically open browser, if not set will be false
@@ -29,11 +31,12 @@ app.use(bodyParser.json())
 
 var apiRoutes = express.Router()
 
-var refererTxt = 'http://pre.yourendai.com:8080/'
-var hostTxt = 'pre.yourendai.com:8080'
+// md 192.168.1.138:8080 // wwz 192.168.1.13:8080 // http://pre.yourendai.com/
+var refererTxt = 'http://pre.yourendai.com/'
+var hostTxt = 'pre.yourendai.com'
 
 apiRoutes.get('/getRecommendBanner', function (req, res) {
-  var url = refererTxt + '/app/index.do'
+  var url = refererTxt + 'app/index.do'
   axios.get(url, {
     headers: {
       referer: refererTxt,
@@ -48,7 +51,7 @@ apiRoutes.get('/getRecommendBanner', function (req, res) {
 })
 
 apiRoutes.get('/getRecommendPro', function (req, res) {
-  var url = refererTxt + '/front/productMessage.do'
+  var url = refererTxt + 'front/productMessage.do'
   axios.get(url, {
     headers: {
       referer: refererTxt,
@@ -63,7 +66,7 @@ apiRoutes.get('/getRecommendPro', function (req, res) {
 })
 
 apiRoutes.get('/getNoticeList', function (req, res) {
-  var url = refererTxt + '/app/index.do'
+  var url = refererTxt + 'app/index.do'
   axios.get(url, {
     headers: {
       referer: refererTxt,
@@ -78,7 +81,7 @@ apiRoutes.get('/getNoticeList', function (req, res) {
 })
 
 apiRoutes.get('/getNoticeDetails', function (req, res) {
-  var url = refererTxt + '/app/index.do'
+  var url = refererTxt + 'app/index.do'
   axios.get(url, {
     headers: {
       referer: refererTxt,
@@ -93,7 +96,7 @@ apiRoutes.get('/getNoticeDetails', function (req, res) {
 })
 
 apiRoutes.get('/getProjectList', function (req, res) {
-  var url = refererTxt + '/front/projectList.do'
+  var url = refererTxt + 'front/projectList.do'
   axios.get(url, {
     headers: {
       referer: refererTxt + '',
@@ -108,7 +111,7 @@ apiRoutes.get('/getProjectList', function (req, res) {
 })
 
 apiRoutes.get('/getSubscribeData', function (req, res) {
-  var url = refererTxt + '/app/project.do'
+  var url = refererTxt + 'app/project.do'
   axios.get(url, {
     headers: {
       referer: refererTxt + '',
@@ -123,7 +126,7 @@ apiRoutes.get('/getSubscribeData', function (req, res) {
 })
 
 apiRoutes.get('/getRepaymentPlan', function (req, res) {
-  var url = refererTxt + '/app/projectDetail.do'
+  var url = refererTxt + 'app/projectDetail.do'
   axios.get(url, {
     headers: {
       referer: refererTxt + '',
@@ -138,7 +141,7 @@ apiRoutes.get('/getRepaymentPlan', function (req, res) {
 })
 
 apiRoutes.get('/getProjectInfo', function (req, res) {
-  var url = refererTxt + '/app/projectDetail.do'
+  var url = refererTxt + 'app/projectDetail.do'
   axios.get(url, {
     headers: {
       referer: refererTxt + '',
@@ -153,7 +156,7 @@ apiRoutes.get('/getProjectInfo', function (req, res) {
 })
 
 apiRoutes.get('/getLoginState', function (req, res) {
-  var url = refererTxt + '/validateUser.jsp'
+  var url = refererTxt + 'validateUser.jsp'
   axios.get(url, {
     headers: {
       referer: refererTxt + '',
@@ -168,7 +171,7 @@ apiRoutes.get('/getLoginState', function (req, res) {
 })
 
 apiRoutes.get('/signOut', function (req, res) {
-  var url = refererTxt + '/front/logout.do'
+  var url = refererTxt + 'front/logout.do'
   axios.get(url, {
     headers: {
       referer: refererTxt + '',
@@ -183,7 +186,7 @@ apiRoutes.get('/signOut', function (req, res) {
 })
 
 apiRoutes.post('/checkTel', function (req, res) {
-  var url = refererTxt + '/front/register.do'
+  var url = refererTxt + 'front/register.do'
   axios({
     url,
     method: 'post',
@@ -209,7 +212,7 @@ apiRoutes.post('/checkTel', function (req, res) {
 })
 
 apiRoutes.post('/getCode', function (req, res) {
-  var url = refererTxt + '/front/register.do'
+  var url = refererTxt + 'front/register.do'
   axios({
     url,
     method: 'post',
@@ -235,7 +238,7 @@ apiRoutes.post('/getCode', function (req, res) {
 })
 
 apiRoutes.post('/getRecommend', function (req, res) {
-  var url = refererTxt + '/front/searchrecommend.do'
+  var url = refererTxt + 'front/searchrecommend.do'
   axios({
     url,
     method: 'post',
@@ -261,7 +264,7 @@ apiRoutes.post('/getRecommend', function (req, res) {
 })
 
 apiRoutes.post('/getImgCode', function (req, res) {
-  var url = refererTxt + '/front/register.do'
+  var url = refererTxt + 'front/register.do'
   axios({
     url,
     method: 'post',
@@ -287,7 +290,7 @@ apiRoutes.post('/getImgCode', function (req, res) {
 })
 
 apiRoutes.post('/signIn', function (req, res) {
-  var url = refererTxt + '/front/register.do'
+  var url = refererTxt + 'front/register.do'
   axios({
     url,
     method: 'post',
@@ -304,7 +307,8 @@ apiRoutes.post('/signIn', function (req, res) {
       'Content-Type': 'application/x-www-form-urlencoded',
       referer: refererTxt + '',
       host: hostTxt
-    }
+    },
+    withCredentials: true
   }).then((response) => {
     res.json(response.data)
   }).catch((e) => {
@@ -313,7 +317,7 @@ apiRoutes.post('/signIn', function (req, res) {
 })
 
 apiRoutes.post('/signUp', function (req, res) {
-  var url = refererTxt + '/front/register.do'
+  var url = refererTxt + 'front/register.do'
   axios({
     url,
     method: 'post',
@@ -338,6 +342,388 @@ apiRoutes.post('/signUp', function (req, res) {
   })
 })
 
+apiRoutes.post('/setRealName', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/getInvestRecord', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/getPacks', function (req, res) {
+  var url = refererTxt + '/wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/userCenter', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/getAssets', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/getCustomer', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/setCustomer', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/userRecharge', function (req, res) {
+  var url = refererTxt + 'front/appSearchRecharge.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/userWithdrawal', function (req, res) {
+  var url = refererTxt + 'front/appWithdrawal.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/subscription', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.get('/getInvestorNotice', function (req, res) {
+  var url = refererTxt + 'qa/pager.do'
+  axios.get(url, {
+    headers: {
+      referer: refererTxt,
+      host: hostTxt
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/submitInvestorNotice', function (req, res) {
+  var url = refererTxt + '/wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.get('/getRewardList', function (req, res) {
+  var url = refererTxt + 'front/userReward.do'
+  axios.get(url, {
+    headers: {
+      referer: refererTxt,
+      host: hostTxt
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.get('/getLatestNews', function (req, res) {
+  var url = refererTxt + 'wap/wapIndexAction.do'
+  axios.get(url, {
+    headers: {
+      referer: refererTxt,
+      host: hostTxt
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/readAllNews', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/readOneNews', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
 app.use('/api', apiRoutes)
 
 var compiler = webpack(webpackConfig)

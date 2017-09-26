@@ -1,15 +1,15 @@
 <template>
   <div class="platform-wrapper">
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
-    <scroll class="platform-group">
+    <scroll class="platform-group" ref="platformScroll">
       <div class="platform-content">
         <div class="platform-banner">
-          <img src="./app-platform.jpg" width="100%">
+          <img src="./app-platform.jpg" @load="refresh" width="100%">
         </div>
         <div class="plat-cont">
           <div class="plat-first bg-fff">
             <img src="./title-1.png" width="45%" />
-            <img src="./pic-1.png" class="plat-tit" width="100%" />
+            <img src="./pic-1.png" class="plat-tit" @load="refresh" width="100%" />
             <p class="plat-p1">有人贷是兴伟集团旗下互联网金融网络借贷信息中介平台，集团资产规模近过百亿元，实力雄厚，商誉卓著。集团业务涵盖商贸旅游、地产、能源、文化、服务、金融、大健康八大产业。</p>
           </div>
           <div class="plat-sec-box">
@@ -30,7 +30,7 @@
           </div>
           <div class="plat-first bg-fff">
             <img src="./title-2.png" width="35%" />
-            <img src="./pic-2.png" class="plat-tit" width="100%" />
+            <img src="./pic-2.png" class="plat-tit" @load="refresh" width="100%" />
             <p class="plat-p1 padd-top">有人贷首创“PCC模式”，与商会（Commerce）开展战略合作，由工商联推荐优质借款企业，从而在源头把控资产质量和信用风险，上线至今，如约兑付。</p>
           </div>
           <div class="plat-sec-box">
@@ -38,19 +38,19 @@
               <img src="./title-3.png" width="35%" />
               <h3 class="plat-h3">银行级风控层层守卫</h3>
               <p class="plat-p1">有人贷引入银行级风控，严密的风控体系层层把关，有效保障借款项目的真实性和优质性。</p>
-              <img src="./pic-3.png" class="plat-tit" width="100%" />
+              <img src="./pic-3.png" class="plat-tit" @load="refresh" width="100%" />
             </div>
-            <img src="./pic-4.png" width="100%" />
+            <img src="./pic-4.png" @load="refresh" width="100%" />
           </div>
           <div class="plat-first bg-fff">
-            <img src="./pic-5.png" class="plat-tit" width="80%" />
+            <img src="./pic-5.png" class="plat-tit" @load="refresh" width="80%" />
             <h3 class="plat-h3 plats-h3">提高大数据应用能力 摸索智能量化风控体系</h3>
             <p class="plat-p1">有人贷一直关注和提升自身数据应用能力，持续探索大数据风控，通过与大数据机构和专业风控机构的合作，不断建设智能量化风控模型和体系，为投资人提供更为安全的投资环境。</p>
           </div>
           <div class="plat-sec-box">
             <div class="plat-first">
               <img src="./title-4.png" width="35%" />
-              <img src="./pic-6.png" class="plat-tit" width="100%" />
+              <img src="./pic-6.png" class="plat-tit" @load="refresh" width="100%" />
               <p class="plat-p1 padd-top">有人贷已与新网银行签订《资金存管服务协议》，已全面完成上线对接，实现了用户资金和平台自有资金的物理分离和分账管理。</p>
             </div>
           </div>
@@ -99,7 +99,7 @@
           </div>
         </div>
         <div class="platform-banner">
-          <img src="./app-platform-bot.jpg" width="100%">
+          <img src="./app-platform-bot.jpg" @load="refresh" width="100%">
         </div>
       </div>
     </scroll>
@@ -116,6 +116,11 @@
         isShow: false,
         opcity: 1,
         titleTxt: '了解平台'
+      }
+    },
+    methods: {
+      refresh() {
+        this.$refs.platformScroll.refresh()
       }
     },
     components: {

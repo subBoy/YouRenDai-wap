@@ -114,6 +114,7 @@
   import {getRecommendBanner, getRecommendPro} from 'api/recommend'
   import {_UA} from 'common/js/ua'
   import {getLoginState} from 'api/sign'
+  import {mapGetters} from 'vuex'
 
   export default {
     data () {
@@ -133,6 +134,11 @@
     created () {
       this._getRecommendBanner()
       this._getRecommendPro()
+    },
+    computed: {
+      ...mapGetters([
+        'changeLoginState'
+      ])
     },
     activated () {
       this.$refs.scroll.refresh()
@@ -174,7 +180,8 @@
         location.href = '/loan/activity/app-reception.shtml'
       },
       latestNews () {
-        getLoginState().then((res) => {
+        getLoginState(this.changeLoginState).then((res) => {
+          console.log('login:' + res.isLogin)
           if (res.isLogin === 'true') {
             this.$router.push('/recommend/latest-news')
           } else {

@@ -65,6 +65,8 @@
   import {prefixStyle} from 'common/js/dom'
   import {debounce} from 'common/js/util'
   import {getSubscribeData} from 'api/product'
+  import {getLoginState} from 'api/sign'
+  import {mapGetters} from 'vuex'
 
   const ERR_OK = 1
   const ITEM_WIDTH = 70
@@ -88,7 +90,8 @@
         removeBool: true,
         project_id: '',
         user_id: '',
-        screenHeight: document.documentElement.clientHeight
+        screenHeight: document.documentElement.clientHeight,
+        qaAssess: 'no'
       }
     },
     created () {
@@ -111,6 +114,11 @@
         }
         this._invest()
       }, 200))
+    },
+    computed: {
+      ...mapGetters([
+        'changeLoginState'
+      ])
     },
     methods: {
       lineBlur () {
@@ -172,8 +180,16 @@
         if (!this.subscribe.btnClass) {
           return
         }
-        this.$router.push({
-          path: `${this.$route.path}/subscription`
+        getLoginState(this.changeLoginState).then((res) => {
+          if (!this.isEvaluated) {
+            this.$router.push({
+              path: `${this.$route.path}/investor-notice/${this.investAmount}/${this.subscribe.surplus}`
+            })
+            return
+          }
+          this.$router.push({
+            path: `${this.$route.path}/subscription/${this.investAmount}/${this.subscribe.surplus}`
+          })
         })
       },
       httpTxt () {

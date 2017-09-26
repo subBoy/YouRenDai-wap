@@ -1,13 +1,8 @@
 <template>
   <div class="invest-record-wrapper">
-    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
+    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" @logined="logined"></m-header>
     <div class="banner" ref="banner"></div>
     <div class="record-wrapper" ref="recordWrapper">
-      <div class="no-record-wrapper" v-if="!recordList.length">
-        <p class="desc">暂无记录</p>
-        <p class="desc">先进行投资体验吧</p>
-        <div class="invest-btn">立即投标</div>
-      </div>
       <div class="record-grounp" v-if="recordList.length">
         <scroll
           class="record-scroll"
@@ -15,37 +10,24 @@
           :pullup="pullup"
           @scrollToEnd="loadMore"
         >
-          <ul class="record-list">
-            <li class="record-item border-1px">
-              <p class="info">产品名称<span class="text">安心宝AXB1512270</span></p>
-              <p class="info">投资时间<span class="text">2015-11-25 22:00:00</span></p>
-              <p class="info">投资金额<span class="text">￥100.00</span></p>
-              <p class="info styl">预期收益<span class="text">￥10.00</span></p>
-              <p class="info">状态<span class="text">已回款</span></p>
-            </li>
-            <li class="record-item border-1px">
-              <p class="info">产品名称<span class="text">安心宝AXB1512270</span></p>
-              <p class="info">投资时间<span class="text">2015-11-25 22:00:00</span></p>
-              <p class="info">投资金额<span class="text">￥100.00</span></p>
-              <p class="info styl">预期收益<span class="text">￥10.00</span></p>
-              <p class="info">状态<span class="text">已回款</span></p>
-            </li>
-            <li class="record-item border-1px">
-              <p class="info">产品名称<span class="text">安心宝AXB1512270</span></p>
-              <p class="info">投资时间<span class="text">2015-11-25 22:00:00</span></p>
-              <p class="info">投资金额<span class="text">￥100.00</span></p>
-              <p class="info styl">预期收益<span class="text">￥10.00</span></p>
-              <p class="info">状态<span class="text">已回款</span></p>
-            </li>
-            <li class="record-item border-1px">
-              <p class="info">产品名称<span class="text">安心宝AXB1512270</span></p>
-              <p class="info">投资时间<span class="text">2015-11-25 22:00:00</span></p>
-              <p class="info">投资金额<span class="text">￥100.00</span></p>
-              <p class="info styl">预期收益<span class="text">￥10.00</span></p>
-              <p class="info">状态<span class="text">已回款</span></p>
-            </li>
-          </ul>
+          <div>
+            <ul class="record-list">
+              <li class="record-item border-1px" v-for="item in recordList">
+                <p class="info">产品名称<span class="text">{{item.project_name}}</span></p>
+                <p class="info">投资时间<span class="text">{{item.create_date}}</span></p>
+                <p class="info">投资金额<span class="text">￥{{item.invest_money}}</span></p>
+                <p class="info styl">预期收益<span class="text">￥{{item.earnings}}</span></p>
+                <p class="info">状态<span class="text">{{item.code}}</span></p>
+              </li>
+            </ul>
+            <loading :title="loadTitle" v-show="hasMore"></loading>
+          </div>
         </scroll>
+      </div>
+      <div class="no-record-wrapper" v-else>
+        <p class="desc">暂无记录</p>
+        <p class="desc">先进行投资体验吧</p>
+        <div class="invest-btn">立即投标</div>
       </div>
     </div>
   </div>
@@ -53,19 +35,22 @@
 <script>
   import MHeader from 'components/m-header/m-header'
   import Scroll from 'base/scroll/scroll'
+  import Loading from 'base/loading/loading'
+  import {getInvestRecord} from 'api/user'
 
   export default {
     data() {
       return {
         titleTxt: '投资记录',
+        loadTitle: '正在载入更多...',
         isShow: false,
         opcity: 1,
+        userId: '',
         pullup: true,
         hasMore: true,
         page: 1,
-        recordList: [{
-          name: 0
-        }]
+        rows: 10,
+        recordList: []
       }
     },
     mounted () {
@@ -74,12 +59,39 @@
     },
     methods: {
       loadMore () {
-
+        if (!this.hasMore) {
+          return
+        }
+        this.page++
+        getInvestRecord(this.userId, this.page, this.rows).then((res) => {
+          this.recordList = this.recordList.concat(res.ret_set)
+          this._checkMore(res)
+        })
+      },
+      logined (res) {
+        this.userId = res.user_Id
+        this._getInvestRecord()
+      },
+      _getInvestRecord () {
+        this.page = 1
+        this.hasMore = true
+        getInvestRecord(this.userId, this.page, this.rows).then((res) => {
+          this.recordList = res.ret_set
+          this._checkMore(res)
+          console.log(this.recordList)
+        })
+      },
+      _checkMore (data) {
+        const rows = data.ret_set
+        if (!rows.length || rows.length < this.rows) {
+          this.hasMore = false
+        }
       }
     },
     components: {
       MHeader,
-      Scroll
+      Scroll,
+      Loading
     }
   }
 </script>

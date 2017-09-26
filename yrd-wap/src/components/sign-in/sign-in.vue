@@ -24,9 +24,10 @@
 <script>
   import MHeader from 'components/m-header/m-header'
   import Sign from 'base/sign/sign'
-  import {encryption, compareEncrypt} from 'common/js/bcrypt'
+  // import {encryption, compareEncrypt} from 'common/js/bcrypt'
   import {encode64} from 'common/js/util'
   import {signIn} from 'api/sign'
+  import {mapActions} from 'vuex'
 
   export default {
     data() {
@@ -43,16 +44,17 @@
     methods: {
       signMethods (phoneNumber, passWord, _id, verificationCode, userType, imgVerify) {
         // 加盐、加密
-        encryption(phoneNumber, (hash) => {
-          // this.userName = hash
-        })
+        // encryption(phoneNumber, (hash) => {
+        //   // this.userName = hash
+        // })
         // 匹配
-        compareEncrypt(passWord, this.password, (res) => {
-          // console.log(res)
-        })
+        // compareEncrypt(passWord, this.password, (res) => {
+        //   // console.log(res)
+        // })
         signIn(encode64(phoneNumber), encode64(passWord), imgVerify).then((res) => {
           if (res.flag) {
             this.$router.push('/')
+            this.changeLoginState(res.userId)
           } else {
             this.$refs.sign.changeVerify()
             this.imgCodeOk()
@@ -69,7 +71,10 @@
       },
       imgCodeOk () {
         this.isImgVerify = true
-      }
+      },
+      ...mapActions([
+        'changeLoginState'
+      ])
     },
     components: {
       MHeader,

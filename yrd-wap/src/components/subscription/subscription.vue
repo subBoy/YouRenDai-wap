@@ -1,6 +1,6 @@
 <template>
   <div class="subscription-wrapper">
-    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
+    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" @logined="logined"></m-header>
     <scroll class="subscription-scroll">
       <div class="subscription-group">
         <div class="prompt-wrapper">
@@ -15,11 +15,11 @@
         <div class="real-name-operate" v-show="!realed">
           <ul class="real-operate-wrapper">
             <li class="real-operate-item border-1px-b">
-              <input type="text" class="operate-input" placeholder="输入姓名">
+              <input type="text" class="operate-input" placeholder="输入姓名" v-model="realName">
               <p class="prompt-txt styl">{{nameErr}}</p>
             </li>
             <li class="real-operate-item border-1px-b">
-              <input type="text" class="operate-input" placeholder="身份证号">
+              <input type="text" class="operate-input" placeholder="身份证号" v-model="idCard">
               <p class="prompt-txt styl">{{idCardErr}}</p>
             </li>
           </ul>
@@ -32,106 +32,26 @@
             </li>
             <li class="real-operate-item border-1px-b">
               <input type="text" class="operate-input" disabled="disabled" placeholder="本次投资">
-              <p class="prompt-txt">{{5000}}元</p>
+              <p class="prompt-txt">{{loanMoney}}元</p>
             </li>
           </ul>
         </div>
         <div class="reward-wrapper">
           <h3 class="title border-1px-b">使用平台奖励</h3>
           <ul class="reward-group" v-show="rewardList.length > 0">
-            <li class="reward-item">
-              <div class="reward-view-wrapper">
-                <div class="reward-bg"><span class="reward-val">100元现金</span><span class="reward-name">抵用券</span></div>
-                <div class="reward-num">共计：<span class="styl">5</span></div>
+            <li class="reward-item" v-for="(reward, index) in rewardList">
+              <div class="reward-view-wrapper" :class="{'selected': reward.selected}" @click="selectReward(index)">
+                <div class="reward-bg"><span class="reward-val">{{reward.rewardVal}}</span><span class="reward-name">{{reward.rewardName}}</span></div>
+                <div class="reward-num">共计：<span class="styl">{{reward.rewardNum}}</span></div>
               </div>
               <div class="reward-desc-wrapper">
-                <p class="desc-txt">本次投资可用：<span class="num">5</span></p>
+                <p class="desc-txt">本次投资可用：<span class="num">{{reward.descTxtNum}}</span></p>
                 <div class="reward-input">
-                  <div class="btn-remove" :class="{remove: !removeBool}" @click="removeInvest"></div>
+                  <div class="btn-remove" @click="removeInvest(index)"></div>
                   <div class="input-wrapper">
-                    <input class="input-self" ref="inputWrapper" disabled="disabled" @keyup.prevent="investKeyup" type="tel" v-model="investAmount">
+                    <input class="input-self" ref="inputWrapper" disabled="disabled" type="tel" v-model="reward.investAmount">
                   </div>
-                  <div class="btn-add" :class="{add: !addBool}" @click="addInvest"></div>
-                </div>
-              </div>
-            </li>
-            <li class="reward-item">
-              <div class="reward-view-wrapper">
-                <div class="reward-bg"><span class="reward-val">100元现金</span><span class="reward-name">抵用券</span></div>
-                <div class="reward-num">共计：<span class="styl">5</span></div>
-              </div>
-              <div class="reward-desc-wrapper">
-                <p class="desc-txt">本次投资可用：<span class="num">5</span></p>
-                <div class="reward-input">
-                  <div class="btn-remove" :class="{remove: !removeBool}" @click="removeInvest"></div>
-                  <div class="input-wrapper">
-                    <input class="input-self" ref="inputWrapper" disabled="disabled" @keyup.prevent="investKeyup" type="tel" v-model="investAmount">
-                  </div>
-                  <div class="btn-add" :class="{add: !addBool}" @click="addInvest"></div>
-                </div>
-              </div>
-            </li>
-            <li class="reward-item">
-              <div class="reward-view-wrapper">
-                <div class="reward-bg"><span class="reward-val">100元现金</span><span class="reward-name">抵用券</span></div>
-                <div class="reward-num">共计：<span class="styl">5</span></div>
-              </div>
-              <div class="reward-desc-wrapper">
-                <p class="desc-txt">本次投资可用：<span class="num">5</span></p>
-                <div class="reward-input">
-                  <div class="btn-remove" :class="{remove: !removeBool}" @click="removeInvest"></div>
-                  <div class="input-wrapper">
-                    <input class="input-self" ref="inputWrapper" disabled="disabled" @keyup.prevent="investKeyup" type="tel" v-model="investAmount">
-                  </div>
-                  <div class="btn-add" :class="{add: !addBool}" @click="addInvest"></div>
-                </div>
-              </div>
-            </li>
-            <li class="reward-item">
-              <div class="reward-view-wrapper">
-                <div class="reward-bg"><span class="reward-val">100元现金</span><span class="reward-name">抵用券</span></div>
-                <div class="reward-num">共计：<span class="styl">5</span></div>
-              </div>
-              <div class="reward-desc-wrapper">
-                <p class="desc-txt">本次投资可用：<span class="num">5</span></p>
-                <div class="reward-input">
-                  <div class="btn-remove" :class="{remove: !removeBool}" @click="removeInvest"></div>
-                  <div class="input-wrapper">
-                    <input class="input-self" ref="inputWrapper" disabled="disabled" @keyup.prevent="investKeyup" type="tel" v-model="investAmount">
-                  </div>
-                  <div class="btn-add" :class="{add: !addBool}" @click="addInvest"></div>
-                </div>
-              </div>
-            </li>
-            <li class="reward-item">
-              <div class="reward-view-wrapper">
-                <div class="reward-bg"><span class="reward-val">100元现金</span><span class="reward-name">抵用券</span></div>
-                <div class="reward-num">共计：<span class="styl">5</span></div>
-              </div>
-              <div class="reward-desc-wrapper">
-                <p class="desc-txt">本次投资可用：<span class="num">5</span></p>
-                <div class="reward-input">
-                  <div class="btn-remove" :class="{remove: !removeBool}" @click="removeInvest"></div>
-                  <div class="input-wrapper">
-                    <input class="input-self" ref="inputWrapper" disabled="disabled" @keyup.prevent="investKeyup" type="tel" v-model="investAmount">
-                  </div>
-                  <div class="btn-add" :class="{add: !addBool}" @click="addInvest"></div>
-                </div>
-              </div>
-            </li>
-            <li class="reward-item">
-              <div class="reward-view-wrapper">
-                <div class="reward-bg"><span class="reward-val">100元现金</span><span class="reward-name">抵用券</span></div>
-                <div class="reward-num">共计：<span class="styl">5</span></div>
-              </div>
-              <div class="reward-desc-wrapper">
-                <p class="desc-txt">本次投资可用：<span class="num">5</span></p>
-                <div class="reward-input">
-                  <div class="btn-remove" :class="{remove: !removeBool}" @click="removeInvest"></div>
-                  <div class="input-wrapper">
-                    <input class="input-self" ref="inputWrapper" disabled="disabled" @keyup.prevent="investKeyup" type="tel" v-model="investAmount">
-                  </div>
-                  <div class="btn-add" :class="{add: !addBool}" @click="addInvest"></div>
+                  <div class="btn-add" @click="addInvest(index)"></div>
                 </div>
               </div>
             </li>
@@ -148,6 +68,8 @@
   import MHeader from 'components/m-header/m-header'
   import Scroll from 'base/scroll/scroll'
   import FootBtn from 'base/foot-btn/foot-btn'
+  import {subscription, getRewardList} from 'api/user'
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
@@ -156,19 +78,94 @@
         opcity: 1,
         titleTxt: '确认认购',
         realed: true,
+        realName: '',
+        idCard: '',
         nameErr: 'xx',
         idCardErr: 'xx',
-        surplus: 52000,
-        thisTime: 5000,
+        surplus: this.$route.params.surplus,
+        loanMoney: this.$route.params.loanMoney,
         submitBtnTxt: '确认提交',
-        rewardList: [
-          {}
-        ]
+        reward: '',
+        rewardLines: '',
+        projectId: this.$route.params.id,
+        projectType: '',
+        rewardList: []
       }
+    },
+    created() {
+      this._getRewardList()
+    },
+    computed: {
+      ...mapGetters([
+        'changeLoginState'
+      ])
     },
     methods: {
       submitFuc () {
         console.log('确认认购')
+        this._subscription()
+      },
+      logined (res) {
+        if (res.usernameCh && res.usernameCh !== '') {
+          this.realed = true
+        } else {
+          this.realed = false
+        }
+      },
+      selectReward(sn) {
+        let bool = this.rewardList[sn].selected
+        bool = !bool
+        this.$set(this.rewardList[sn], 'selected', bool)
+      },
+      removeInvest(sn) {
+        let num3 = this.rewardList[sn].investAmount
+        if (num3 <= 1) {
+          return
+        }
+        num3--
+        this.$set(this.rewardList[sn], 'investAmount', num3)
+      },
+      addInvest(sn) {
+        let num1 = this.rewardList[sn].rewardNum
+        let num2 = this.rewardList[sn].descTxtNum
+        let num3 = this.rewardList[sn].investAmount
+        if (num3 >= num1 || num3 >= num2) {
+          return
+        }
+        num3++
+        this.$set(this.rewardList[sn], 'investAmount', num3)
+      },
+      _getRewardList() {
+        getRewardList(this.projectId, this.loanMoney).then((res) => {
+          this.rewardList = this._formatData(res.data_list)
+          console.log(res)
+        })
+      },
+      _formatData(data) {
+        let ret = []
+        data.forEach((item, index) => {
+          ret.push({
+            rewardVal: item.reward_name,
+            rewardName: item.reward_type_name_ch,
+            rewardNum: item.actual_possession,
+            descTxtNum: item.use_max,
+            investAmount: 1,
+            selected: false,
+            minInvestAmout: item.min_investment_amount,
+            rewardId: item.reward_id,
+            rewardLines: item.reward_lines,
+            rewardEnName: item.reward_type_name_en,
+            useWithLuckMoney: item.use_with_luck_money,
+            useWithOthersType: item.use_with_others_type,
+            useWithSameType: item.use_with_same_type
+          })
+        })
+        return ret
+      },
+      _subscription() {
+        subscription(this.changeLoginState, this.realName, this.idCard, this.reward, this.rewardLines, this.projectId, this.loanMoney, this.projectType).then((res) => {
+          console.log(res)
+        })
       }
     },
     components: {
@@ -269,6 +266,8 @@
               bg-image('select')
               background-position: center left
               background-size: 20px 20px
+              &.selected
+                bg-image('selected')
               .reward-bg
                 position: relative
                 height: 24px
@@ -325,7 +324,7 @@
                 .btn-remove
                   flex: 0 0 20px
                   width: 20px
-                  hieght: 20px
+                  height: 20px
                   extend-click()
                   bg-image('buyDeBtn')
                   background-size: 50% auto
@@ -346,8 +345,10 @@
                     width: 100%
                     line-height: 20px
                     height: 20px
+                    font-size: $font-size-small
                     background-color: $color-background
                     color: $color-tle
+                    text-align: center
           .air-reward
             line-height: 54px
             text-align: center

@@ -8,12 +8,12 @@
     <div class="content-wrapper">
       <ul class="content-list">
         <li class="content-item border-1px-b">
-          <input type="text" class="input-box" placeholder="输入姓名">
-          <p class="err-desc">jsfhdjfhsdhfsdjfsdjjd</p>
+          <input type="text" class="input-box" placeholder="输入姓名" @focus="clearNameErr" v-model="nameVal">
+          <p class="err-desc">{{nameErr}}</p>
         </li>
          <li class="content-item">
-          <input type="text" class="input-box" placeholder="身份证号">
-          <p class="err-desc"></p>
+          <input type="text" class="input-box" placeholder="身份证号" @focus="clearCodeErr" v-model="codeVal">
+          <p class="err-desc">{{codeErr}}</p>
         </li>
       </ul>
     </div>
@@ -23,6 +23,8 @@
 <script>
   import MHeader from 'components/m-header/m-header'
   import FootBtn from 'base/foot-btn/foot-btn'
+  import {setRealName} from 'api/user'
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
@@ -30,12 +32,41 @@
         titleTxt: '实名认证',
         isShow: false,
         opcity: 1,
-        submitBtnTxt: '确认提交'
+        submitBtnTxt: '确认提交',
+        nameErr: '',
+        codeErr: '',
+        nameVal: '',
+        codeVal: ''
       }
+    },
+    computed: {
+      ...mapGetters([
+        'changeLoginState'
+      ])
     },
     methods: {
       submitFuc() {
-        console.log('ok')
+        if (this.nameVal === '') {
+          this.nameErr = '真实姓名不能为空！'
+          return
+        }
+        if (this.codeVal === '') {
+          this.codeErr = '身份证号不能为空！'
+          return
+        }
+
+        this._setRealName()
+      },
+      clearNameErr() {
+        this.nameErr = ''
+      },
+      clearCodeErr() {
+        this.codeErr = ''
+      },
+      _setRealName() {
+        setRealName(this.nameVal, this.codeVal, this.changeLoginState).then((res) => {
+          console.log(res)
+        })
       }
     },
     components: {

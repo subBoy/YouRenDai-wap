@@ -7,7 +7,7 @@
           <div class="assets-info-wrapper">
             <div class="assets-info-grounp">
               <div class="assets-info">
-                <p class="balance">10000.00<span class="util">元</span></p>
+                <p class="balance">{{assetsInfo.activity}}<span class="util">元</span></p>
                 <p class="desc">账户余额</p>
               </div>
               <div class="btns-wrapper">
@@ -19,23 +19,23 @@
           <ul class="assets-details-wrapper">
             <li class="assets-details-item">
               <span class="left">代收金额</span>
-              <span class="right">￥1000.00</span>
+              <span class="right">￥{{assetsInfo.duein}}</span>
             </li>
             <li class="assets-details-item">
               <span class="left">已收金额</span>
-              <span class="right">￥100.00</span>
+              <span class="right">￥{{assetsInfo.earnings}}</span>
             </li>
             <li class="assets-details-item">
               <span class="left">下次回款</span>
-              <span class="right">￥10.00</span>
+              <span class="right">￥{{assetsInfo.nextEearnings}}</span>
             </li>
             <li class="assets-details-item">
               <span class="left">下次回款日期</span>
-              <span class="right">2017-08-25</span>
+              <span class="right">{{assetsInfo.repaymentDate}}</span>
             </li>
             <li class="assets-details-item">
               <span class="left">奖励金额</span>
-              <span class="right">￥0.50</span>
+              <span class="right">￥{{assetsInfo.transferMoney}}</span>
             </li>
           </ul>
           <ul class="assets-operate-wrapper">
@@ -72,7 +72,16 @@
   import Scroll from 'base/scroll/scroll'
   import Tab from 'components/tab/tab'
   import Call from 'base/call/call'
+  import {getAssets} from 'api/user'
+  import {mapGetters} from 'vuex'
+
   export default {
+    props: {
+      wapUserId: {
+        type: String,
+        default: ''
+      }
+    },
     data() {
       return {
         isShow: false,
@@ -81,8 +90,18 @@
         probeType: 3,
         opcity: 0,
         titleTxt: '我的资产',
-        showFlag: true
+        showFlag: true,
+        assetsInfo: {},
+        userId: ''
       }
+    },
+    created () {
+      this._getAssets()
+    },
+    computed: {
+      ...mapGetters([
+        'changeLoginState'
+      ])
     },
     methods: {
       scroll (pos) {
@@ -99,6 +118,11 @@
       },
       callMe () {
         this.$refs.call.show()
+      },
+      _getAssets () {
+        getAssets(this.changeLoginState).then((res) => {
+          this.assetsInfo = res.ret_set
+        })
       }
     },
     components: {

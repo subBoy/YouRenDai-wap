@@ -1,7 +1,7 @@
 {
-  "name": "vue-music",
+  "name": "vue-p2p",
   "version": "1.0.0",
-  "description": "music webApp",
+  "description": "p2p webApp",
   "author": "subBoy <15256025969@163.com>",
   "private": true,
   "scripts": {

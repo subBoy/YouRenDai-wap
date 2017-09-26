@@ -351,7 +351,6 @@
           loop: true,
           onSlideChangeStart: function() {
             _this.activeIndex = _this.ptswiper.realIndex
-            console.log(_this.activeIndex)
             if (_this.activeIndex === 2) {
               _this.page3An()
             } else {

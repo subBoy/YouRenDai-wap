@@ -1,5 +1,7 @@
+import {getChangeLogin} from 'common/js/cache'
+
 const state = {
-  changeLoginState: false
+  changeLoginState: getChangeLogin()
 }
 
 export default state

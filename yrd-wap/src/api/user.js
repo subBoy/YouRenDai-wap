@@ -1,96 +1,22 @@
 import axios from 'axios'
 
-axios.defaults.withCredentials = true
-
 const debug = process.env.NODE_ENV !== 'production'
 let url = ''
 
-// 注册获取短信验证码
-export function getCodeNumber (loginName, mdNum) {
+// 实名认证
+export function setRealName (realname, cardId, userId) {
   if (debug) {
-    url = '/api/getCode'
+    url = '/api/setRealName'
   } else {
-    url = '/front/register.do'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
-    cmd: 'getPhoneCode',
-    loginName,
-    mdNum
-  })
-
-  return axios({
-    url,
-    method: 'post',
-    data,
-    transformRequest: [function (data) {
-      let ret = ''
-      for (let it in data) {
-        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-      }
-      ret = ret.substr(0, ret.length - 1)
-      return ret
-    }],
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  }).then((res) => {
-    if (debug) {
-      return Promise.resolve({msg: '短信发送成功', flag: true})
-    }
-    return Promise.resolve(res.data)
-  })
-}
-
-// 忘记密码获取短信验证码
-export function getPassCodeNumber (loginName, mdNum) {
-  if (debug) {
-    url = '/api/getCode'
-  } else {
-    url = '/front/register.do'
-  }
-
-  const data = Object.assign({}, {
-    cmd: 'getPhoneCode4ForgetPwd',
-    loginName,
-    mdNum
-  })
-
-  return axios({
-    url,
-    method: 'post',
-    data,
-    transformRequest: [function (data) {
-      let ret = ''
-      for (let it in data) {
-        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-      }
-      ret = ret.substr(0, ret.length - 1)
-      return ret
-    }],
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  }).then((res) => {
-    if (debug) {
-      return Promise.resolve({msg: '短信发送成功', flag: true})
-    }
-    return Promise.resolve(res.data)
-  })
-}
-
-// 注册验证手机号
-export function checkTel (loginName) {
-  if (debug) {
-    url = '/api/checkTel'
-  } else {
-    url = '/front/register.do'
-  }
-
-  const data = Object.assign({}, {
-    cmd: 'checkTel',
-    loginName,
-    type: 'tz'
+    cmd: 'realRegister',
+    realname,
+    cardId,
+    user_id: userId,
+    source: 'WAP'
   })
 
   return axios({
@@ -113,17 +39,19 @@ export function checkTel (loginName) {
   })
 }
 
-// 忘记密码验证手机号
-export function checkTelPass (loginName) {
+// 投资记录
+export function getInvestRecord (userId, page, rows) {
   if (debug) {
-    url = '/api/checkTel'
+    url = '/api/getInvestRecord'
   } else {
-    url = '/front/register.do'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
-    cmd: 'checkTel4ForgetPwd',
-    loginName
+    cmd: 'investRecord',
+    user_id: userId,
+    page,
+    rows
   })
 
   return axios({
@@ -146,17 +74,26 @@ export function checkTelPass (loginName) {
   })
 }
 
-// 获取推荐人
-export function getRecommend (loginName) {
+// 认购确认
+export function subscription (userId, realName, idCard, reward, rewardLines, projectId, loanMoney, projectType) {
   if (debug) {
-    url = '/api/getRecommend'
+    url = '/api/subscription'
   } else {
-    url = '/front/searchrecommend.do'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
-    cmd: 'DataDecryption',
-    loginName
+    cmd: 'identification',
+    user_id: userId,
+    realName,
+    idCard,
+    reward,
+    reward_lines: rewardLines,
+    param: {
+      projectId,
+      loanMoney,
+      projectType
+    }
   })
 
   return axios({
@@ -179,16 +116,19 @@ export function getRecommend (loginName) {
   })
 }
 
-// 获取图片验证码
-export function getImgCode () {
+// 礼包大放送
+export function getPacks (userId, page, rows) {
   if (debug) {
-    url = '/api/getImgCode'
+    url = '/api/getPacks'
   } else {
-    url = '/front/register.do'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
-    cmd: 'needCode'
+    cmd: 'rewardList',
+    user_id: userId,
+    page,
+    rows
   })
 
   return axios({
@@ -211,22 +151,17 @@ export function getImgCode () {
   })
 }
 
-// 注册
-export function signUp (loginName, telcode, lcNum, userType, password) {
+// 我的资产
+export function getAssets(userId) {
   if (debug) {
-    url = '/api/signUp'
+    url = '/api/getAssets'
   } else {
-    url = '/front/register.do'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
-    cmd: 'register',
-    source: 'PC',
-    loginName,
-    telcode,
-    lcNum,
-    userType,
-    password
+    cmd: 'moneyManage',
+    userId
   })
 
   return axios({
@@ -249,58 +184,17 @@ export function signUp (loginName, telcode, lcNum, userType, password) {
   })
 }
 
-// 登录
-export function signIn (loginName, passWord, checkCode) {
+// 个人中心
+export function userCenter(userId) {
   if (debug) {
-    url = '/api/signIn'
+    url = '/api/userCenter'
   } else {
-    url = '/front/register.do'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
-    cmd: 'login',
-    source: 'PC',
-    loginName,
-    passWord,
-    checkCode
-  })
-
-  return axios({
-    url,
-    method: 'post',
-    data,
-    transformRequest: [function (data) {
-      let ret = ''
-      for (let it in data) {
-        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-      }
-      ret = ret.substr(0, ret.length - 1)
-      return ret
-    }],
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    withCredentials: true
-  }).then((res) => {
-    return Promise.resolve(res.data)
-  })
-}
-
-// 忘记密码
-export function forgetPassword (loginName, telcode, mdNum, pwd) {
-  if (debug) {
-    url = '/api/signUp'
-  } else {
-    url = '/front/register.do'
-  }
-
-  const data = Object.assign({}, {
-    cmd: 'forgetPwd',
-    source: 'PC',
-    loginName,
-    telcode,
-    mdNum,
-    pwd
+    cmd: 'getUser',
+    userId: userId
   })
 
   return axios({
@@ -323,17 +217,157 @@ export function forgetPassword (loginName, telcode, mdNum, pwd) {
   })
 }
 
-// 检测登录状态
-export function getLoginState (userId) {
+// 客服工号
+export function getCustomer(userId) {
   if (debug) {
-    url = '/api/getLoginState'
+    url = '/api/getCustomer'
   } else {
-    url = '/validateUser.jsp'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
-    wapUserId: userId,
-    _: +new Date()
+    cmd: 'lcData',
+    user_id: userId
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 绑定客服工号
+export function setCustomer(userId, lcNum) {
+  if (debug) {
+    url = '/api/setCustomer'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'lcAdd',
+    user_id: userId,
+    lcNum
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 立即充值
+export function userRecharge(userId, source, timestamp, sign) {
+  if (debug) {
+    url = '/api/userRecharge'
+  } else {
+    url = '/front/appSearchRecharge.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'beforeImmediatelyRecharge',
+    user_id: userId,
+    source,
+    timestamp,
+    sign
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 提现
+export function userWithdrawal(userId, source, timestamp, sign) {
+  if (debug) {
+    url = '/api/userWithdrawal'
+  } else {
+    url = '/front/appWithdrawal.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'beforeImmediatelyRecharge',
+    user_id: userId,
+    source,
+    timestamp,
+    sign
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 投资者须知 问券
+export function getInvestorNotice (qaCatCode, qaPaperIssue) {
+  if (debug) {
+    url = '/api/getInvestorNotice'
+  } else {
+    url = '/qa/pager.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'getQaPager',
+    qaCatCode,
+    qaPaperIssue
   })
 
   return axios.get(url, {
@@ -343,17 +377,52 @@ export function getLoginState (userId) {
   })
 }
 
-// 退出登录
-export function signOut () {
+// 投资者须知 答案提交
+export function submitInvestorNotice(qaPaperId, qaAnsContent) {
   if (debug) {
-    url = '/api/signOut'
+    url = '/api/submitInvestorNotice'
   } else {
-    url = '/front/logout.do'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
-    cmd: 'new_logout',
-    _: +new Date()
+    cmd: 'submitQaAns',
+    qaPaperId,
+    qaAnsContent
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 获取平台奖励列表
+export function getRewardList (projectId, investmentAmount) {
+  if (debug) {
+    url = '/api/getRewardList'
+  } else {
+    url = '/front/userReward.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'orderRewardList201702',
+    project_id: projectId,
+    investment_amount: investmentAmount
   })
 
   return axios.get(url, {

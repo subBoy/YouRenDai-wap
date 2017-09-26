@@ -3,7 +3,7 @@
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
     <div class="packs-number">
       <span class="name">累计优惠券</span>
-      <span class="number">50</span>
+      <span class="number">{{allLen}}</span>
     </div>
     <div class="null-packs" v-if="!packsList.length">
       <p class="desc">暂无记录</p>
@@ -17,92 +17,25 @@
         :pullup="pullup"
         @scrollToEnd="loadMore"
       >
-        <ul class="packs-list">
-          <li class="paxks-item" :class="{back: packsSort}">
-            <div class="icon">
-              <span class="name">返现券</span>
-              <span class="use-btn"><a class="use-btn-txt">立即使用</a></span>
-            </div>
-            <div class="info-desc">
-              <div class="text">
-                <p class="name ellipsis">100元现金券</p>
-                <p class="term ellipsis">(投资含10,000元及以上使用)</p>
-                <p class="time ellipsis">过期时间: 2017-3-11 18:19:05</p>
-                <p class="state ellipsis">是否已使用: <span :class="{desc: !isUseed}">否</span></p>
+        <div>
+          <ul class="packs-list">
+            <li class="packs-item" v-for="item in packsList" :class="{back: item.rewardTypeName === '返现券'}">
+              <div class="icon">
+                <span class="name">{{item.rewardTypeName}}</span>
+                <span class="use-btn"><a class="use-btn-txt">{{btnTxt(item)}}</a></span>
               </div>
-            </div>
-          </li>
-          <li class="paxks-item" :class="{back: packsSort}">
-            <div class="icon">
-              <span class="name">返现券</span>
-              <span class="use-btn"><a class="use-btn-txt">立即使用</a></span>
-            </div>
-            <div class="info-desc">
-              <div class="text">
-                <p class="name ellipsis">100元现金券</p>
-                <p class="term ellipsis">(投资含10,000元及以上使用)</p>
-                <p class="time ellipsis">过期时间: 2017-3-11 18:19:05</p>
-                <p class="state ellipsis">是否已使用: <span :class="{desc: !isUseed}">否</span></p>
+              <div class="info-desc">
+                <div class="text">
+                  <p class="name ellipsis">{{item.rewardName}}</p>
+                  <p class="term ellipsis">({{item.note}})</p>
+                  <p class="time ellipsis">过期时间: {{item.recordEnableDate}}</p>
+                  <p class="state ellipsis">是否已使用: <span :class="{desc: item.isEnable === '未使用'}">{{item.isEnable}}</span></p>
+                </div>
               </div>
-            </div>
-          </li>
-          <li class="paxks-item" :class="{back: packsSort}">
-            <div class="icon">
-              <span class="name">返现券</span>
-              <span class="use-btn"><a class="use-btn-txt">立即使用</a></span>
-            </div>
-            <div class="info-desc">
-              <div class="text">
-                <p class="name ellipsis">100元现金券</p>
-                <p class="term ellipsis">(投资含10,000元及以上使用)</p>
-                <p class="time ellipsis">过期时间: 2017-3-11 18:19:05</p>
-                <p class="state ellipsis">是否已使用: <span :class="{desc: !isUseed}">否</span></p>
-              </div>
-            </div>
-          </li>
-          <li class="paxks-item" :class="{back: packsSort}">
-            <div class="icon">
-              <span class="name">返现券</span>
-              <span class="use-btn"><a class="use-btn-txt">立即使用</a></span>
-            </div>
-            <div class="info-desc">
-              <div class="text">
-                <p class="name ellipsis">100元现金券</p>
-                <p class="term ellipsis">(投资含10,000元及以上使用)</p>
-                <p class="time ellipsis">过期时间: 2017-3-11 18:19:05</p>
-                <p class="state ellipsis">是否已使用: <span :class="{desc: !isUseed}">否</span></p>
-              </div>
-            </div>
-          </li>
-          <li class="paxks-item" :class="{back: packsSort}">
-            <div class="icon">
-              <span class="name">返现券</span>
-              <span class="use-btn"><a class="use-btn-txt">立即使用</a></span>
-            </div>
-            <div class="info-desc">
-              <div class="text">
-                <p class="name ellipsis">100元现金券</p>
-                <p class="term ellipsis">(投资含10,000元及以上使用)</p>
-                <p class="time ellipsis">过期时间: 2017-3-11 18:19:05</p>
-                <p class="state ellipsis">是否已使用: <span :class="{desc: !isUseed}">否</span></p>
-              </div>
-            </div>
-          </li>
-          <li class="paxks-item" :class="{back: packsSort}">
-            <div class="icon">
-              <span class="name">返现券</span>
-              <span class="use-btn"><a class="use-btn-txt">立即使用</a></span>
-            </div>
-            <div class="info-desc">
-              <div class="text">
-                <p class="name ellipsis">100元现金券</p>
-                <p class="term ellipsis">(投资含10,000元及以上使用)</p>
-                <p class="time ellipsis">过期时间: 2017-3-11 18:19:05</p>
-                <p class="state ellipsis">是否已使用: <span :class="{desc: !isUseed}">否</span></p>
-              </div>
-            </div>
-          </li>
-        </ul>
+            </li>
+          </ul>
+          <loading :title="loadTitle" v-show="hasMore"></loading>
+        </div>
       </scroll>
     </div>
   </div>
@@ -110,29 +43,75 @@
 <script>
   import MHeader from 'components/m-header/m-header'
   import Scroll from 'base/scroll/scroll'
+  import Loading from 'base/loading/loading'
+  import {getPacks} from 'api/user'
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
       return {
         titleTxt: '我的礼包',
+        loadTitle: '正在载入更多...',
         isShow: false,
         opcity: 1,
         pullup: true,
+        hasMore: true,
+        allLen: 0,
+        page: 1,
+        rows: 6,
         packsSort: true,
         isUseed: false,
-        packsList: [{
-          name: '测试'
-        }]
+        packsList: []
       }
+    },
+    created () {
+      this._getPacks()
+    },
+    computed: {
+      ...mapGetters([
+        'changeLoginState'
+      ])
     },
     methods: {
       loadMore () {
+        if (!this.hasMore) {
+          return
+        }
+        this.page++
+        getPacks(this.changeLoginState, this.page, this.rows).then((res) => {
+          this.packsList = this.packsList.concat(res.ret_set.jsonArray)
+          console.log(this.packsList)
+          this._checkMore(res)
+        })
+      },
+      btnTxt(item) {
+        console.log(item)
+        if (item.isEnable === '未使用') {
+          return '立即使用'
+        }
+        return item.isEnable
+      },
+      _getPacks () {
+        this.page = 1
+        this.hasMore = true
 
+        getPacks(this.changeLoginState, this.page, this.rows).then((res) => {
+          this.allLen = res.ret_set.totle
+          this.packsList = res.ret_set.jsonArray
+          this._checkMore(res)
+        })
+      },
+      _checkMore (data) {
+        const rows = data.ret_set
+        if (!rows.jsonArray.length || (rows.jsonArray.length < this.rows)) {
+          this.hasMore = false
+        }
       }
     },
     components: {
       MHeader,
-      Scroll
+      Scroll,
+      Loading
     }
   }
 </script>
@@ -192,7 +171,7 @@
         .packs-list
           margin: 0 20px
           padding-bottom: 5px
-          .paxks-item
+          .packs-item
             position: relative
             margin-bottom: 5px
             padding-left: 116px

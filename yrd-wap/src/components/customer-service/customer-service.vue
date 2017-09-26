@@ -4,16 +4,16 @@
     <div class="customer-service-content border-1px-b">
       <div class="avatar"></div>
       <div class="service-info-grounp">
-        <div class="service-info-unbind" v-if="unbind">您还未绑定客服顾问~~</div>
-        <div class="service-info-bind" v-if="!unbind">
-          <p class="info-item"><span class="name">小哥001</span></p>
-          <p class="info-item"><a class="tel" href="tel:137-1107-3101">137-1107-3101</a></p>
+        <div class="service-info-unbind" v-if="!customerInfo.telephone || customerInfo.telephone === ''">您还未绑定客服顾问~~</div>
+        <div class="service-info-bind" v-else>
+          <p class="info-item"><span class="name">{{customerInfo.consultantName1}}</span></p>
+          <p class="info-item"><a class="tel" href="tel:customerInfo.telephone">{{customerInfo.telephone}}</a></p>
         </div>
       </div>
     </div>
-    <div class="bind-operate-wrapper" v-if="unbind">
+    <div class="bind-operate-wrapper" v-if="!customerInfo.telephone || customerInfo.telephone === ''">
       <div class="bind-operate-input">
-        <input class="operate-input" type="tel" v-model="customerNumber">
+        <input class="operate-input" type="tel" v-model="customerNumber" maxLength="11">
         <p class="input-desc" :class="errClass" v-show="!customerNumber || customerNumber === ''">填写客服顾问工号或手机号</p>
       </div>
       <div class="bind-operate-btn" @click.stop="bindCustomer">立即绑定</div>
@@ -24,6 +24,8 @@
 <script>
   import MHeader from 'components/m-header/m-header'
   import Confirm from 'base/confirm/confirm'
+  import {getCustomer, setCustomer} from 'api/user'
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
@@ -31,14 +33,22 @@
         titleTxt: '客服工号',
         isShow: false,
         opcity: 1,
-        unbind: true,
         customerNumber: '',
         errClass: '',
         text: '',
         btnTxt: '',
         confirmBtnText: '',
-        operateState: false
+        operateState: false,
+        customerInfo: {}
       }
+    },
+    created() {
+      this._getCustomer()
+    },
+    computed: {
+      ...mapGetters([
+        'changeLoginState'
+      ])
     },
     methods: {
       bindCustomer() {
@@ -46,9 +56,7 @@
           this._errClass()
           return
         }
-
-        this._bindErr()
-        // this._bindOk()
+        this._setCustomer()
       },
       confirm() {
         if (this.operateState) { // 绑定成功回调
@@ -57,13 +65,30 @@
           this.bindCustomer()
         }
       },
+      _getCustomer() {
+        getCustomer(this.changeLoginState).then((res) => {
+          this.customerInfo = res.ret_set
+        })
+      },
+      _setCustomer() {
+        setCustomer(this.changeLoginState, this.customerNumber).then((res) => {
+          console.log(res)
+          if (res.ret_code && res.ret_code === 1) {
+            this.operateState = true
+            this._bindOk()
+          } else {
+            this.operateState = false
+            this._bindErr(res.ret_msg)
+          }
+        })
+      },
       _bindOk() {
         this.text = '恭喜您绑定成功！'
         this.confirmBtnText = '关闭'
         this.$refs.customerConfirm.show()
       },
-      _bindErr() {
-        this.text = '很遗憾本次操作失败！'
+      _bindErr(errTxt) {
+        this.text = errTxt
         this.confirmBtnText = '继续完成绑定'
         this.btnTxt = '返回上一步'
         this.$refs.customerConfirm.show()
