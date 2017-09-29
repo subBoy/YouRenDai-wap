@@ -143,23 +143,11 @@ export default new Router({
       children: [
         {
           path: 'recharge',
-          component: Recharge,
-          children: [
-            {
-              path: 'recharge-success',
-              component: RechargeSuccess
-            }
-          ]
+          component: Recharge
         },
         {
           path: 'withdraw',
-          component: Withdraw,
-          children: [
-            {
-              path: 'withdraw-success',
-              component: WithdrawSuccess
-            }
-          ]
+          component: Withdraw
         },
         {
           path: 'bill-list',
@@ -183,23 +171,11 @@ export default new Router({
           children: [
             {
               path: 'recharge',
-              component: Recharge,
-              children: [
-                {
-                  path: 'recharge-success',
-                  component: RechargeSuccess
-                }
-              ]
+              component: Recharge
             },
             {
               path: 'withdraw',
-              component: Withdraw,
-              children: [
-                {
-                  path: 'withdraw-success',
-                  component: WithdrawSuccess
-                }
-              ]
+              component: Withdraw
             },
             {
               path: 'bill-list',
@@ -245,23 +221,11 @@ export default new Router({
         },
         {
           path: 'recharge',
-          component: Recharge,
-          children: [
-            {
-              path: 'recharge-success',
-              component: RechargeSuccess
-            }
-          ]
+          component: Recharge
         },
         {
           path: 'withdraw',
-          component: Withdraw,
-          children: [
-            {
-              path: 'withdraw-success',
-              component: WithdrawSuccess
-            }
-          ]
+          component: Withdraw
         },
         {
           path: 'real-name',
@@ -328,8 +292,15 @@ export default new Router({
     {
       path: '/guide',
       component: Guide
+    },
+    {
+      path: '/recharge-success',
+      component: RechargeSuccess
+    },
+    {
+      path: '/withdraw-success',
+      component: WithdrawSuccess
     }
-
   ]
 })
 

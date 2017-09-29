@@ -1,13 +1,15 @@
 <template>
   <div class="recharge-wrapper">
-    <m-header :isShow="isShow" :opcity="opcity" :titleTxt="titleTxt"></m-header>
+    <m-header :isShow="isShow" :opcity="opcity" :titleTxt="titleTxt" @logined="logined"></m-header>
     <access
+      ref="accessEl"
       :accessTitle="accessTitle"
       :recordTitle="recordTitle"
       :airTxt="airTxt"
       :airBtnTxt="airBtnTxt"
+      @getSum="getSum"
     >
-      <div v-if="!realName" class="not-real-name-wrapper" slot="recharge">
+      <div v-if="!realNameOk" class="not-real-name-wrapper" slot="recharge">
         <div class="desc-text">
           <p class="prompt-focus">同一手机号只能绑定一张银行卡</p>
           <p class="prompt">该号码必须为银行预留手机号</p>
@@ -20,7 +22,7 @@
                 <p class="desc">姓名</p>
                 <div class="info-input-wrapper">
                   <span class="info-input-group">
-                    <input type="text" class="info-input" placeholder="请输入姓名">
+                    <input type="text" class="info-input" v-model="realName" placeholder="请输入姓名">
                   </span>
                 </div>
               </li>
@@ -28,7 +30,7 @@
                 <p class="desc">身份证号</p>
                 <div class="info-input-wrapper">
                   <span class="info-input-group">
-                    <input type="text" class="info-input" placeholder="请输入身份证号">
+                    <input type="text" class="info-input" v-model="idCard" placeholder="请输入身份证号">
                   </span>
                 </div>
               </li>
@@ -36,7 +38,7 @@
                 <p class="desc">手机号</p>
                 <div class="info-input-wrapper">
                   <span class="info-input-group">
-                    <input type="text" class="info-input" placeholder="请输入手机号">
+                    <input type="text" class="info-input" v-model="mobilePhone" placeholder="请输入手机号">
                   </span>
                 </div>
               </li>
@@ -44,7 +46,7 @@
                 <p class="desc">验证码</p>
                 <div class="info-input-wrapper">
                   <span class="info-input-group">
-                    <input type="text" class="info-input" placeholder="请输入验证码">
+                    <input type="text" class="info-input" v-model="verificationCode" placeholder="请输入验证码">
                   </span>
                   <span class="btn-code">{{codeBtnTxt}}</span>
                 </div>
@@ -106,9 +108,6 @@
       </div>
     </access>
     <foot-btn :submitBtnTxt="submitBtnTxt" @submitFuc="submitFuc"></foot-btn>
-    <transition name="slide">
-      <router-view></router-view>
-    </transition>
   </div>
 </template>
 
@@ -116,6 +115,8 @@
   import MHeader from 'components/m-header/m-header'
   import Access from 'base/access/access'
   import FootBtn from 'base/foot-btn/foot-btn'
+  import storage from 'good-storage'
+  import {userRecharge} from 'api/user'
 
   export default {
     data() {
@@ -123,18 +124,41 @@
         isShow: false,
         titleTxt: '充值',
         opcity: 1,
-        realName: false,
+        realNameOk: false,
         accessTitle: '充值金额',
         codeBtnTxt: '发送验证',
         recordTitle: '充值记录',
         airTxt: '先进行充值体验吧！',
         airBtnTxt: '立即充值',
-        submitBtnTxt: '确认充值'
+        submitBtnTxt: '确认充值',
+        money: 0,
+        realName: '',
+        idCard: '',
+        mobilePhone: '',
+        verificationCode: ''
       }
     },
     methods: {
       submitFuc() {
-        this.$router.push('/user-center/recharge/recharge-success')
+        console.log('确认充值')
+        userRecharge(this.money, this.realName, this.idCard, this.mobilePhone, this.verificationCode).then((res) => {
+          console.log(res)
+          if (res.status) {
+            storage.set('SECHARGE', res.form)
+            location.href = '/dist/air.html'
+          }
+        })
+      },
+      getSum(sum) {
+        this.money = sum
+      },
+      logined(res) {
+        if (res.usernameCh && res.usernameCh !== '') {
+          this.realNameOk = true
+          setTimeout(() => {
+            this.$refs.accessEl.refresh()
+          }, 20)
+        }
       }
     },
     components: {
@@ -149,10 +173,6 @@
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 
-  .slide-enter-active, .slide-leave-active
-    transition: all 0.3s
-  .slide-enter, .slide-leave-to
-    transform: translate3d(100%, 0, 0)
   .recharge-wrapper
     position: fixed;
     top: 0

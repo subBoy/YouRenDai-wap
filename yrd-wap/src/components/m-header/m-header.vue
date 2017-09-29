@@ -81,10 +81,8 @@
         }
       },
       _getLoginState () {
-        console.log(this.changeLoginState)
         if (this.changeLoginState && this.changeLoginState !== '') {
           getLoginState(this.changeLoginState).then((res) => {
-            console.log(res)
             if (res.isLogin === 'true') {
               this.$emit('logined', res)
             } else {

@@ -35,6 +35,21 @@ var apiRoutes = express.Router()
 var refererTxt = 'http://pre.yourendai.com/'
 var hostTxt = 'pre.yourendai.com'
 
+apiRoutes.get('/getIndexData', function (req, res) {
+  var url = refererTxt + 'wap/wapIndexAction.do'
+  axios.get(url, {
+    headers: {
+      referer: refererTxt,
+      host: hostTxt
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
 apiRoutes.get('/getRecommendBanner', function (req, res) {
   var url = refererTxt + 'app/index.do'
   axios.get(url, {
@@ -525,7 +540,7 @@ apiRoutes.post('/setCustomer', function (req, res) {
 })
 
 apiRoutes.post('/userRecharge', function (req, res) {
-  var url = refererTxt + 'front/appSearchRecharge.do'
+  var url = refererTxt + '/wap/wapUserAction.do'
   axios({
     url,
     method: 'post',

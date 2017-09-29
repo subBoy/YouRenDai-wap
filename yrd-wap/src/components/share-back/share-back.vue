@@ -1,7 +1,7 @@
 <template>
   <div class="share-back-wrapper">
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
-    <scroll class="share-back-scroll">
+    <scroll class="share-back-scroll" ref="backScroll">
       <div class="share-back-content">
         <div class="app-20170512-invited-wrapper">
           <img src="./invited-20170512-bg.jpg" width="100%">
@@ -16,15 +16,15 @@
             <img src="./invited-20170512-rule.png" width="100%">
           </div>
           <input type="hidden" id="invite_url">
-          <div class="app-invited-page-3">
-            <div class="app-invited-page-3-bg">
-              <img src="./invited-201706512-btn-1.png" width="100%">
-              <a class="signed" id="signed" @click="shareBack">立即分享</a>
-            </div>
-          </div>
         </div>
       </div>
     </scroll>
+    <div class="app-invited-page-3">
+      <div class="app-invited-page-3-bg">
+        <img src="./invited-201706512-btn-1.png" width="100%">
+        <a class="signed" id="signed" @click="shareBack">立即分享</a>
+      </div>
+    </div>
     <div class="slide-wrapper" v-show="winShow">
       <em class="bg"></em>
       <div class="slide-wrapper-centent">

@@ -231,11 +231,10 @@
                   top: 5px
                   line-height: 24px
                   width: 100px
-                  height: 24px
                   font-size: $font-size-medium-x
                   text-align: center
                   bg-image('table')
-                  background-size: 100%
+                  background-size: 100% 100%
                   color: $color-text
                   transform: scale(0.5)
                   transform-origin: 100% 0

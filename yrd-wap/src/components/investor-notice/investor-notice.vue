@@ -64,6 +64,7 @@
   import Scroll from 'base/scroll/scroll'
   import Loading from 'base/loading/loading'
   import {getInvestorNotice, submitInvestorNotice} from 'api/user'
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
@@ -92,7 +93,10 @@
           return true
         }
         return false
-      }
+      },
+      ...mapGetters([
+        'changeLoginState'
+      ])
     },
     methods: {
       selectItem(group, item, index, k) {
@@ -211,7 +215,7 @@
         })
         this.qaAnsContent = selectIdCom.substring(0, selectIdCom.length - 1)
         console.log(this.qaAnsContent)
-        submitInvestorNotice(this.qaPaperId, this.qaAnsContent).then((res) => {
+        submitInvestorNotice(this.changeLoginState, this.qaPaperId, this.qaAnsContent).then((res) => {
           console.log(res.msg)
         })
       }

@@ -9,10 +9,10 @@
         <div class="tab-icon tab-icon-2"></div>
         <span class="tab-link">列表</span>
       </router-link>
-      <router-link tag="div" class="tab-item" to="/assets">
+      <div class="tab-item" @click="lookAssets">
         <div class="tab-icon tab-icon-3"></div>
         <span class="tab-link">资产</span>
-      </router-link>
+      </div>
       <router-link tag="div" class="tab-item" to="/user-center">
         <div class="tab-icon tab-icon-4"></div>
         <span class="tab-link">我的</span>
@@ -21,8 +21,31 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
-  export default {}
+<script>
+  import {mapGetters, mapActions} from 'vuex'
+
+  export default {
+    computed: {
+      ...mapGetters([
+        'changeLoginState'
+      ])
+    },
+    methods: {
+      lookAssets() {
+        if (this.changeLoginState === '') {
+          this.changeReturnPath(this.$route.path)
+          this.$router.push({
+            path: '/signIn'
+          })
+          return
+        }
+        this.$router.push('/assets')
+      },
+      ...mapActions([
+        'changeReturnPath'
+      ])
+    }
+  }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">

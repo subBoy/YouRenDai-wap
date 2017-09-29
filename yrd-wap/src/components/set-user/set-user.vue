@@ -38,11 +38,13 @@
       _singOut() {
         signOut().then(() => {
           this.changeLoginState('')
+          this.changeReturnPath('')
           this.$router.push('/')
         })
       },
       ...mapActions([
-        'changeLoginState'
+        'changeLoginState',
+        'changeReturnPath'
       ])
     },
     components: {

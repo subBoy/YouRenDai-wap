@@ -12,10 +12,12 @@
         :isSignIn="isSignIn"
         :errTxt="errTxt"
         :isImgVerify="isImgVerify"
+        :passwordLength="passwordLength"
         @signMethods="signMethods"
         @signErr="signErr"
         @ifImgcode="ifImgcode"
         @imgCodeOk="imgCodeOk"
+        @imgCodeErr="imgCodeErr"
       ></sign>
     </div>
   </transition>
@@ -27,7 +29,7 @@
   // import {encryption, compareEncrypt} from 'common/js/bcrypt'
   import {encode64} from 'common/js/util'
   import {signIn} from 'api/sign'
-  import {mapActions} from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     data() {
@@ -38,8 +40,14 @@
         signBtnTxt: '立即登录',
         errTxt: '',
         userName: '',
-        password: ''
+        password: '',
+        passwordLength: false
       }
+    },
+    computed: {
+      ...mapGetters([
+        'changeReturnPath'
+      ])
     },
     methods: {
       signMethods (phoneNumber, passWord, _id, verificationCode, userType, imgVerify) {
@@ -53,8 +61,13 @@
         // })
         signIn(encode64(phoneNumber), encode64(passWord), imgVerify).then((res) => {
           if (res.flag) {
-            this.$router.push('/')
             this.changeLoginState(res.userId)
+            this.imgCodeErr()
+            if (this.changeReturnPath === '') {
+              this.$router.push('/')
+              return
+            }
+            this.$router.push(this.changeReturnPath)
           } else {
             this.$refs.sign.changeVerify()
             this.imgCodeOk()
@@ -71,6 +84,9 @@
       },
       imgCodeOk () {
         this.isImgVerify = true
+      },
+      imgCodeErr () {
+        this.isImgVerify = false
       },
       ...mapActions([
         'changeLoginState'

@@ -19,8 +19,8 @@
                 </div>
               </div>
               <div class="btns-wrapper">
-                <router-link tag="span" class="withdraw btn" to="/user-center/withdraw">提现</router-link>
-                <router-link tag="span" class="recharge btn" to="/user-center/recharge">立即充值</router-link>
+                <span class="withdraw btn" @click="GotoWithdraw" to="/user-center/withdraw">提现</span>
+                <span class="recharge btn" @click="GotoRecharge" to="/user-center/recharge">立即充值</span>
               </div>
             </div>
           </div>
@@ -52,6 +52,7 @@
   import Tab from 'components/tab/tab'
   import Confirm from 'base/confirm/confirm'
   import {userCenter} from 'api/user'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     data() {
@@ -104,8 +105,10 @@
         ]
       }
     },
-    created () {
-
+    computed: {
+      ...mapGetters([
+        'changeLoginState'
+      ])
     },
     methods: {
       scroll (pos) {
@@ -118,11 +121,42 @@
         }
       },
       selectedItem (item) {
+        if (this.changeLoginState === '' && item.path !== 'packs' && item.path !== 'disclosure') {
+          this.changeReturnPath(this.$route.path)
+          this.$router.push({
+            path: '/signIn'
+          })
+          return
+        }
         setTimeout(() => {
           this.$router.push({
             path: `user-center/${item.path}`
           })
         }, 100)
+      },
+      GotoWithdraw () {
+        if (this.changeLoginState === '') {
+          this.changeReturnPath(this.$route.path)
+          this.$router.push({
+            path: '/signIn'
+          })
+          return
+        }
+        this.$router.push({
+          path: '/user-center/withdraw'
+        })
+      },
+      GotoRecharge () {
+        if (this.changeLoginState === '') {
+          this.changeReturnPath(this.$route.path)
+          this.$router.push({
+            path: '/signIn'
+          })
+          return
+        }
+        this.$router.push({
+          path: '/user-center/recharge'
+        })
       },
       setUser () {
         this.$router.push('user-center/set-user')
@@ -160,7 +194,10 @@
         userCenter(this.user_id).then((res) => {
           this.userInfo = res.ret_set
         })
-      }
+      },
+      ...mapActions([
+        'changeReturnPath'
+      ])
     },
     components: {
       MHeader,

@@ -10,12 +10,12 @@
         <div class="input-wrapper">
           <ul class="input-box">
             <li class="input-item">
-              <input type="text" v-model="phoneNumber" class="input-box" @focus="focus" @blur="blurTel">
+              <input type="text" v-model="phoneNumber" class="input-box" @focus="focus" @blur="blurTel" @keyup="checkPhoneVal">
               <p class="place-desc" v-show="phoneNumber.length <= 0">手机号</p>
             </li>
             <li class="input-item">
-              <input type="text" v-model="passWord" class="input-box" @focus="focus" v-show="shPass" @blur="blurPassword">
-              <input type="password" v-model="passWord" class="input-box" @focus="focus" v-show="!shPass" @blur="blurPassword">
+              <input type="text" v-model="passWord" class="input-box" @focus="focus" v-show="shPass" @blur="blurPassword" @keyup="checkPassVal">
+              <input type="password" v-model="passWord" class="input-box" @focus="focus" v-show="!shPass" @blur="blurPassword" onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false" @keyup="checkPassVal">
               <span class="showPassword" @click.stop.prevent="shPassword" :class="{hidePassword: shPass}"></span>
               <p class="place-desc" v-show="passWord.length <= 0">填写密码<span class="styl">(长度为8-16位的字符串)</span></p>
             </li>
@@ -27,7 +27,7 @@
               <p class="place-desc" v-show="imgVerify.length <= 0">图形验证码</span></p>
             </li>
             <li class="input-item" v-if="isSignUp">
-              <input type="text" v-model="serviceNumber" class="input-box" @focus="focus">
+              <input type="text" v-model="serviceNumber" class="input-box" @focus="focus" @keyup="checkVal">
               <p class="place-desc" v-show="serviceNumber.length <= 0">填写客服顾问工号或手机号（选填）</p>
             </li>
             <li class="input-item" v-if="isSignUp || isForget">
@@ -84,6 +84,10 @@
       mdNum: {
         type: String,
         default: ''
+      },
+      passwordLength: {
+        type: Boolean,
+        default: true
       }
     },
     data () {
@@ -109,6 +113,13 @@
         this.$emit('ifImgcode')
       }, 20)
     },
+    activated () {
+      this.phoneNumber = ''
+      this.passWord = ''
+      this.serviceNumber = ''
+      this.verificationCode = ''
+      this.imgVerify = ''
+    },
     methods: {
       changeVerify () {
         if (debug) {
@@ -131,6 +142,24 @@
           // this.$refs.signBox.style.height = windowHei - 44 + 'px'
           this.$refs.scroll.refresh()
         }, 20)
+      },
+      checkPhoneVal() {
+        this.phoneNumber = this.check(this.phoneNumber)
+      },
+      checkPassVal() {
+        this.passWord = this.check(this.passWord)
+      },
+      checkVal() {
+        this.serviceNumber = this.check(this.serviceNumber)
+      },
+      check (str) {
+        let temp = ''
+        for (let i = 0; i < str.length; i++) {
+          if (str.charCodeAt(i) > 0 && str.charCodeAt(i) < 255) {
+            temp += str.charAt(i)
+          }
+        }
+        return temp
       },
       blurTel () {
         this.$emit('blurTel', this.phoneNumber)
@@ -232,9 +261,18 @@
         return true
       },
       _password () {
-        if (this.passWord === '' || this.passWord === null || this.passWord.length < 8 || this.passWord.length > 16) {
-          this.$emit('signErr', '密码长度需控制在8-16位！')
+        if (this.passWord === '' || this.passWord === null) {
+          this.$emit('signErr', '请输入密码！')
           return false
+        } else if (this.passwordLength) {
+          if (this.passWord.length < 8 || this.passWord.length > 16) {
+            this.$emit('signErr', '密码长度需控制在8-16位！')
+            return false
+          }
+          if (this._checkPass(this.passWord) < 3) {
+            this.$emit('signErr', '密码必须由大小写字母以及数字组成！')
+            return false
+          }
         } else {
           const reg = /^\w+$/
           let mathes = this.passWord.match(reg)
@@ -246,6 +284,22 @@
           }
         }
         return true
+      },
+      _checkPass(pass) {
+        let ls = 0
+        if (pass.match(/([a-z])+/)) {
+          ls++
+        }
+        if (pass.match(/([0-9])+/)) {
+          ls++
+        }
+        if (pass.match(/([A-Z])+/)) {
+          ls++
+        }
+        if (pass.match(/[^a-zA-Z0-9]+/)) {
+          ls++
+        }
+        return ls
       },
       _verify () {
         if (this.imgVerify === '' || this.imgVerify === null) {

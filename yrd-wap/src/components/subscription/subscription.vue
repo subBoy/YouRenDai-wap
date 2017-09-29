@@ -87,6 +87,7 @@
         submitBtnTxt: '确认提交',
         reward: '',
         rewardLines: '',
+        rewardType: '',
         projectId: this.$route.params.id,
         projectType: '',
         rewardList: []
@@ -163,7 +164,27 @@
         return ret
       },
       _subscription() {
-        subscription(this.changeLoginState, this.realName, this.idCard, this.reward, this.rewardLines, this.projectId, this.loanMoney, this.projectType).then((res) => {
+        let selectItems = []
+        this.rewardList.forEach((item) => {
+          if (item.selected) {
+            selectItems.push(item)
+          }
+        })
+
+        selectItems.forEach((rewardItem) => {
+          this.reward += `${rewardItem.rewardId}_${rewardItem.investAmount},`
+          this.rewardType += `${rewardItem.rewardEnName},`
+          this.rewardLines += `${rewardItem.rewardLines},`
+        })
+
+        this.reward = this.reward.substring(0, this.reward.length - 1)
+        this.rewardType = this.rewardType.substring(0, this.reward.length - 1)
+        this.rewardLines = this.rewardLines.substring(0, this.reward.length - 1)
+
+        subscription(this.changeLoginState, this.realName, this.idCard, this.reward, this.rewardLines, this.rewardType, this.projectId, this.loanMoney, this.projectType).then((res) => {
+          if (res.ret_code === '1') {
+            location.href = res.ret_set.redirect_url
+          }
           console.log(res)
         })
       }

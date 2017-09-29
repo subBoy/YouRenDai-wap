@@ -26,7 +26,9 @@
   import MHeader from 'components/m-header/m-header'
   import Sign from 'base/sign/sign'
   // import {encryption, compareEncrypt} from 'common/js/bcrypt'
-  import {getCodeNumber, checkTel, signUp} from 'api/sign'
+  import {encode64} from 'common/js/util'
+  import {getCodeNumber, checkTel, signUp, signIn} from 'api/sign'
+  import {mapActions} from 'vuex'
 
   export default {
     data() {
@@ -53,7 +55,16 @@
 
         signUp(phoneNumber, verificationCode, _id, userType, passWord).then((res) => {
           if (res.flag) {
-            this.$router.push('/')
+            const _this = this
+            signIn(encode64(phoneNumber), encode64(passWord), '').then((signRes) => {
+              if (signRes.flag) {
+                _this.$router.push('/')
+                _this.changeLoginState(signRes.userId)
+              } else {
+                _this.$router.push('/sign-in')
+              }
+              console.log(signRes)
+            })
           } else {
             this.signErr(res.msg)
           }
@@ -90,7 +101,10 @@
             this.$refs.sign.codeClickOk()
           }
         })
-      }
+      },
+      ...mapActions([
+        'changeLoginState'
+      ])
     },
     components: {
       MHeader,

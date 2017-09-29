@@ -66,7 +66,7 @@
   import {debounce} from 'common/js/util'
   import {getSubscribeData} from 'api/product'
   import {getLoginState} from 'api/sign'
-  import {mapGetters} from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   const ERR_OK = 1
   const ITEM_WIDTH = 70
@@ -178,6 +178,13 @@
       },
       subscribeSubmit () {
         if (!this.subscribe.btnClass) {
+          return
+        }
+        if (this.changeLoginState === '') {
+          this.changeReturnPath(this.$route.path)
+          this.$router.push({
+            path: '/signIn'
+          })
           return
         }
         getLoginState(this.changeLoginState).then((res) => {
@@ -325,7 +332,10 @@
         let i = parseInt(number = Math.abs(+number || 0).toFixed(places), 10) + ''
         let j = (j = i.length) > 3 ? j % 3 : 0
         return symbol + negative + (j ? i.substr(0, j) + thousand : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + thousand) + (places ? decimal + Math.abs(number - i).toFixed(places).slice(2) : '')
-      }
+      },
+      ...mapActions([
+        'changeReturnPath'
+      ])
     },
     mounted () {
       const bottom = this.$refs.subscribeBtn.clientHeight

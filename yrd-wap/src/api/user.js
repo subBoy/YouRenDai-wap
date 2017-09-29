@@ -75,25 +75,28 @@ export function getInvestRecord (userId, page, rows) {
 }
 
 // 认购确认
-export function subscription (userId, realName, idCard, reward, rewardLines, projectId, loanMoney, projectType) {
+export function subscription (userId, realName, idCard, reward, rewardLines, rewardType, projectId, loanMoney, projectType) {
   if (debug) {
     url = '/api/subscription'
   } else {
     url = '/wap/wapUserAction.do'
   }
 
+  const str = {
+    projectId,
+    loanMoney,
+    projectType
+  }
+
   const data = Object.assign({}, {
     cmd: 'identification',
-    user_id: userId,
+    userId,
     realName,
     idCard,
     reward,
     reward_lines: rewardLines,
-    param: {
-      projectId,
-      loanMoney,
-      projectType
-    }
+    rewardType,
+    param: JSON.stringify(str)
   })
 
   return axios({
@@ -285,19 +288,20 @@ export function setCustomer(userId, lcNum) {
 }
 
 // 立即充值
-export function userRecharge(userId, source, timestamp, sign) {
+export function userRecharge(money, realName, idCard, mobilePhone, verificationCode) {
   if (debug) {
     url = '/api/userRecharge'
   } else {
-    url = '/front/appSearchRecharge.do'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
-    cmd: 'beforeImmediatelyRecharge',
-    user_id: userId,
-    source,
-    timestamp,
-    sign
+    cmd: 'recharge',
+    money,
+    realName,
+    idCard,
+    mobilePhone,
+    verificationCode
   })
 
   return axios({
@@ -378,7 +382,7 @@ export function getInvestorNotice (qaCatCode, qaPaperIssue) {
 }
 
 // 投资者须知 答案提交
-export function submitInvestorNotice(qaPaperId, qaAnsContent) {
+export function submitInvestorNotice(userId, qaPaperId, qaAnsContent) {
   if (debug) {
     url = '/api/submitInvestorNotice'
   } else {
@@ -387,6 +391,7 @@ export function submitInvestorNotice(qaPaperId, qaAnsContent) {
 
   const data = Object.assign({}, {
     cmd: 'submitQaAns',
+    userId,
     qaPaperId,
     qaAnsContent
   })

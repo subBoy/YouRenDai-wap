@@ -114,6 +114,7 @@
   import {getRecommendBanner, getRecommendPro} from 'api/recommend'
   import {_UA} from 'common/js/ua'
   import {getLoginState} from 'api/sign'
+  import {getIndexData} from 'api/index'
   import {mapGetters} from 'vuex'
 
   export default {
@@ -134,6 +135,7 @@
     created () {
       this._getRecommendBanner()
       this._getRecommendPro()
+      this._getIndexData()
     },
     computed: {
       ...mapGetters([
@@ -187,6 +189,12 @@
           } else {
             this.$router.push('/recommend/to-user')
           }
+        })
+      },
+      _getIndexData () {
+        getIndexData(this.changeLoginState).then((res) => {
+          console.log('getIndexData')
+          console.log(res)
         })
       },
       _getRecommendBanner () {
@@ -412,7 +420,6 @@
           margin: 0 auto
           line-height: 30px
           width: 110px
-          height: 30px
           border-radius: 15px
           border: 1px solid $btn-clo
           color: $btn-clo

@@ -1,7 +1,8 @@
-import {getChangeLogin} from 'common/js/cache'
+import {getChangeLogin, getReturnPath} from 'common/js/cache'
 
 const state = {
-  changeLoginState: getChangeLogin()
+  changeLoginState: getChangeLogin(),
+  changeReturnPath: getReturnPath()
 }
 
 export default state

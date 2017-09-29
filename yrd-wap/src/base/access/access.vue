@@ -3,7 +3,7 @@
     <top-tip ref="topTip">
       <p class="caveatText">{{caveatText}}</p>
     </top-tip>
-    <scroll class="access-scroll">
+    <scroll class="access-scroll" ref="accessScroll">
       <div class="access-group">
         <div class="access-input">
           <div class="access-input-box">
@@ -70,9 +70,20 @@
         sum: 5000
       }
     },
+    created() {
+      this.$emit('getSum', this.sum)
+    },
     methods: {
       caveat() {
         this.$refs.topTip.show()
+      },
+      refresh() {
+        this.$refs.accessScroll.refresh()
+      }
+    },
+    watch: {
+      sum(newVal) {
+        this.$emit('getSum', newVal)
       }
     },
     components: {
@@ -120,7 +131,7 @@
                   top: 0
                   left: 0
                   width: 100%
-                  line-height: 30px
+                  // line-height: 30px
                   height: 30px
                   text-align: right
                   z-index: 10
@@ -157,7 +168,6 @@
                 margin: 16px auto 0
                 line-height: 30px
                 width: 100px
-                height: 30px
                 background-color: $btn-clo
                 color: $color-text
                 font-size: $font-size-medium-x

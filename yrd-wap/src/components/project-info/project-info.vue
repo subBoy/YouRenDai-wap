@@ -1,7 +1,7 @@
 <template>
   <div class="project-info-wrapper">
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
-    <scroll class="project-info-scroll">
+    <scroll class="project-info-scroll" ref="infoScroll">
       <div class="project">
         <div class="project-intro">
           <div class="project-intro-list-bg">
@@ -112,6 +112,9 @@
           } else {
             this.cruntTxt = '投资已结束'
           }
+          setTimeout(() => {
+            this.$refs.infoScroll.refresh()
+          }, 20)
         })
       },
       _crunt () {
