@@ -1,22 +1,17 @@
 <template>
   <div class="bill-details-wrapper">
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
-    <div class="air-bill-details" v-show="airBill">
-      <div class="air-ic"></div>
-      <p class="text">每月26日为账单日</p>
-      <p class="text">发放上个月27日-当月26日账户账单</p>
-    </div>
-    <scroll class="bill-details-scroll" v-show="!airBill">
+    <scroll class="bill-details-scroll" ref="billScroll" :data="recordList">
       <div class="bill-details-content">
         <div class="Investment-details common-block">
           <h3 class="block-name ic-1">投资明细</h3>
-          <div class="not-investment-wrapper" style="display: none">
+          <div class="not-investment-wrapper" v-show="!recordList.length || !recordList.length === 0">
             <div class="txt-box">
               <p class="txt">本月您还未投资~~~</p>
             </div>
-            <div class="invest-btn">立即投资</div>
+            <router-link tag="div" class="invest-btn" to="/product-list">立即投资</router-link>
           </div>
-          <div class="investment-wrapper">
+          <div class="investment-wrapper" v-show="recordList.length && recordList.length > 0">
             <ul class="investment-title-list">
               <li class="investment-title-item flex-1"><span class="txt">项目名称</span></li>
               <li class="investment-title-item flex-1-1"><span class="txt">投资时间</span></li>
@@ -24,50 +19,43 @@
               <li class="investment-title-item flex-1-2"><span class="txt">投资金额/元</span></li>
               <li class="investment-title-item flex-1-2"><span class="txt">利息收益/元</span></li>
             </ul>
-            <ul class="investment-record-item">
-              <li class="investment-record-desc flex-1"><span class="txt">安稳赢3-3</span></li>
-              <li class="investment-record-desc flex-1-1"><span class="txt">2017.03.17<br/>15:46:35</span></li>
-              <li class="investment-record-desc flex-1-1"><span class="txt">2017.03.17<br/>15:46:35</span></li>
-              <li class="investment-record-desc flex-1-2"><span class="txt">1,000</span></li>
-              <li class="investment-record-desc flex-1-2"><span class="txt">6.87</span></li>
-            </ul>
-            <ul class="investment-record-item">
-              <li class="investment-record-desc flex-1"><span class="txt">安稳赢3-3</span></li>
-              <li class="investment-record-desc flex-1-1"><span class="txt">2017.03.17<br/>15:46:35</span></li>
-              <li class="investment-record-desc flex-1-1"><span class="txt">2017.03.17<br/>15:46:35</span></li>
-              <li class="investment-record-desc flex-1-2"><span class="txt">1,000</span></li>
-              <li class="investment-record-desc flex-1-2"><span class="txt">6.87</span></li>
+            <ul class="investment-record-item" v-for="item in recordList">
+              <li class="investment-record-desc flex-1"><span class="txt">{{item.project_name}}</span></li>
+              <li class="investment-record-desc flex-1-1"><span class="txt">{{item.create_date.split(' ')[0]}}<br/>{{item.create_date.split(' ')[1]}}</span></li>
+              <li class="investment-record-desc flex-1-1"><span class="txt">{{item.pepayment_date.split(' ')[0]}}<br/>{{item.pepayment_date.split(' ')[1]}}</span></li>
+              <li class="investment-record-desc flex-1-2"><span class="txt">{{item.invest_money}}</span></li>
+              <li class="investment-record-desc flex-1-2"><span class="txt">{{item.earnings}}</span></li>
             </ul>
           </div>
         </div>
         <div class="activity-recommend common-block">
           <h3 class="block-name ic-2">活动推荐</h3>
-          <div class="not-investment-wrapper">
+          <div class="not-investment-wrapper" v-show="!oldRules && !newRules">
             <div class="txt-box">
               <p class="txt">暂无活动，热情不减</p>
               <p class="txt">投资再继续~~~</p>
             </div>
-            <div class="invest-btn">立即投资</div>
+            <router-link tag="div" class="invest-btn" to="/product-list">立即投资</router-link>
           </div>
-          <div class="activity-recommend-wrapper" style="display: none">
-            <div class="img-wrapper" style="display: none">
+          <div class="activity-recommend-wrapper" v-show="oldRules || newRules">
+            <div class="img-wrapper" v-show="oldRules">
               <div class="img-box"></div>
             </div>
-            <div class="news-user-wrapper" style="display: none">
+            <div class="news-user-wrapper" v-show="newRules">
               <div class="news-user-box"></div>
             </div>
-            <div class="invest-btn">立即参加</div>
+            <router-link tag="div" class="invest-btn" to="/product-list">立即参加</router-link>
           </div>
         </div>
-        <div class="remarks common-block">
+        <div class="remarks common-block" v-show="oldRules || newRules">
           <h3 class="block-name ic-3">备注</h3>
           <div class="remarks-wrapper">
-            <ul class="rules-list" style="display: none">
+            <ul class="rules-list" v-show="oldRules">
               <li class="rules-item"><span class="serial">1.</span>投资10000元（包含10000）以上使用；</li>
               <li class="rules-item"><span class="serial">2.</span>本活动不与其他活动同享，不与新手红包同享，只限老用户使用；</li>
               <li class="rules-item"><span class="serial">3.</span>在平台投资超过1次，为老用户。</li>
             </ul>
-            <ul class="desc-list">
+            <ul class="desc-list" v-show="newRules">
               <li class="desc-item">平台标的均可使用，本活动不与其他活动同享，不与现金券同享，只限注册新用户使用；</li>
               <li class="desc-item"><span class="hb">18元红包</span><span class="desc-txt">投资满1800元</span></li>
               <li class="desc-item"><span class="hb">20元红包</span><span class="desc-txt">投资满2000元</span></li>
@@ -87,6 +75,9 @@
 <script>
   import MHeader from 'components/m-header/m-header'
   import Scroll from 'base/scroll/scroll'
+  import {getBillDetails} from 'api/user'
+  import {getMessageId, getCreateDate} from 'common/js/cache'
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
@@ -94,7 +85,51 @@
         isShow: false,
         opcity: 1,
         titleTxt: '账单详情',
-        airBill: false
+        recordList: [],
+        oldRules: false,
+        newRules: false
+      }
+    },
+    created() {
+      this._getBillDetails()
+    },
+    computed: {
+      ...mapGetters([
+        'changeLoginState'
+      ])
+    },
+    methods: {
+      _getBillDetails() {
+        const createDate = getCreateDate()
+        const messageId = getMessageId()
+        getBillDetails(this.changeLoginState, createDate, messageId).then((res) => {
+          const billData = res.ret_set
+          if (res.ret_code === '1') {
+            this.recordList = billData.InvestmentRecord
+            if (billData.status === 'oldLogin') {
+              if (billData.reward_old === 'yes') {
+                this.oldRules = true
+              } else {
+                this.oldRules = false
+              }
+            } else {
+              if (billData.reward === 'yes') {
+                this.newRules = true
+              } else {
+                this.newRules = false
+              }
+            }
+          }
+          console.log('details:', res)
+        })
+      }
+    },
+    watch: {
+      oldRules() {
+        this.$refs.billScroll.refresh()
+      },
+      newRules() {
+        this.$refs.billScroll.refresh()
       }
     },
     components: {
@@ -116,24 +151,6 @@
     left: 0
     z-index: 999
     background-color: $color-background
-    .air-bill-details
-      position: absolute
-      top: 49px
-      right: 0
-      bottom: 0
-      left: 0
-      background-color: $color-text
-      .air-ic
-        height: 115px
-        bg-image('air')
-        background-size: auto 55px
-        background-repeat: no-repeat
-        background-position: center
-      .text
-        line-height: 24px
-        font-size: $font-size-medium
-        color: $color-q
-        text-align: center
     .bill-details-scroll
       position: absolute
       top: 44px

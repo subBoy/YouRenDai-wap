@@ -1,6 +1,9 @@
 <template>
-  <div class="real-name-wrapper">
+  <div class="real-name-wrapper" ref="realNameWrapper">
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
+    <top-tip ref="topTip">
+      <p class="caveatText">{{caveatText}}</p>
+    </top-tip>
     <div class="desc-wrapper">
       <p class="title">实名认证 安全保障</p>
       <p class="desc-txt">落实监管新规 保障用户的每一分钱</p>
@@ -23,6 +26,8 @@
 <script>
   import MHeader from 'components/m-header/m-header'
   import FootBtn from 'base/foot-btn/foot-btn'
+  import TopTip from 'base/top-tip/top-tip'
+  import storage from 'good-storage'
   import {setRealName} from 'api/user'
   import {mapGetters} from 'vuex'
 
@@ -36,13 +41,20 @@
         nameErr: '',
         codeErr: '',
         nameVal: '',
-        codeVal: ''
+        codeVal: '',
+        caveatText: '',
+        btnShow: true
       }
     },
     computed: {
       ...mapGetters([
         'changeLoginState'
       ])
+    },
+    mounted () {
+      setTimeout(() => {
+        this.$refs.realNameWrapper.style.height = document.documentElement.clientHeight + 'px'
+      }, 20)
     },
     methods: {
       submitFuc() {
@@ -63,15 +75,26 @@
       clearCodeErr() {
         this.codeErr = ''
       },
+      caveat() {
+        this.$refs.topTip.show()
+      },
       _setRealName() {
         setRealName(this.nameVal, this.codeVal, this.changeLoginState).then((res) => {
           console.log(res)
+          if (res.ret_code === '0') {
+            this.caveatText = res.ret_msg
+            this.caveat()
+          } else {
+            storage.set('SECHARGE', res.form)
+            location.href = '/dist/real.html'
+          }
         })
       }
     },
     components: {
       MHeader,
-      FootBtn
+      FootBtn,
+      TopTip
     }
   }
 </script>
@@ -88,6 +111,12 @@
     left: 0
     z-index: 999
     background-color: $color-background
+    .caveatText
+      padding: 20px
+      line-height: 16px
+      background-color: $btn-clo
+      font-size: 12px
+      color: #fff
     .desc-wrapper
       padding: 15px 20px
       .title

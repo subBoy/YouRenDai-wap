@@ -1,7 +1,7 @@
 <template>
   <div class="guide-wrapper">
-    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
-    <scroll class="guide-scroll" ref="guideScroll">
+    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" :guideBool="guideBool" @logined="logined"></m-header>
+    <scroll class="guide-scroll" :class="{'realed': realed}" ref="guideScroll">
       <div class="guide-content">
         <div class="g-banner">
           <img src="./app-banner.jpg" width="100%">
@@ -115,7 +115,7 @@
 
       </div>
     </scroll>
-    <div class="g-bank-activation" id="tishi1">
+    <div class="g-bank-activation" id="tishi1" v-if="!realed">
       <h3 class="g-title">开通银行存管账户，资金安全保障系数更高</h3>
       <p class="g-activation-desc">（届时开通存管账户后才能正常充值、投资、提现哦）</p>
       <a class="g-bank-btn box-sd" id="login" @click="activation">马上开通/激活</a>
@@ -126,6 +126,8 @@
 <script>
   import MHeader from 'components/m-header/m-header'
   import Scroll from 'base/scroll/scroll'
+  import {mapGetters, mapActions} from 'vuex'
+
   import 'swiper/dist/css/swiper.css'
   import Swiper from 'swiper/dist/js/swiper.js'
 
@@ -136,7 +138,9 @@
         opcity: 1,
         titleTxt: '新网银行资金存管',
         guideSilde: '',
-        oldUser: true
+        oldUser: true,
+        realed: false,
+        guideBool: true
       }
     },
     created () {
@@ -144,9 +148,19 @@
         this._swiper()
       }, 20)
     },
+    computed: {
+      ...mapGetters([
+        'changeLoginState'
+      ])
+    },
     methods: {
       activation() {
-
+        if (this.changeLoginState !== '') {
+          this.$router.push('/user-center/real-name')
+        } else {
+          this.changeReturnPath(this.$route.path)
+          this.$router.push('/signIn')
+        }
       },
       isOld() {
         this.oldUser = true
@@ -177,6 +191,15 @@
           this.$refs.guideScroll.refresh()
         }, 20)
       },
+      logined(res) {
+        console.log('guide', res)
+        if (res.usernameCh === '') {
+          this.realed = false
+        } else {
+          this.realed = true
+        }
+        this.refresh()
+      },
       _swiper () {
         const _this = this
         this.guideSilde = new Swiper('.swiper-container-1', {
@@ -189,7 +212,10 @@
             _this.refresh()
           }
         })
-      }
+      },
+      ...mapActions([
+        'changeReturnPath'
+      ])
     },
     components: {
       MHeader,
@@ -216,6 +242,8 @@
       right: 0
       bottom: 123px
       left: 0
+      &.realed
+        bottom: 0
       .swiper-container
         width: 100%
       .swiper-slide

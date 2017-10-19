@@ -3,15 +3,15 @@
     <div class="icon" :class="{black: isIndex}" @click="gobackAndNotice"></div>
     <h1 class="text">{{titleTxt}}</h1>
     <div v-if="isShow" class="right-core">
-      <div class="user-center" v-if="changeLoginState && changeLoginState !== ''">
+      <div class="user-center" v-if="(changeLoginState && changeLoginState.length > 0) || (userId && userId.length > 0)">
         <router-link tag="div" class="mine" to="/user-center">
           <i class="icon-mine"></i>
         </router-link>
       </div>
       <div class="sign" v-else>
-        <router-link tag="div" class="btns" to="/signIn">登录</router-link>
+        <div class="btns" @click="signMethod('/signIn')">登录</div>
         <span class="hr">/</span>
-        <router-link tag="div" class="btns" to="/signUp">注册</router-link>
+        <div class="btns" @click="signMethod('/signUp')">注册</div>
       </div>
     </div>
     <slot></slot>
@@ -19,13 +19,22 @@
 </template>
 
 <script>
+  import {setChangeLogin} from 'common/js/cache'
   import {getLoginState} from 'api/sign'
-  import {mapGetters} from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     props: {
       titleTxt: '',
       isIndex: {
+        type: Boolean,
+        default: false
+      },
+      gobool: {
+        type: Boolean,
+        default: false
+      },
+      guideBool: {
         type: Boolean,
         default: false
       },
@@ -52,17 +61,20 @@
       opcity: {
         type: Number,
         default: 0
+      },
+      goBack: {
+        type: Boolean,
+        default: false
+      }
+    },
+    data() {
+      return {
+        userId: ''
       }
     },
     created () {
-      setTimeout(() => {
-        this._getLoginState()
-      }, 20)
-    },
-    activated () {
-      setTimeout(() => {
-        this._getLoginState()
-      }, 20)
+      this.userId = this.$route.query.userId
+      this._getLoginState()
     },
     computed: {
       bgColor () {
@@ -76,9 +88,25 @@
       gobackAndNotice () {
         if (this.isIndex) {
           this.$router.push('/recommend/notice')
+          return
+        } else if (this.gobool) {
+          this.$router.push('/user-center')
+          return
+        } else if (this.$route.path === '/user-center/share-back') {
+          this.$router.back()
+          return
+        } else if (this.guideBool) {
+          this.$router.push('/')
+          return
         } else {
           this.$router.back()
         }
+      },
+      signMethod (str) {
+        if (this.goBack) {
+          this.changeReturnPath(this.$route.path)
+        }
+        this.$router.push(str)
       },
       _getLoginState () {
         if (this.changeLoginState && this.changeLoginState !== '') {
@@ -89,8 +117,21 @@
               this.$emit('noLogin', res)
             }
           })
+          return
+        } else if (this.userId && this.userId !== '') {
+          getLoginState(this.userId).then((res) => {
+            if (res.isLogin === 'true') {
+              this.$emit('logined', res)
+              setChangeLogin(this.userId)
+            } else {
+              this.$emit('noLogin', res)
+            }
+          })
         }
-      }
+      },
+      ...mapActions([
+        'changeReturnPath'
+      ])
     }
   }
 </script>
@@ -112,6 +153,8 @@
       background-color: $color-text-s
       .icon
          bg-image('b-fff')
+      .text
+        color: $color-text
     .icon
       extend-click()
       position: absolute

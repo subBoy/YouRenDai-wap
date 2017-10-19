@@ -24,3 +24,30 @@ export function setReturnPath(returnPath) {
 export function getReturnPath() {
   return storage.get(RETURN_PATH, '')
 }
+
+// 账单详情参数存取 message_id create_date
+
+const MESSAGE_ID = '__messid__'
+const CREATE_DATE = '__createdate__'
+
+export function setMessageId(messid) {
+  let returnVal = storage.get(MESSAGE_ID, '')
+  returnVal = messid
+  storage.set(MESSAGE_ID, returnVal)
+  return returnVal
+}
+
+export function getMessageId() {
+  return storage.get(MESSAGE_ID, '')
+}
+
+export function setCreateDate(createdate) {
+  let returnVal = storage.get(CREATE_DATE, '')
+  returnVal = createdate
+  storage.set(CREATE_DATE, returnVal)
+  return returnVal
+}
+
+export function getCreateDate() {
+  return storage.get(CREATE_DATE, '')
+}

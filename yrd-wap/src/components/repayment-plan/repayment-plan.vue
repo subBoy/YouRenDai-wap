@@ -16,7 +16,7 @@
             <div class="recording-context" id="repaymentPlan">
               <!-- 有记录 -->
               <ul v-show="plans.length && plans.length > 0" v-for="plan in plans">
-                <li class="t-align-l-123"><p>plan.repayment_type</p></li>
+                <li class="t-align-l-123"><p>{{plan.repayment_type}}</p></li>
                 <li>{{plan.repayment_date.split(" ")[0]}}</li>
                 <li class="t-align-r">￥{{plan.repayment_money}}</li>
               </ul>
@@ -25,7 +25,7 @@
             </div>
           </div>
           <div class="repayment-plan pt-none">
-            <h3>总计本息金额<output id="totleMoney">￥{{plans.totleMoney}}</output></h3>
+            <h3>总计本息金额<output id="totleMoney">￥{{totleMoney}}</output></h3>
           </div>
         </div>
       </div>
@@ -37,6 +37,7 @@
   import MHeader from 'components/m-header/m-header'
   import Scroll from 'base/scroll/scroll'
   import {getRepaymentPlan} from 'api/product'
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
@@ -44,7 +45,8 @@
         isShow: false,
         opcity: 1,
         titleTxt: '还款计划',
-        plans: []
+        plans: [],
+        totleMoney: 0
       }
     },
     activated () {
@@ -55,11 +57,18 @@
     created() {
       this._getRepaymentPlan()
     },
+    computed: {
+      ...mapGetters([
+        'changeLoginState'
+      ])
+    },
     methods: {
       _getRepaymentPlan() {
-        getRepaymentPlan(this.$route.params.projectId).then((res) => {
-          // this.plans = res.repaymentplanJson
-          console.log(res)
+        getRepaymentPlan(this.changeLoginState, this.$route.params.projectId).then((res) => {
+          if (res.ret_code === '1') {
+            this.plans = res.repaymentplanJson
+            this.totleMoney = res.totleMoney
+          }
         })
       }
     },

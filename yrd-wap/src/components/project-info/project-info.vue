@@ -87,11 +87,6 @@
         cruntTxt: ''
       }
     },
-    activated () {
-      setTimeout(() => {
-        this._getProjectInfo()
-      }, 20)
-    },
     created() {
       this._getProjectInfo()
     },

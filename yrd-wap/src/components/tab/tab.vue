@@ -1,19 +1,19 @@
 <template>
   <div class="m-footer">
     <div class="tab border-1px">
-      <router-link tag="div" class="tab-item" to="/recommend">
+      <router-link tag="div" class="tab-item" to="/recommend" :class="{'link-active': activeIndex === 0}">
         <div class="tab-icon tab-icon-1"></div>
         <span class="tab-link">首页</span>
       </router-link>
-      <router-link tag="div" class="tab-item" to="/product-list">
+      <router-link tag="div" class="tab-item" to="/product-list" :class="{'link-active': activeIndex === 1}">
         <div class="tab-icon tab-icon-2"></div>
         <span class="tab-link">列表</span>
       </router-link>
-      <div class="tab-item" @click="lookAssets">
+      <div class="tab-item" @click="lookAssets" :class="{'link-active': activeIndex === 2}">
         <div class="tab-icon tab-icon-3"></div>
         <span class="tab-link">资产</span>
       </div>
-      <router-link tag="div" class="tab-item" to="/user-center">
+      <router-link tag="div" class="tab-item" to="/user-center" :class="{'link-active': activeIndex === 3}">
         <div class="tab-icon tab-icon-4"></div>
         <span class="tab-link">我的</span>
       </router-link>
@@ -25,6 +25,12 @@
   import {mapGetters, mapActions} from 'vuex'
 
   export default {
+    props: {
+      activeIndex: {
+        type: Number,
+        default: -1
+      }
+    },
     computed: {
       ...mapGetters([
         'changeLoginState'
@@ -83,7 +89,7 @@
             bg-image('zc-not')
           &.tab-icon-4
             bg-image('me-not')
-        &.router-link-active
+        &.link-active
           .tab-link
             color: $color-theme
           .tab-icon

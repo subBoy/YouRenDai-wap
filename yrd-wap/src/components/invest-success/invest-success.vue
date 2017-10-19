@@ -5,7 +5,7 @@
         <div class="txt">推荐给好友 我要分享~~</div>
       </div>
       <router-link tag="div" class="invite-btn" to="/recommend/share-back">立即分享</router-link>
-      <router-link tag="p" class="success-details" to="/user-center/assets">查看详情>></router-link>
+      <router-link tag="p" class="success-details" to="/user-center/invest-record">查看详情>></router-link>
     </div>
   </success>
 </template>
@@ -16,8 +16,8 @@
   export default {
     data() {
       return {
-        titleTxt: '提现成功',
-        descTxt: '恭喜您。成功完成一笔提现！'
+        titleTxt: '投资成功',
+        descTxt: '恭喜您。成功完成一笔投资！'
       }
     },
     components: {

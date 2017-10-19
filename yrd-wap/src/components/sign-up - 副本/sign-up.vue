@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div class="sign-wrapper">
+    <div class="sign-wrapper" ref="signWrapper">
       <m-header :isShow="isShow">
         <div class="sign">
           <router-link tag="div" class="btns" to="/signIn">立即去登录</router-link>
@@ -17,6 +17,7 @@
         @blurTel="blurTel"
         @blurPassword="blurPassword"
         @getPhoneCode="getPhoneCode"
+        @boxHeight="boxHeight"
       ></sign>
     </div>
   </transition>
@@ -26,8 +27,11 @@
   import MHeader from 'components/m-header/m-header'
   import Sign from 'base/sign/sign'
   // import {encryption, compareEncrypt} from 'common/js/bcrypt'
-  import {getCodeNumber, checkTel, signUp} from 'api/sign'
+  import {encode64} from 'common/js/util'
+  import {getCodeNumber, checkTel, signUp, signIn} from 'api/sign'
+  import {mapGetters, mapActions} from 'vuex'
 
+  const windowHei = document.documentElement.clientHeight
   export default {
     data() {
       return {
@@ -39,6 +43,11 @@
         password: '',
         mdNum: ''
       }
+    },
+    computed: {
+      ...mapGetters([
+        'changeReturnPath'
+      ])
     },
     methods: {
       signMethods (phoneNumber, passWord, _id, verificationCode, userType, imgVerify) {
@@ -53,7 +62,19 @@
 
         signUp(phoneNumber, verificationCode, _id, userType, passWord).then((res) => {
           if (res.flag) {
-            this.$router.push('/')
+            const _this = this
+            signIn(encode64(phoneNumber), encode64(passWord), '').then((signRes) => {
+              if (signRes.flag) {
+                _this.changeLoginState(signRes.userId)
+                if (_this.changeReturnPath === '') {
+                  _this.$router.push('/')
+                  return
+                }
+                _this.$router.push(this.changeReturnPath)
+              } else {
+                _this.$router.push('/sign-in')
+              }
+            })
           } else {
             this.signErr(res.msg)
           }
@@ -90,7 +111,13 @@
             this.$refs.sign.codeClickOk()
           }
         })
-      }
+      },
+      boxHeight() {
+        this.$refs.signWrapper.style.height = windowHei + 'px'
+      },
+      ...mapActions([
+        'changeLoginState'
+      ])
     },
     components: {
       MHeader,

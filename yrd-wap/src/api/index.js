@@ -13,7 +13,7 @@ export function getIndexData (userId) {
 
   const data = Object.assign({}, {
     cmd: 'init',
-    user_id: userId
+    userId
   })
 
   return axios.get(url, {

@@ -51,25 +51,25 @@
             <div class="fileBox">
               <ul>
                 <li>
-                  <a href="">
+                  <a href="/loan/blacklist/pdf/huodongguanli.pdf">
                     <img src="./01.png" width="">
                     <p class="fileFont">网络借贷信息中介机构<br/>业务活动管理暂行办法</p>
                   </a>
                 </li>
                 <li>
-                  <a href="">
+                  <a href="/loan/blacklist/pdf/10.pdf">
                     <img src="./02.png" width="">
                     <p class="fileFont">电子认证服务<br/>管理办法</p>
                   </a>
                 </li>
                 <li>
-                  <a href="">
+                  <a href="/loan/blacklist/pdf/09.pdf">
                     <img src="./03.png" width="">
                     <p class="fileFont">借贷知识条款</p>
                   </a>
                 </li>
                 <li>
-                  <a href="">
+                  <a href="/loan/blacklist/pdf/07.pdf">
                     <img src="./04.png" width="">
                     <p class="fileFont">风险提示条款</p>
                   </a>
@@ -79,7 +79,7 @@
             <img src="./overFont.png" class="overPic">
           </div>
         </div>
-        <div class="swiper-button-next common-btn"></div>
+        <div class="swiper-button-next common-btn" v-show="nextOk"></div>
       </div>
     </div>
     <transition name="slide">
@@ -102,7 +102,8 @@
         isShow: false,
         opcity: 1,
         mySwiper: '',
-        mySwiper2: ''
+        mySwiper2: '',
+        nextOk: true
       }
     },
     created () {
@@ -128,6 +129,8 @@
               addClass(_child[_index].children[1], 'animated fadeIn')
             } else if (_index === 1) {
               addClass(_child[_index].children[1], 'animated fadeInLeft')
+            } else if (_index === 4) {
+              _this.nextOk = false
             }
           }
         })
@@ -207,9 +210,8 @@
     .content-img
       position: absolute
       width: 90%
-      left: 50%
-      margin-left: -45%
-      top: 38%
+      left: 5%
+      top: 43%
     .yrdPic1
       top: 45%
     .swiper-slide .animated.fadeIn
@@ -239,16 +241,18 @@
       left: 0
       top: 38%
     .mouthP1
+      display: block
       position: absolute
       font-size: 18px
       color: #fff
-      top: 49%
+      left: 50%
+      top: 54%
       width: 100%
       text-align: center
-      transform: translateY(-50%)
+      transform: translate3d(-50%, -50%, 0)
     .lookbtn
       position: absolute
-      top: 63%
+      top: 69%
       left: 50%
       transform: translateX(-50%)
       text-align: center

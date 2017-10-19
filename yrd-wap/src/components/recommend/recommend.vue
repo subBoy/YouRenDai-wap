@@ -33,7 +33,7 @@
               <li class="recommed-group-item">
                 <router-link tag="div" to="/recommend/packs">
                   <div class="item-icons item-icons-2">
-                    <span class="item-new-num">{{hbNum}}</span>
+                    <span class="item-new-num" v-if="hbNum > 0">{{hbNum}}</span>
                   </div>
                   <p class="item-text">现金红包</p>
                 </router-link>
@@ -47,7 +47,7 @@
               <li class="recommed-group-item">
                 <div @click="latestNews">
                   <div class="item-icons item-icons-4">
-                    <span class="item-new-num">{{newsNum}}</span>
+                    <span class="item-new-num" v-if="newsNum > 0">{{newsNum}}</span>
                   </div>
                   <p class="item-text">最新消息</p>
                 </div>
@@ -71,8 +71,8 @@
                 <div class="product-message-item swiper-slide swiper-no-swiping" v-for="item in disclist">
                   <p class="return"><span class="num">{{item.year_rate}}</span>%</p>
                   <div class="info">
-                    <span class="desc">{{item.limit_month}}个月</span>
-                    <span class="desc">剩余{{item.balance}}元</span>
+                    <span class="desc">{{item.time_limit}}个月</span>
+                    <span class="desc">剩余{{item.canrongzimoney}}元</span>
                     <span class="desc">{{item.minimum_investment}}元起投</span>
                   </div>
                   <div class="details-btn" @click="selectItem(item)">
@@ -111,7 +111,6 @@
   import Loading from 'base/loading/loading'
   import Scroll from 'base/scroll/scroll'
   import Swiper from 'base/swiper/swiper'
-  import {getRecommendBanner, getRecommendPro} from 'api/recommend'
   import {_UA} from 'common/js/ua'
   import {getLoginState} from 'api/sign'
   import {getIndexData} from 'api/index'
@@ -133,8 +132,6 @@
       }
     },
     created () {
-      this._getRecommendBanner()
-      this._getRecommendPro()
       this._getIndexData()
     },
     computed: {
@@ -183,7 +180,7 @@
       },
       latestNews () {
         getLoginState(this.changeLoginState).then((res) => {
-          console.log('login:' + res.isLogin)
+          console.log('login:', res.isLogin)
           if (res.isLogin === 'true') {
             this.$router.push('/recommend/latest-news')
           } else {
@@ -193,18 +190,14 @@
       },
       _getIndexData () {
         getIndexData(this.changeLoginState).then((res) => {
-          console.log('getIndexData')
-          console.log(res)
-        })
-      },
-      _getRecommendBanner () {
-        getRecommendBanner().then((res) => {
-          this.recommends = res.bannerList
-        })
-      },
-      _getRecommendPro () {
-        getRecommendPro().then((res) => {
-          this.disclist.push(res.allArray[0])
+          if (res.ret_code === '1') {
+            console.log('indexData:', res)
+            const indexData = res.ret_set
+            this.recommends = indexData.banner_list
+            this.disclist.push(indexData.main_push_list[0])
+            this.hbNum = indexData.wrrNum
+            this.newsNum = indexData.memssageNum
+          }
         })
       }
     },

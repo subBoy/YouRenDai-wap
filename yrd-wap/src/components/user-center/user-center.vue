@@ -12,8 +12,8 @@
                 <div class="avatar"></div>
                 <div class="user-info-center">
                   <div v-if="signed">
-                    <p class="name">{{userInfo.username}}<span class="vip" :class="countVip(userInfo.level)"><span class="num">{{userInfo.level}}</span></span></p>
-                    <p class="balance">账户余额 <span class="sum">￥{{userInfo.activity}}</span></p>
+                    <p class="name">{{userInfo.username}}<span class="vip" :class="countVip(userInfo.level)"><span class="num">V{{userInfo.level}}</span></span></p>
+                    <p class="balance">账户余额 <span class="sum">￥{{checkVal(userInfo.activity)}}</span></p>
                   </div>
                   <router-link tag="div" class="user-no-login" to="/signIn" v-else>立即登录</router-link>
                 </div>
@@ -38,7 +38,7 @@
         </div>
       </scroll>
     </div>
-    <tab></tab>
+    <tab :activeIndex="activeIndex"></tab>
     <confirm ref="customerConfirm" @confirm="confirm" :text="text" :confirmBtnText="confirmBtnText" :btnTxt="btnTxt" :winDesc="winDesc" :realClass="realClass"></confirm>
     <transition name="slide">
       <router-view></router-view>
@@ -71,6 +71,7 @@
         realClass: true,
         user_id: '',
         userInfo: {},
+        activeIndex: 3,
         applicationList: [
           {
             path: 'assets',
@@ -83,7 +84,7 @@
             icon: 'ic-2'
           },
           {
-            path: 'invite',
+            path: 'share-back',
             text: '邀请好友',
             icon: 'ic-3'
           },
@@ -132,7 +133,7 @@
           this.$router.push({
             path: `user-center/${item.path}`
           })
-        }, 100)
+        }, 80)
       },
       GotoWithdraw () {
         if (this.changeLoginState === '') {
@@ -184,6 +185,18 @@
           return 'vip4-6'
         }
         return 'vip7-9'
+      },
+      checkVal (sum) {
+        if (!sum) return
+        let flostNum = ''
+        const indexD = sum.split('.')
+        if (!indexD[1]) {
+          flostNum = '00'
+        } else {
+          flostNum = indexD[1] + '00'
+        }
+        let ret = indexD[0] + '.' + flostNum
+        return ret.substring(0, indexD[0].length + 3)
       },
       _real () {
         setTimeout(() => {
@@ -293,7 +306,7 @@
                       float: right
                       line-height: 16px
                       font-size: $font-size-small
-                      padding-right: 13px
+                      padding-right: 9px
                 .balance
                   .sum
                     font-weight: bold

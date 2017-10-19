@@ -42,6 +42,7 @@
         this.content_id = this.$route.params.id
         getNoticeDetails(this.content_id).then((res) => {
           this.content = res.ret_set
+          console.log('content', this.content)
           setTimeout(() => {
             this.$refs.detailsScroll.refresh()
           }, 20)

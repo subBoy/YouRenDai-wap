@@ -1,6 +1,6 @@
 <template>
   <div class="share-back-wrapper">
-    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
+    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" :guideBool="guideBool" @logined="logined"></m-header>
     <scroll class="share-back-scroll" ref="backScroll">
       <div class="share-back-content">
         <div class="app-20170512-invited-wrapper">
@@ -26,41 +26,44 @@
       </div>
     </div>
     <div class="slide-wrapper" v-show="winShow">
-      <em class="bg"></em>
+      <em class="bg" @click="hide"></em>
       <div class="slide-wrapper-centent">
         <p class="desc">请好友扫描二维码</p>
         <div class="erweima">
           <div class="erweima-img">
-            <div id="qrcode"></div>
+            <div id="qrcode">
+            </div>
           </div>
         </div>
-        <p class="desc">或</p>
-        <div class="line"></div>
-        <div class="invite-type">
-          <ul class="invite-type-wrapper bdsharebuttonbox">
-            <li class="invite-type-item">
-              <div class="tyoe-icon ic-1"></div> <a id="bds_weixin"
-              class="bds_weixin" data-cmd="weixin"></a>
-              <p class="type-name">微信好友</p>
-            </li>
-            <li class="invite-type-item">
-              <div class="tyoe-icon ic-2"></div> <a id="bds_weixin"
-              class="bds_weixin" data-cmd="weixin"></a>
-              <p class="type-name">朋友圈</p>
-            </li>
-            <li class="invite-type-item">
-              <div class="tyoe-icon ic-3"></div> <a id="bds_qzone"
-              class="bds_qzone" data-cmd="qzone"></a>
-              <p class="type-name">QQ空间</p>
-            </li>
-            <li class="invite-type-item">
-              <div class="tyoe-icon ic-4"></div> <a id="popup_sqq"
-              class="popup_sqq" data-cmd="sqq"></a>
-              <p class="type-name">QQ好友</p>
-            </li>
-          </ul>
+        <div v-show="shareHide">
+          <p class="desc">或</p>
+          <div class="line"></div>
+          <div class="invite-type">
+            <ul class="invite-type-wrapper bdsharebuttonbox">
+              <li class="invite-type-item">
+                <div class="tyoe-icon ic-1"></div> <a id="bds_weixin"
+                class="bds_weixin" data-cmd="weixin"></a>
+                <p class="type-name">微信好友</p>
+              </li>
+              <li class="invite-type-item">
+                <div class="tyoe-icon ic-2"></div> <a id="bds_weixin"
+                class="bds_weixin" data-cmd="weixin"></a>
+                <p class="type-name">朋友圈</p>
+              </li>
+              <li class="invite-type-item">
+                <div class="tyoe-icon ic-3"></div> <a id="bds_qzone"
+                class="bds_qzone" data-cmd="qzone"></a>
+                <p class="type-name">QQ空间</p>
+              </li>
+              <li class="invite-type-item">
+                <div class="tyoe-icon ic-4"></div> <a id="popup_sqq"
+                class="popup_sqq" data-cmd="sqq"></a>
+                <p class="type-name">QQ好友</p>
+              </li>
+            </ul>
+          </div>
+          <div class="line"></div>
         </div>
-        <div class="line"></div>
         <div class="close-btn" @click="hide">取消</div>
       </div>
     </div>
@@ -69,6 +72,7 @@
 <script>
   import MHeader from 'components/m-header/m-header'
   import Scroll from 'base/scroll/scroll'
+  import $ from 'jquery'
 
   export default {
     data() {
@@ -76,18 +80,39 @@
         titleTxt: '分享返现',
         isShow: false,
         opcity: 1,
-        winShow: false
+        winShow: false,
+        guideBool: true,
+        shareHide: false,
+        src: '',
+        logoSrc: '',
+        inviteUrl: ''
       }
+    },
+    mounted() {
+      this.$nextTick(() => {
+        require('jquery/dist/jquery.qrcode.min.js')
+        this.qrcode()
+      })
     },
     methods: {
       shareBack () {
         this.show()
+      },
+      qrcode () {
+        $('#qrcode').qrcode({
+          text: this.inviteUrl,
+          width: 110,
+          height: 110
+        })
       },
       show () {
         this.winShow = true
       },
       hide () {
         this.winShow = false
+      },
+      logined (res) {
+        this.inviteUrl = res.wap_invite_url
       }
     },
     components: {
@@ -159,15 +184,15 @@
       margin-bottom: 50px
     .erweima-img
       position: relative
-      width: 105px
-      height: 105px
+      margin: 0 auto
+      width: 110px
+      height: 110px
     #qrcode
       position: absolute
-      top: 13px
-      left: 13px
+      top: 10px
+      left: 2px
     .erweima-img img
       width: 100%
-      padding: 12.5px 13px
     .invite-type
       margin: 0 25px
     .invite-type-wrapper

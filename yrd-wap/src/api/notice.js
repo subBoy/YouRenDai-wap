@@ -76,8 +76,8 @@ export function readAllNews (userId) {
   }
 
   const data = Object.assign({}, {
-    cmd: 'wapProjectInformation',
-    user_id: userId
+    cmd: 'allMessageStat',
+    userId
   })
 
   return axios({
@@ -109,10 +109,10 @@ export function readOneNews (userId, receivesId, messageId) {
   }
 
   const data = Object.assign({}, {
-    cmd: 'wapProjectInformation',
-    user_id: userId,
-    message_id: messageId,
-    receivesId
+    cmd: 'messageStat',
+    userId,
+    receives_id: receivesId,
+    message_id: messageId
   })
 
   return axios({

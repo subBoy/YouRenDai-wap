@@ -1,6 +1,6 @@
 <template>
   <div class="product-wrapper">
-    <m-header :titleTxt="titleTxt" :opcity="opcity"></m-header>
+    <m-header :titleTxt="titleTxt" :opcity="opcity" :goBack="goBack"></m-header>
     <div class="product">
       <scroll class="product-scroll"
         :data="productList"
@@ -32,7 +32,7 @@
         </div>
       </scroll>
     </div>
-    <tab></tab>
+    <tab :activeIndex="activeIndex"></tab>
     <transition name="slide">
       <router-view></router-view>
     </transition>
@@ -57,7 +57,9 @@
         hasMore: true,
         page: 1,
         opcity: 1,
-        productList: []
+        activeIndex: 1,
+        productList: [],
+        goBack: true
       }
     },
     created () {

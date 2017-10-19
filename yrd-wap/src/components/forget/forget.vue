@@ -1,19 +1,21 @@
 <template>
   <transition name="slide">
     <div class="sign-wrapper">
-      <m-header :titleTxt="titleTxt" :isForget="isForget" :isShow="isShow"></m-header>
+      <m-header :titleTxt="titleTxt" :isForget="isForget" :isShow="isShow" :whiteIcon="whiteIcon"></m-header>
       <sign
         ref="sign"
         :signBtnTxt="signBtnTxt"
         :isForget="isForget"
         :mdNum="mdNum"
         :errTxt="errTxt"
+        :codeClick="codeClick"
         @signMethods="signMethods"
         @signErr="signErr"
         @blurTel="blurTel"
         @blurPassword="blurPassword"
         @getPhoneCode="getPhoneCode"
       ></sign>
+      <confirm ref="customerConfirm" @confirm="confirm" :text="text" :confirmBtnText="confirmBtnText" :realClass="realClass"></confirm>
     </div>
   </transition>
 </template>
@@ -21,6 +23,7 @@
 <script>
   import MHeader from 'components/m-header/m-header'
   import Sign from 'base/sign/sign'
+  import Confirm from 'base/confirm/confirm'
   // import {encryption, compareEncrypt} from 'common/js/bcrypt'
   import {getPassCodeNumber, checkTelPass, forgetPassword} from 'api/sign'
 
@@ -29,8 +32,13 @@
       return {
         isForget: true,
         isShow: false,
+        text: '恭喜您成功重置密码！',
+        confirmBtnText: '立即登录',
         titleTxt: '重置密码',
         signBtnTxt: '提交',
+        realClass: false,
+        whiteIcon: true,
+        codeClick: true,
         errTxt: '',
         mdNum: '',
         userName: '',
@@ -51,7 +59,8 @@
         forgetPassword(phoneNumber, verificationCode, this.mdNum, passWord).then((res) => {
           if (res.flag) {
             console.log(res.flag)
-            this.$router.push('signIn')
+            this._real()
+            // this.$router.push('signIn')
           } else {
             this.signErr(res.msg)
           }
@@ -80,19 +89,38 @@
       signErr (errTxt) {
         this.errTxt = errTxt
       },
-      getPhoneCode (phoneNumber, mdNum) {
-        getPassCodeNumber(phoneNumber, mdNum).then((res) => {
-          if (res.flag) {
-            this.$refs.sign.setInterFuc()
-          } else {
-            this.$refs.sign.codeClickOk()
+      getPhoneCode (phoneNumber) {
+        clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
+          if (!this.mdNum || this.mdNum.length <= 0) {
+            this.signErr('该手机号尚未注册！')
+            return
           }
-        })
+
+          getPassCodeNumber(phoneNumber, this.mdNum).then((res) => {
+            if (res.flag) {
+              this.codeClick = false
+              this.$refs.sign.setInterFuc()
+            } else {
+              this.signErr(res.msg)
+              this.$refs.sign.codeClickOk()
+            }
+          })
+        }, 200)
+      },
+      confirm () {
+        this.$router.back()
+      },
+      _real () {
+        setTimeout(() => {
+          this.$refs.customerConfirm.show()
+        }, 20)
       }
     },
     components: {
       MHeader,
-      Sign
+      Sign,
+      Confirm
     }
   }
 </script>

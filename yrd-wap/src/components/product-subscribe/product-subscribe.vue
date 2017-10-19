@@ -1,6 +1,9 @@
 <template>
   <div class="subscribe-wrapper" ref="subscribeWrapper" @touchstart="lineBlur">
-    <m-header :titleTxt="titleTxt" :opcity="opcity" :whiteIcon="whiteIcon"></m-header>
+    <m-header :titleTxt="titleTxt" :opcity="opcity" :whiteIcon="whiteIcon" @logined="logined"></m-header>
+    <top-tip ref="topTip">
+      <p class="caveatText">{{caveatText}}</p>
+    </top-tip>
     <div class="subscribe-grounp" ref="subscribeGrounp">
       <scroll class="subscribe-scroll" :listenScroll="listenScroll" :probeType="probeType" @scroll="scroll" ref="scroll">
         <div>
@@ -61,6 +64,7 @@
 <script>
   import MHeader from 'components/m-header/m-header'
   import Scroll from 'base/scroll/scroll'
+  import TopTip from 'base/top-tip/top-tip'
   import ProgressCircle from 'base/progress-circle/progress-circle'
   import {prefixStyle} from 'common/js/dom'
   import {debounce} from 'common/js/util'
@@ -71,7 +75,7 @@
   const ERR_OK = 1
   const ITEM_WIDTH = 70
   const transform = prefixStyle('transform')
-  const windowHei = document.documentElement.clientHeight
+  let windowHei = document.documentElement.clientHeight
 
   export default {
     data () {
@@ -86,15 +90,18 @@
         investAmount: 1000,
         incomeList: [],
         income: 0,
+        logVal: 100,
         addBool: true,
         removeBool: true,
+        userType: true,
         project_id: '',
-        user_id: '',
         screenHeight: document.documentElement.clientHeight,
-        qaAssess: 'no'
+        qaAssess: 'no',
+        caveatText: ''
       }
     },
     created () {
+      this.pathNow = this.$route.path
       this.project_id = this.$route.params.id
 
       this._getSubscribeData()
@@ -123,6 +130,10 @@
     methods: {
       lineBlur () {
         this.$refs.inputWrapper.blur()
+        this.$refs.subscribeWrapper.style.top = 0
+        setTimeout(() => {
+          this.$refs.scroll.refresh()
+        }, 20)
       },
       scroll (pos) {
         if (pos.y < 0) {
@@ -149,16 +160,20 @@
         if (!this.addBool) {
           return
         }
-        this.investAmount = this.investAmount + this.subscribe.minmoney
+        this.investAmount = this.investAmount - 0 + this.subscribe.minmoney
       },
       investKeyup () {
-        if (parseInt(parseInt(this.investAmount) / 100) === parseInt(parseInt(this.investAmount) / 100)) {
-          this.investAmount = parseInt(parseInt(this.investAmount) / 100) * 100
+        const reg = /^(0|[1-9][0-9]*)$/
+        const bool = reg.test(this.investAmount)
+        if (bool) {
+          this.logVal = this.investAmount
+          if (this.logVal < 10) {
+            this.logVal = ''
+          }
         } else {
-          this.investAmount = 100
+          this.investAmount = this.logVal
         }
         if (this.investAmount <= 100) {
-          this.investAmount = 100
           this.removeBool = false
           this.addBool = true
         } else if (this.investAmount >= parseInt(this.subscribe.surplus)) {
@@ -166,6 +181,7 @@
           this.addBool = false
           this.removeBool = true
         }
+        console.log(this.investAmount)
         this._invest()
       },
       investBlur () {
@@ -176,10 +192,31 @@
         this.$refs.subscribeWrapper.style.height = windowHei + 'px'
         this.$refs.subscribeWrapper.style.top = '-55%'
       },
+      logined(res) {
+        this.userType = res.userType
+      },
       subscribeSubmit () {
+        if (!this.userType) {
+          this.caveatText = '借款人不允许投资！'
+          this.caveat()
+          return
+        }
         if (!this.subscribe.btnClass) {
           return
         }
+
+        if (this.investAmount < 100) {
+          this.caveatText = '请输入100的整数倍金额，且最小投资额100！'
+          this.caveat()
+          return
+        }
+
+        if ((this.investAmount % 100) !== 0) {
+          this.caveatText = '请输入100的整数倍金额！'
+          this.caveat()
+          return
+        }
+
         if (this.changeLoginState === '') {
           this.changeReturnPath(this.$route.path)
           this.$router.push({
@@ -187,8 +224,9 @@
           })
           return
         }
+
         getLoginState(this.changeLoginState).then((res) => {
-          if (!this.isEvaluated) {
+          if (!res.isEvaluated) {
             this.$router.push({
               path: `${this.$route.path}/investor-notice/${this.investAmount}/${this.subscribe.surplus}`
             })
@@ -198,6 +236,9 @@
             path: `${this.$route.path}/subscription/${this.investAmount}/${this.subscribe.surplus}`
           })
         })
+      },
+      caveat() {
+        this.$refs.topTip.show()
       },
       httpTxt () {
         if (this.subscribe.limit !== 12) {
@@ -280,15 +321,21 @@
         return obj
       },
       _getSubscribeData () {
-        getSubscribeData(this.project_id, this.user_id).then((res) => {
+        getSubscribeData(this.project_id, this.changeLoginState).then((res) => {
           if (parseInt(res.ret_code) === ERR_OK) {
             this.subscribe = Object.assign(res.ret_set, this._genResult(res.ret_set))
             this.percent = 1 - parseInt(this.subscribe.surplus) / parseInt(this.subscribe.total)
+            if (parseInt(this.subscribe.surplus) <= 1000) {
+              this.investAmount = parseInt(this.subscribe.surplus)
+              this.addBool = false
+              this.removeBool = true
+            }
             if (parseInt(this.subscribe.surplus) === 0) {
               this.investAmount = 0
               this.addBool = false
               this.removeBool = false
             }
+
             setTimeout(() => {
               this._init()
               this._invest()
@@ -352,6 +399,9 @@
     watch: {
       screenHeight (newVal, oldVal) {
         if (!this.timer) {
+          console.log('oldVal', oldVal)
+          console.log('newVal', newVal)
+          if (this.pathNow !== this.$route.path) return
           this.screenHeight = newVal
           this.timer = true
           let _this = this
@@ -369,6 +419,7 @@
     components: {
       MHeader,
       Scroll,
+      TopTip,
       ProgressCircle
     }
   }
@@ -390,6 +441,12 @@
     top: 0
     background-color: $color-text
     z-index: 9999
+    .caveatText
+      padding: 20px
+      line-height: 16px
+      background-color: $btn-clo
+      font-size: 12px
+      color: #fff
     .subscribe-grounp
       position: absolute
       top: 0

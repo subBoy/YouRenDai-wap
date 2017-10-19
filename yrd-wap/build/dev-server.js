@@ -140,8 +140,38 @@ apiRoutes.get('/getSubscribeData', function (req, res) {
   })
 })
 
+apiRoutes.get('/rechargeRecord', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios.get(url, {
+    headers: {
+      referer: refererTxt + '',
+      host: hostTxt
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.get('/withdrawalRecord', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios.get(url, {
+    headers: {
+      referer: refererTxt + '',
+      host: hostTxt
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
 apiRoutes.get('/getRepaymentPlan', function (req, res) {
-  var url = refererTxt + 'app/projectDetail.do'
+  var url = refererTxt + 'wap/wapIndexAction.do'
   axios.get(url, {
     headers: {
       referer: refererTxt + '',
@@ -540,7 +570,59 @@ apiRoutes.post('/setCustomer', function (req, res) {
 })
 
 apiRoutes.post('/userRecharge', function (req, res) {
-  var url = refererTxt + '/wap/wapUserAction.do'
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/closeRecharge', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/continueRecharge', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
   axios({
     url,
     method: 'post',
@@ -566,7 +648,7 @@ apiRoutes.post('/userRecharge', function (req, res) {
 })
 
 apiRoutes.post('/userWithdrawal', function (req, res) {
-  var url = refererTxt + 'front/appWithdrawal.do'
+  var url = refererTxt + 'front/appWithdrawalList.do'
   axios({
     url,
     method: 'post',
@@ -632,8 +714,38 @@ apiRoutes.get('/getInvestorNotice', function (req, res) {
   })
 })
 
+apiRoutes.get('/getBillList', function (req, res) {
+  var url = refererTxt + 'wap/wapIndexAction.do'
+  axios.get(url, {
+    headers: {
+      referer: refererTxt,
+      host: hostTxt
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.get('/getBillDetails', function (req, res) {
+  var url = refererTxt + 'wap/wapIndexAction.do'
+  axios.get(url, {
+    headers: {
+      referer: refererTxt,
+      host: hostTxt
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
 apiRoutes.post('/submitInvestorNotice', function (req, res) {
-  var url = refererTxt + '/wap/wapUserAction.do'
+  var url = refererTxt + 'wap/wapUserAction.do'
   axios({
     url,
     method: 'post',
@@ -689,7 +801,7 @@ apiRoutes.get('/getLatestNews', function (req, res) {
 })
 
 apiRoutes.post('/readAllNews', function (req, res) {
-  var url = refererTxt + 'wap/wapUserAction.do'
+  var url = refererTxt + 'wap/wapIndexAction.do'
   axios({
     url,
     method: 'post',
@@ -715,6 +827,32 @@ apiRoutes.post('/readAllNews', function (req, res) {
 })
 
 apiRoutes.post('/readOneNews', function (req, res) {
+  var url = refererTxt + 'wap/wapIndexAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/readAllBills', function (req, res) {
   var url = refererTxt + 'wap/wapUserAction.do'
   axios({
     url,
@@ -739,6 +877,33 @@ apiRoutes.post('/readOneNews', function (req, res) {
     console.log(e)
   })
 })
+
+apiRoutes.post('/readOneBills', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
 app.use('/api', apiRoutes)
 
 var compiler = webpack(webpackConfig)

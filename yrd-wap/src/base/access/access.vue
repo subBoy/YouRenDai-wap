@@ -3,15 +3,20 @@
     <top-tip ref="topTip">
       <p class="caveatText">{{caveatText}}</p>
     </top-tip>
-    <scroll class="access-scroll" ref="accessScroll">
+    <scroll class="access-scroll" ref="accessScroll"
+      :data="accessList"
+      :pullup="pullup"
+      @scrollToEnd="startLoad"
+    >
       <div class="access-group">
         <div class="access-input">
           <div class="access-input-box">
             <span class="title">{{accessTitle}}</span>
             <div class="input-box">
               <div class="input-box-wrapper">
-                <input class="access-input-sum" type="tel" v-model="sum" maxLength="19">
-                <p class="desc">￥<span class="desc-sum">{{sum}}</span></p>
+                <input class="access-input-sum" type="tel" v-model="sum" maxLength="19" @keyup="check">
+                <p class="desc" v-if="sum && (sum > 0 || sum !== '')">￥<span class="desc-sum">{{sum}}</span></p>
+                <p class="desc" v-else>{{descTxt}}</p>
               </div>
             </div>
           </div>
@@ -21,14 +26,15 @@
           <div class="access-record-group">
             <div class="access-record-title border-1px-b">{{recordTitle}}</div>
             <!-- 无记录状态 -->
-            <div class="access-record-air">
+            <div class="access-record-air" v-show="!accessList.length || accessList.length === 0">
               <p class="desc">暂无记录</p>
               <p class="desc">{{airTxt}}</p>
-              <div class="btn">{{airBtnTxt}}</div>
+              <div class="btn" @click="airRecord">{{airBtnTxt}}</div>
             </div>
             <slot name="record-list"></slot>
           </div>
         </div>
+        <loading :title="loadTitle" v-show="hasMore"></loading>
       </div>
     </scroll>
   </div>
@@ -37,6 +43,7 @@
 <script>
   import Scroll from 'base/scroll/scroll'
   import TopTip from 'base/top-tip/top-tip'
+  import Loading from 'base/loading/loading'
 
   export default {
     props: {
@@ -63,11 +70,25 @@
       airBtnTxt: {
         type: String,
         default: ''
+      },
+      descTxt: {
+        type: String,
+        default: ''
+      },
+      accessList: {
+        type: Array,
+        default: []
+      },
+      hasMore: {
+        type: Boolean,
+        default: true
       }
     },
     data() {
       return {
-        sum: 5000
+        sum: null,
+        pullup: true,
+        loadTitle: '正在加载更多...'
       }
     },
     created() {
@@ -79,6 +100,19 @@
       },
       refresh() {
         this.$refs.accessScroll.refresh()
+      },
+      startLoad() {
+        this.$emit('loadMore')
+      },
+      check() {
+        this.sum = this.sum.replace(/[^\d.]/g, '')
+        this.sum = this.sum.replace(/^\./g, '')
+        this.sum = this.sum.replace(/\.{2,}/g, '.')
+        this.sum = this.sum.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
+        console.log('sum:', this.sum)
+      },
+      airRecord() {
+        this.$emit('airBtnMethod')
       }
     },
     watch: {
@@ -88,7 +122,8 @@
     },
     components: {
       Scroll,
-      TopTip
+      TopTip,
+      Loading
     }
   }
 </script>
@@ -103,6 +138,12 @@
     right: 0
     bottom: 84px
     left: 0
+    .caveatText
+      padding: 20px
+      line-height: 16px
+      background-color: $btn-clo
+      font-size: 12px
+      color: #fff
     .access-scroll
       width: 100%;
       height: 100%;

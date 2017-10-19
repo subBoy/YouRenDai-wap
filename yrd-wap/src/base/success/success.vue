@@ -5,7 +5,7 @@
       <div>
         <p class="desc-txt">{{descTxt}}</p>
         <div class="access-success-group">
-          <div class="icon icon1"></div>
+          <div class="icon" :class="suClass"></div>
           <slot></slot>
         </div>
       </div>
@@ -31,6 +31,19 @@
       return {
         isShow: false,
         opcity: 1
+      }
+    },
+    computed: {
+      suClass() {
+        if (this.titleTxt === '提现成功') {
+          return 'wi-ic'
+        }
+        if (this.titleTxt === '充值成功') {
+          return 're-ic'
+        }
+        if (this.titleTxt === '投资成功') {
+          return 'su-ic'
+        }
       }
     },
     components: {
@@ -70,5 +83,10 @@
           background-repeat: no-repeat
           background-size: auto 120px
           background-position: center
-          bg-image('su-ic')
+          &.wi-ic
+            bg-image('wi-ic')
+          &.re-ic
+            bg-image('re-ic')
+          &.su-ic
+            bg-image('su-ic')
 </style>

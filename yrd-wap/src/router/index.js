@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import {getChangeLogin} from 'common/js/cache'
 
 const Recommend = () => import('components/recommend/recommend')
 const Assets = () => import('components/assets/assets')
@@ -40,267 +41,303 @@ const Report = () => import('components/report/report')
 const Subscription = () => import('components/subscription/subscription')
 const Guide = () => import('components/guide/guide')
 const InvestorNotice = () => import('components/investor-notice/investor-notice')
+const InvestSuccess = () => import('components/invest-success/invest-success')
+const LatestNewsDetails = () => import('components/latest-news-details/latest-news-details')
 
 Vue.use(Router)
 
-export default new Router({
-  routes: [
-    {
-      path: '*',
-      component: Undefind
+const routes = [
+  {
+    path: '*',
+    component: Undefind
+  },
+  {
+    path: '/server-error',
+    component: serverError
+  },
+  {
+    path: '/',
+    redirect: '/recommend'
+  },
+  {
+    path: '/recommend',
+    component: Recommend,
+    children: [
+      {
+        path: 'subscribe/:id',
+        component: productSubscribe,
+        children: [
+          {
+            path: 'contract',
+            component: Contract
+          },
+          {
+            path: 'contract-6',
+            component: Contract6
+          },
+          {
+            path: 'project-info/:projectId',
+            component: ProjectInfo
+          },
+          {
+            path: 'repayment-plan/:projectId',
+            component: RepaymentPlan
+          },
+          {
+            path: 'risk-warning',
+            component: RiskWarning
+          },
+          {
+            path: 'subscription/:loanMoney/:surplus',
+            component: Subscription
+          },
+          {
+            path: 'investor-notice/:loanMoney/:surplus',
+            component: InvestorNotice
+          }
+        ]
+      },
+      {
+        path: 'notice',
+        component: Notice,
+        children: [
+          {
+            path: ':id',
+            component: NoticeDetails
+          }
+        ]
+      },
+      {
+        path: 'to-user',
+        component: ToUser
+      },
+      {
+        path: 'latest-news',
+        component: LatestNews,
+        children: [
+          {
+            path: 'news-details',
+            component: NewsDetails
+          },
+          {
+            path: 'bill-details',
+            component: BillDetails
+          },
+          {
+            path: 'latest-news-details/:messageId',
+            component: LatestNewsDetails
+          }
+        ]
+      },
+      {
+        path: 'platform',
+        component: Platform
+      },
+      {
+        path: 'packs',
+        component: Packs
+      },
+      {
+        path: 'share-back',
+        component: ShareBack
+      }
+    ]
+  },
+  {
+    path: '/assets',
+    component: Assets,
+    children: [
+      {
+        path: 'recharge',
+        component: Recharge
+      },
+      {
+        path: 'withdraw',
+        component: Withdraw
+      },
+      {
+        path: 'bill-list',
+        component: BillList,
+        children: [
+          {
+            path: 'bill-details',
+            component: BillDetails
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/user-center',
+    component: Usercenter,
+    children: [
+      {
+        path: 'assets',
+        component: Assets,
+        children: [
+          {
+            path: 'recharge',
+            component: Recharge
+          },
+          {
+            path: 'withdraw',
+            component: Withdraw
+          },
+          {
+            path: 'bill-list',
+            component: BillList,
+            children: [
+              {
+                path: 'bill-details',
+                component: BillDetails
+              }
+            ]
+          }
+        ]
+      },
+      {
+        path: 'set-user',
+        component: setUser
+      },
+      {
+        path: 'invest-record',
+        component: investRecord
+      },
+      {
+        path: 'packs',
+        component: Packs
+      },
+      {
+        path: 'invite',
+        component: Invite
+      },
+      {
+        path: 'share-back',
+        component: ShareBack
+      },
+      {
+        path: 'disclosure',
+        component: Disclosure,
+        children: [
+          {
+            path: 'report',
+            component: Report
+          }
+        ]
+      },
+      {
+        path: 'customer-service',
+        component: CustomerService
+      },
+      {
+        path: 'recharge',
+        component: Recharge
+      },
+      {
+        path: 'withdraw',
+        component: Withdraw
+      },
+      {
+        path: 'real-name',
+        component: RealName
+      }
+    ]
+  },
+  {
+    path: '/product-list',
+    component: Productlist,
+    children: [
+      {
+        path: 'subscribe/:id',
+        component: productSubscribe,
+        children: [
+          {
+            path: 'contract',
+            component: Contract
+          },
+          {
+            path: 'contract-6',
+            component: Contract6
+          },
+          {
+            path: 'project-info/:projectId',
+            component: ProjectInfo
+          },
+          {
+            path: 'repayment-plan/:projectId',
+            component: RepaymentPlan
+          },
+          {
+            path: 'risk-warning',
+            component: RiskWarning
+          },
+          {
+            path: 'subscription/:loanMoney/:surplus',
+            component: Subscription
+          },
+          {
+            path: 'investor-notice/:loanMoney/:surplus',
+            component: InvestorNotice
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/signIn',
+    component: SignIn
+  },
+  {
+    path: '/signUp',
+    component: SignUp
+  },
+  {
+    path: '/signUp/:id',
+    component: SignUp
+  },
+  {
+    path: '/forget',
+    component: Forget
+  },
+  {
+    path: '/guide',
+    meta: {
+      requireAuth: true
     },
-    {
-      path: '/server-error',
-      component: serverError
-    },
-    {
-      path: '/',
-      redirect: '/recommend'
-    },
-    {
-      path: '/recommend',
-      component: Recommend,
-      children: [
-        {
-          path: 'subscribe/:id',
-          component: productSubscribe,
-          children: [
-            {
-              path: 'contract',
-              component: Contract
-            },
-            {
-              path: 'contract-6',
-              component: Contract6
-            },
-            {
-              path: 'project-info/:projectId',
-              component: ProjectInfo
-            },
-            {
-              path: 'repayment-plan/:projectId',
-              component: RepaymentPlan
-            },
-            {
-              path: 'risk-warning',
-              component: RiskWarning
-            },
-            {
-              path: 'subscription/:loanMoney/:surplus',
-              component: Subscription
-            },
-            {
-              path: 'investor-notice/:loanMoney/:surplus',
-              component: InvestorNotice
-            }
-          ]
-        },
-        {
-          path: 'notice',
-          component: Notice,
-          children: [
-            {
-              path: ':id',
-              component: NoticeDetails
-            }
-          ]
-        },
-        {
-          path: 'to-user',
-          component: ToUser
-        },
-        {
-          path: 'latest-news',
-          component: LatestNews,
-          children: [
-            {
-              path: 'news-details',
-              component: NewsDetails
-            },
-            {
-              path: 'bill-details',
-              component: BillDetails
-            }
-          ]
-        },
-        {
-          path: 'platform',
-          component: Platform
-        },
-        {
-          path: 'packs',
-          component: Packs
-        },
-        {
-          path: 'share-back',
-          component: ShareBack
-        }
-      ]
-    },
-    {
-      path: '/assets',
-      component: Assets,
-      children: [
-        {
-          path: 'recharge',
-          component: Recharge
-        },
-        {
-          path: 'withdraw',
-          component: Withdraw
-        },
-        {
-          path: 'bill-list',
-          component: BillList,
-          children: [
-            {
-              path: 'bill-details',
-              component: BillDetails
-            }
-          ]
-        }
-      ]
-    },
-    {
-      path: '/user-center',
-      component: Usercenter,
-      children: [
-        {
-          path: 'assets',
-          component: Assets,
-          children: [
-            {
-              path: 'recharge',
-              component: Recharge
-            },
-            {
-              path: 'withdraw',
-              component: Withdraw
-            },
-            {
-              path: 'bill-list',
-              component: BillList,
-              children: [
-                {
-                  path: 'bill-details',
-                  component: BillDetails
-                }
-              ]
-            }
-          ]
-        },
-        {
-          path: 'set-user',
-          component: setUser
-        },
-        {
-          path: 'invest-record',
-          component: investRecord
-        },
-        {
-          path: 'packs',
-          component: Packs
-        },
-        {
-          path: 'invite',
-          component: Invite
-        },
-        {
-          path: 'disclosure',
-          component: Disclosure,
-          children: [
-            {
-              path: 'report',
-              component: Report
-            }
-          ]
-        },
-        {
-          path: 'customer-service',
-          component: CustomerService
-        },
-        {
-          path: 'recharge',
-          component: Recharge
-        },
-        {
-          path: 'withdraw',
-          component: Withdraw
-        },
-        {
-          path: 'real-name',
-          component: RealName
-        }
-      ]
-    },
-    {
-      path: '/product-list',
-      component: Productlist,
-      children: [
-        {
-          path: 'subscribe/:id',
-          component: productSubscribe,
-          children: [
-            {
-              path: 'contract',
-              component: Contract
-            },
-            {
-              path: 'contract-6',
-              component: Contract6
-            },
-            {
-              path: 'project-info/:projectId',
-              component: ProjectInfo
-            },
-            {
-              path: 'repayment-plan/:projectId',
-              component: RepaymentPlan
-            },
-            {
-              path: 'risk-warning',
-              component: RiskWarning
-            },
-            {
-              path: 'subscription/:loanMoney/:surplus',
-              component: Subscription
-            },
-            {
-              path: 'investor-notice/:loanMoney/:surplus',
-              component: InvestorNotice
-            }
-          ]
-        }
-      ]
-    },
-    {
-      path: '/signIn',
-      component: SignIn
-    },
-    {
-      path: '/signUp',
-      component: SignUp
-    },
-    {
-      path: '/signUp/:id',
-      component: SignUp
-    },
-    {
-      path: '/forget',
-      component: Forget
-    },
-    {
-      path: '/guide',
-      component: Guide
-    },
-    {
-      path: '/recharge-success',
-      component: RechargeSuccess
-    },
-    {
-      path: '/withdraw-success',
-      component: WithdrawSuccess
-    }
-  ]
+    component: Guide
+  },
+  {
+    path: '/recharge-success',
+    component: RechargeSuccess
+  },
+  {
+    path: '/withdraw-success',
+    component: WithdrawSuccess
+  },
+  {
+    path: '/invest-success',
+    component: InvestSuccess
+  }
+]
+
+const router = new Router({
+  routes
 })
 
+const userId = getChangeLogin()
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(r => r.meta.requireAuth)) {
+    if (userId !== '') {
+      next()
+    } else {
+      next({
+        path: '/login',
+        query: {redirect: to.fullPath}
+      })
+    }
+  } else {
+    next()
+  }
+})
+
+export default router

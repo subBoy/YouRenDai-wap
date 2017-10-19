@@ -113,15 +113,14 @@
 
         const _this = this
         for (let j = 0; j < _this.noticeList.length; j++) {
-          (function(j) {
-            let selectIdOption = _this.noticeList[j].selectedId.split('_')[1]
-            if (!selectIdOption || selectIdOption === '') {
-              _this.selectIDNot = false
-              _this.$refs.investorNoticeScroll.scrollToElement(_this.$refs.noticeListWrapper.children[j], 500)
-              return
-            }
-            _this.selectIDNot = true
-          })(j)
+          let selectIdOption = _this.noticeList[j].selectedId.split('_')[1]
+          if (!selectIdOption || selectIdOption === '') {
+            _this.selectIDNot = false
+            _this.$refs.investorNoticeScroll.scrollToElement(_this.$refs.noticeListWrapper.children[j], 500)
+
+            break
+          }
+          _this.selectIDNot = true
         }
       },
       sumbit() {

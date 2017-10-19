@@ -19,7 +19,7 @@
       >
         <div>
           <ul class="packs-list">
-            <li class="packs-item" v-for="item in packsList" :class="{back: item.rewardTypeName === '返现券'}">
+            <li class="packs-item" v-for="item in packsList" :class="{back: item.rewardTypeName === '返现券'}" @click="selectedItem(item)">
               <div class="icon">
                 <span class="name">{{item.rewardTypeName}}</span>
                 <span class="use-btn"><a class="use-btn-txt">{{btnTxt(item)}}</a></span>
@@ -61,6 +61,7 @@
         rows: 6,
         packsSort: true,
         isUseed: false,
+        projectId: '',
         packsList: []
       }
     },
@@ -80,16 +81,24 @@
         this.page++
         getPacks(this.changeLoginState, this.page, this.rows).then((res) => {
           this.packsList = this.packsList.concat(res.ret_set.jsonArray)
-          console.log(this.packsList)
           this._checkMore(res)
         })
       },
       btnTxt(item) {
-        console.log(item)
         if (item.isEnable === '未使用') {
           return '立即使用'
         }
         return item.isEnable
+      },
+      selectedItem(item) {
+        console.log(this.projectId)
+        if (this.projectId && this.projectId !== '') {
+          this.$router.push({
+            path: `/product-list/subscribe/${this.projectId}`
+          })
+        } else {
+          this.$router.push('/signIn')
+        }
       },
       _getPacks () {
         this.page = 1
@@ -98,7 +107,9 @@
         getPacks(this.changeLoginState, this.page, this.rows).then((res) => {
           this.allLen = res.ret_set.totle
           this.packsList = res.ret_set.jsonArray
+          this.projectId = res.ret_set.projectId
           this._checkMore(res)
+          console.log('packs:', res)
         })
       },
       _checkMore (data) {

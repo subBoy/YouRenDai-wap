@@ -7,7 +7,13 @@
       :recordTitle="recordTitle"
       :airTxt="airTxt"
       :airBtnTxt="airBtnTxt"
+      :accessList="accessList"
+      :hasMore="hasMore"
+      :caveatText="caveatText"
+      :descTxt="descTxt"
       @getSum="getSum"
+      @loadMore="loadMore"
+      @airBtnMethod="airBtnMethod"
     >
       <div v-if="!realNameOk" class="not-real-name-wrapper" slot="recharge">
         <div class="desc-text">
@@ -56,53 +62,31 @@
           <div class="styl"></div>
         </div>
       </div>
-      <div class="access-record-list" slot="record-list">
-        <ul class="record-list border-1px-b">
+      <div class="access-record-list" slot="record-list" v-show="accessList.length && accessList.length > 0">
+        <ul class="record-list border-1px-b" v-for="item in accessList">
           <li class="record-item">
             <span class="name">订单编号</span>
-            <span class="text"></span>
+            <span class="text">{{item.orderCode}}</span>
           </li>
           <li class="record-item">
             <span class="name">操作时间</span>
-            <span class="text"></span>
+            <span class="text">{{item.rechargeDate}}</span>
           </li>
           <li class="record-item">
             <span class="name">充值金额</span>
-            <span class="text"></span>
+            <span class="text">{{item.rechargeMoney}}</span>
           </li>
           <li class="record-item">
             <span class="name">实到账</span>
-            <span class="text styl"></span>
+            <span class="text styl">{{item.rechargeMoney}}</span>
           </li>
           <li class="record-item">
             <span class="name">状态</span>
-            <span class="text">待支付</span>
+            <span class="text">{{item.status}}</span>
           </li>
-          <li class="record-item border-1px">
-            <span class="btn styl">取消支付</span>
-            <span class="btn">继续支付</span>
-          </li>
-        </ul>
-        <ul class="record-list border-1px-b">
-          <li class="record-item">
-            <span class="name">订单编号</span>
-            <span class="text">201709061528</span>
-          </li>
-          <li class="record-item">
-            <span class="name">操作时间</span>
-            <span class="text">2017-09-06 15:28:00</span>
-          </li>
-          <li class="record-item">
-            <span class="name">充值金额</span>
-            <span class="text">￥100.00</span>
-          </li>
-          <li class="record-item">
-            <span class="name">实到账</span>
-            <span class="text styl">￥100.00</span>
-          </li>
-          <li class="record-item">
-            <span class="name">状态</span>
-            <span class="text">已处理</span>
+          <li class="record-item border-1px" v-if="item.status === '等待支付'">
+            <span class="btn styl" @click="closeItem(item)">取消支付</span>
+            <span class="btn" @click="continueItem(item)">继续支付</span>
           </li>
         </ul>
       </div>
@@ -116,7 +100,8 @@
   import Access from 'base/access/access'
   import FootBtn from 'base/foot-btn/foot-btn'
   import storage from 'good-storage'
-  import {userRecharge} from 'api/user'
+  import {userRecharge, rechargeRecord, closeRecharge, continueRecharge} from 'api/user'
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
@@ -131,18 +116,68 @@
         airTxt: '先进行充值体验吧！',
         airBtnTxt: '立即充值',
         submitBtnTxt: '确认充值',
+        descTxt: '点击输入充值金额',
         money: 0,
         realName: '',
         idCard: '',
         mobilePhone: '',
-        verificationCode: ''
+        verificationCode: '',
+        page: 1,
+        rows: 5,
+        accessList: [],
+        hasMore: true,
+        caveatText: ''
       }
+    },
+    created () {
+      this._rechargeRecord()
+    },
+    activated () {
+      this._rechargeRecord()
+    },
+    computed: {
+      ...mapGetters([
+        'changeLoginState'
+      ])
     },
     methods: {
       submitFuc() {
-        console.log('确认充值')
+        this.money = parseFloat(this.money)
+        if (!this.money) {
+          this.caveatText = '请输入充值金额'
+          this.$refs.accessEl.caveat()
+          return
+        }
+        if (this.money < 0.01) {
+          this.caveatText = '充值金额不能小于0.01元'
+          this.$refs.accessEl.caveat()
+          return
+        }
         userRecharge(this.money, this.realName, this.idCard, this.mobilePhone, this.verificationCode).then((res) => {
-          console.log(res)
+          if (res.status) {
+            storage.set('SECHARGE', res.form)
+            location.href = '/dist/air.html'
+          } else {
+            this.caveatText = res.msg
+            this.$refs.accessEl.caveat()
+          }
+        })
+      },
+      closeItem(item) {
+        console.log('item:', item)
+        closeRecharge(item.orderCode).then((res) => {
+          if (res.msg) {
+            for (let i = 0; i < this.accessList.length; i++) {
+              if (this.accessList[i].orderCode === item.orderCode) {
+                this.accessList.splice(i, 1)
+              }
+            }
+          }
+        })
+      },
+      continueItem(item) {
+        continueRecharge(item.rechargeMoney, item.orderCode).then((res) => {
+          console.log('继续支付', res)
           if (res.status) {
             storage.set('SECHARGE', res.form)
             location.href = '/dist/air.html'
@@ -158,6 +193,34 @@
           setTimeout(() => {
             this.$refs.accessEl.refresh()
           }, 20)
+        }
+      },
+      loadMore() {
+        if (!this.hasMore) {
+          return
+        }
+
+        this.page++
+        rechargeRecord(this.changeLoginState, this.page, this.rows).then((res) => {
+          this.accessList = this.accessList.concat(res.rows)
+          this._checkMore(res)
+        })
+      },
+      airBtnMethod() {
+        this.submitFuc()
+      },
+      _rechargeRecord() {
+        this.page = 1
+        this.hasMore = true
+        rechargeRecord(this.changeLoginState, this.page, this.rows).then((res) => {
+          this.accessList = res.rows
+          this._checkMore(res)
+        })
+      },
+      _checkMore (data) {
+        const rows = data.rows
+        if (!rows.length || rows.length < this.rows) {
+          this.hasMore = false
         }
       }
     },

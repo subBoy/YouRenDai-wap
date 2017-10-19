@@ -13,9 +13,9 @@ export function setRealName (realname, cardId, userId) {
 
   const data = Object.assign({}, {
     cmd: 'realRegister',
-    realname,
-    cardId,
-    user_id: userId,
+    real_name: realname,
+    card_id: cardId,
+    userId,
     source: 'WAP'
   })
 
@@ -49,7 +49,7 @@ export function getInvestRecord (userId, page, rows) {
 
   const data = Object.assign({}, {
     cmd: 'investRecord',
-    user_id: userId,
+    userId,
     page,
     rows
   })
@@ -96,6 +96,7 @@ export function subscription (userId, realName, idCard, reward, rewardLines, rew
     reward,
     reward_lines: rewardLines,
     rewardType,
+    type: 'loan',
     param: JSON.stringify(str)
   })
 
@@ -129,7 +130,7 @@ export function getPacks (userId, page, rows) {
 
   const data = Object.assign({}, {
     cmd: 'rewardList',
-    user_id: userId,
+    userId,
     page,
     rows
   })
@@ -230,7 +231,7 @@ export function getCustomer(userId) {
 
   const data = Object.assign({}, {
     cmd: 'lcData',
-    user_id: userId
+    userId
   })
 
   return axios({
@@ -263,7 +264,7 @@ export function setCustomer(userId, lcNum) {
 
   const data = Object.assign({}, {
     cmd: 'lcAdd',
-    user_id: userId,
+    userId,
     lcNum
   })
 
@@ -324,20 +325,17 @@ export function userRecharge(money, realName, idCard, mobilePhone, verificationC
   })
 }
 
-// 提现
-export function userWithdrawal(userId, source, timestamp, sign) {
+// 取消充值
+export function closeRecharge(ordernoV) {
   if (debug) {
-    url = '/api/userWithdrawal'
+    url = '/api/closeRecharge'
   } else {
-    url = '/front/appWithdrawal.do'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
-    cmd: 'beforeImmediatelyRecharge',
-    user_id: userId,
-    source,
-    timestamp,
-    sign
+    cmd: 'updateRecharge',
+    ordernoV
   })
 
   return axios({
@@ -355,6 +353,118 @@ export function userWithdrawal(userId, source, timestamp, sign) {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 继续充值
+export function continueRecharge(money, ordernoV) {
+  if (debug) {
+    url = '/api/continueRecharge'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'bhaneoapp',
+    money,
+    ordernoV
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 充值记录
+export function rechargeRecord(userId, page, rows) {
+  if (debug) {
+    url = '/api/rechargeRecord'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'rechargeList',
+    userId,
+    page,
+    rows
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 提现
+export function userWithdrawal(money) {
+  if (debug) {
+    url = '/api/userWithdrawal'
+  } else {
+    url = '/front/appWithdrawalList.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'withdrawal',
+    money,
+    source: 'wap'
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 提现记录
+export function withdrawalRecord(userId, page, rows) {
+  if (debug) {
+    url = '/api/withdrawalRecord'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'withdrawalList',
+    userId,
+    page,
+    rows
+  })
+
+  return axios.get(url, {
+    params: data
   }).then((res) => {
     return Promise.resolve(res.data)
   })
@@ -428,6 +538,50 @@ export function getRewardList (projectId, investmentAmount) {
     cmd: 'orderRewardList201702',
     project_id: projectId,
     investment_amount: investmentAmount
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 账单列表
+export function getBillList(userId, page, rows) {
+  if (debug) {
+    url = '/api/getBillList'
+  } else {
+    url = '/wap/wapIndexAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'orderList',
+    userId,
+    page,
+    rows
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 账单详情
+export function getBillDetails(userId, createDate, messageId) {
+  if (debug) {
+    url = '/api/getBillDetails'
+  } else {
+    url = '/wap/wapIndexAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'billDetails',
+    userId,
+    create_date: createDate,
+    messageId
   })
 
   return axios.get(url, {

@@ -1,7 +1,7 @@
 <template>
   <transition name="slide">
-    <div class="sign-wrapper">
-      <m-header :isShow="isShow">
+    <div class="sign-wrapper" ref="signWrapper">
+      <m-header :isShow="isShow" :whiteIcon="whiteIcon">
         <div class="sign">
           <router-link tag="div" class="btns" to="/signUp">立即去注册</router-link>
         </div>
@@ -18,6 +18,7 @@
         @ifImgcode="ifImgcode"
         @imgCodeOk="imgCodeOk"
         @imgCodeErr="imgCodeErr"
+        @boxHeight="boxHeight"
       ></sign>
     </div>
   </transition>
@@ -31,6 +32,7 @@
   import {signIn} from 'api/sign'
   import {mapGetters, mapActions} from 'vuex'
 
+  const windowHei = document.documentElement.clientHeight
   export default {
     data() {
       return {
@@ -41,7 +43,8 @@
         errTxt: '',
         userName: '',
         password: '',
-        passwordLength: false
+        passwordLength: false,
+        whiteIcon: true
       }
     },
     computed: {
@@ -68,6 +71,11 @@
               return
             }
             this.$router.push(this.changeReturnPath)
+            // 登录拦截
+            // let redirect = decodeURIComponent(this.$route.query.redirect || '/')
+            // this.$router.push({
+            //   path: redirect
+            // })
           } else {
             this.$refs.sign.changeVerify()
             this.imgCodeOk()
@@ -87,6 +95,9 @@
       },
       imgCodeErr () {
         this.isImgVerify = false
+      },
+      boxHeight() {
+        this.$refs.signWrapper.style.height = windowHei + 'px'
       },
       ...mapActions([
         'changeLoginState'
@@ -114,4 +125,7 @@
     background-image: url(sign-bg.jpg)
     background-repeat: no-repeat
     background-size: cover
+    .sign
+      .btns
+        color: $color-text
 </style>

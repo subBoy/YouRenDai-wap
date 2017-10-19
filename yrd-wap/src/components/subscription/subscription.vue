@@ -1,11 +1,14 @@
 <template>
   <div class="subscription-wrapper">
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" @logined="logined"></m-header>
-    <scroll class="subscription-scroll">
+    <top-tip ref="topTip">
+      <p class="caveatText">{{caveatText}}</p>
+    </top-tip>
+    <scroll class="subscription-scroll" :data="rewardList">
       <div class="subscription-group">
         <div class="prompt-wrapper">
           <div class="realed-name-desc" v-if="realed">
-            <p class="txt">您是保守型投资者，建议您小额投资，投资额不超过您年收入的20%</p>
+            <p class="txt">{{userTxt}}</p>
           </div>
           <div class="real-name-desc" v-else>
             <h3 class="title">实名认证 安全保障</h3>
@@ -41,7 +44,7 @@
           <ul class="reward-group" v-show="rewardList.length > 0">
             <li class="reward-item" v-for="(reward, index) in rewardList">
               <div class="reward-view-wrapper" :class="{'selected': reward.selected}" @click="selectReward(index)">
-                <div class="reward-bg"><span class="reward-val">{{reward.rewardVal}}</span><span class="reward-name">{{reward.rewardName}}</span></div>
+                <div class="reward-bg"><span class="reward-val">{{ckeckVal(reward)}}</span><span class="reward-name">{{reward.rewardName}}</span></div>
                 <div class="reward-num">共计：<span class="styl">{{reward.rewardNum}}</span></div>
               </div>
               <div class="reward-desc-wrapper">
@@ -68,6 +71,7 @@
   import MHeader from 'components/m-header/m-header'
   import Scroll from 'base/scroll/scroll'
   import FootBtn from 'base/foot-btn/foot-btn'
+  import TopTip from 'base/top-tip/top-tip'
   import {subscription, getRewardList} from 'api/user'
   import {mapGetters} from 'vuex'
 
@@ -80,8 +84,8 @@
         realed: true,
         realName: '',
         idCard: '',
-        nameErr: 'xx',
-        idCardErr: 'xx',
+        nameErr: '',
+        idCardErr: '',
         surplus: this.$route.params.surplus,
         loanMoney: this.$route.params.loanMoney,
         submitBtnTxt: '确认提交',
@@ -90,7 +94,10 @@
         rewardType: '',
         projectId: this.$route.params.id,
         projectType: '',
-        rewardList: []
+        rewardList: [],
+        selectItems: [],
+        userTxt: '',
+        caveatText: ''
       }
     },
     created() {
@@ -107,6 +114,7 @@
         this._subscription()
       },
       logined (res) {
+        this.userTxt = res.isEvaluatedResult
         if (res.usernameCh && res.usernameCh !== '') {
           this.realed = true
         } else {
@@ -136,6 +144,27 @@
         num3++
         this.$set(this.rewardList[sn], 'investAmount', num3)
       },
+      caveat() {
+        this.$refs.topTip.show()
+      },
+      ckeckVal(reward) {
+        if (reward.rewardName === '现金券') {
+          return `${reward.rewardLines}元现金券`
+        }
+        if (reward.rewardName === '返现券') {
+          if (reward.rewardLines === 1.8 || reward.rewardLines === 1.2) {
+            return `${reward.rewardLines}%返现券`
+          }
+          return `${reward.rewardLines}元返现券`
+        }
+        if (reward.rewardName === '加息券') {
+          if (reward.rewardLines === 1) {
+            return `${reward.rewardLines}%八月奖励加息券`
+          }
+          return `${reward.rewardLines}%加息券`
+        }
+        return `${reward.rewardLines}%收益券`
+      },
       _getRewardList() {
         getRewardList(this.projectId, this.loanMoney).then((res) => {
           this.rewardList = this._formatData(res.data_list)
@@ -164,35 +193,41 @@
         return ret
       },
       _subscription() {
-        let selectItems = []
+        this.selectItems = []
         this.rewardList.forEach((item) => {
           if (item.selected) {
-            selectItems.push(item)
+            this.selectItems.push(item)
           }
         })
-
-        selectItems.forEach((rewardItem) => {
+        this.selectItems.forEach((rewardItem) => {
           this.reward += `${rewardItem.rewardId}_${rewardItem.investAmount},`
           this.rewardType += `${rewardItem.rewardEnName},`
           this.rewardLines += `${rewardItem.rewardLines},`
         })
 
         this.reward = this.reward.substring(0, this.reward.length - 1)
-        this.rewardType = this.rewardType.substring(0, this.reward.length - 1)
-        this.rewardLines = this.rewardLines.substring(0, this.reward.length - 1)
+        this.rewardType = this.rewardType.substring(0, this.rewardType.length - 1)
+        this.rewardLines = this.rewardLines.substring(0, this.rewardLines.length - 1)
 
         subscription(this.changeLoginState, this.realName, this.idCard, this.reward, this.rewardLines, this.rewardType, this.projectId, this.loanMoney, this.projectType).then((res) => {
+          this.reward = ''
+          this.rewardType = ''
+          this.rewardLines = ''
           if (res.ret_code === '1') {
             location.href = res.ret_set.redirect_url
+          } else {
+            this.caveatText = res.ret_msg
+            this.caveat()
           }
-          console.log(res)
+          console.log('认购确认：', res)
         })
       }
     },
     components: {
       MHeader,
       Scroll,
-      FootBtn
+      FootBtn,
+      TopTip
     }
   }
 </script>

@@ -59,7 +59,7 @@
         </div>
       </scroll>
     </div>
-    <tab></tab>
+    <tab :activeIndex="activeIndex"></tab>
     <transition name="slide">
       <router-view></router-view>
     </transition>
@@ -91,8 +91,8 @@
         opcity: 0,
         titleTxt: '我的资产',
         showFlag: true,
-        assetsInfo: {},
-        userId: ''
+        activeIndex: 2,
+        assetsInfo: {}
       }
     },
     created () {

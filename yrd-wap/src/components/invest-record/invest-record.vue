@@ -1,9 +1,9 @@
 <template>
   <div class="invest-record-wrapper">
-    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" @logined="logined"></m-header>
+    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" @logined="logined" :gobool="gobool"></m-header>
     <div class="banner" ref="banner"></div>
     <div class="record-wrapper" ref="recordWrapper">
-      <div class="record-grounp" v-if="recordList.length">
+      <div class="record-grounp" v-show="recordList.length > 0">
         <scroll
           class="record-scroll"
           :data="recordList"
@@ -24,10 +24,10 @@
           </div>
         </scroll>
       </div>
-      <div class="no-record-wrapper" v-else>
+      <div class="no-record-wrapper" v-show="!recordList.length || recordList.length === 0">
         <p class="desc">暂无记录</p>
         <p class="desc">先进行投资体验吧</p>
-        <div class="invest-btn">立即投标</div>
+        <router-link tag="div" class="invest-btn" to="/product-list">立即投资</router-link>
       </div>
     </div>
   </div>
@@ -48,6 +48,7 @@
         userId: '',
         pullup: true,
         hasMore: true,
+        gobool: true,
         page: 1,
         rows: 10,
         recordList: []

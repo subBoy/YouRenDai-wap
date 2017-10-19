@@ -43,16 +43,17 @@ export function getSubscribeData (projectId, userId) {
   })
 }
 
-export function getRepaymentPlan (projectId) {
+export function getRepaymentPlan (userId, projectId) {
   if (debug) {
     url = '/api/getRepaymentPlan'
   } else {
-    url = '/app/projectDetail.do'
+    url = '/wap/wapIndexAction.do'
   }
 
   const data = Object.assign({}, {
-    cmd: 'appRepaymentPlan',
-    projectId
+    cmd: 'wapRepaymentPlan',
+    project_id: projectId,
+    userId
   })
 
   return axios.get(url, {

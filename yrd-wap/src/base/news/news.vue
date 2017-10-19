@@ -3,25 +3,20 @@
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity">
       <span class="latest-news-btn" @click="readAll">全部已读</span>
     </m-header>
-    <scroll class="latest-news-scroll">
+    <scroll class="latest-news-scroll" v-if="billLength"
+      :data="newsListArr"
+      :pullup="pullup"
+      @scrollToEnd="startLoad"
+    >
       <div class="latest-news-group">
         <ul class="latest-news-list" ref="LatestNewsList">
-          <li class="latest-news-item border-1px-b" @click="selectItem">
+          <li class="latest-news-item border-1px-b" @click="selectItem(item)" v-for="(item, index) in newsListArr" :class="{'readed': item.status === '1' || !item.status}">
             <span class="remind"></span>
-            <p class="name ellipsis">【账号信息】您本月账单已出，立即查看账单</p>
-            <p class="time">2017-03-30 15:30:07</p>
-          </li>
-          <li class="latest-news-item border-1px-b">
-            <span class="remind"></span>
-            <p class="name ellipsis">【推广公告】关于加入密码设置通知</p>
-            <p class="time">2017-03-30 15:30:07</p>
-          </li>
-          <li class="latest-news-item border-1px-b readed">
-            <span class="remind"></span>
-            <p class="name ellipsis">【系统消息】北京网贷风险控制及资金存管系统...</p>
-            <p class="time">2017-03-30 15:30:07</p>
+            <p class="name ellipsis">【{{item.message_type_name}}】{{item.message_title}}</p>
+            <p class="time">{{item.create_date}}</p>
           </li>
         </ul>
+        <loading :title="loadTitle" v-show="hasMore"></loading>
       </div>
     </scroll>
   </div>
@@ -29,6 +24,7 @@
 
 <script>
   import MHeader from 'components/m-header/m-header'
+  import Loading from 'base/loading/loading'
   import Scroll from 'base/scroll/scroll'
   import {addClass} from 'common/js/dom'
 
@@ -37,28 +33,53 @@
       titleTxt: {
         type: String,
         default: ''
+      },
+      newsListArr: {
+        type: Array,
+        default: []
+      },
+      billLength: {
+        type: Boolean,
+        default: true
+      },
+      hasMore: {
+        type: Boolean,
+        default: true
       }
     },
     data() {
       return {
+        pullup: true,
         isShow: false,
+        loadTitle: '正在加载更多...',
         opcity: 1
       }
     },
+    activated () {
+      this.$emit('newsList')
+    },
+    created () {
+      this.$emit('newsList')
+    },
     methods: {
       readAll () {
+        if (!this.newsListArr.length || this.newsListArr.length === 0) return
         let _child = this.$refs.LatestNewsList.children
         for (let i = 0; i < _child.length; i++) {
           addClass(_child[i], 'readed')
         }
         this.$emit('readAllNews')
       },
-      selectItem () {
-        this.$emit('selected')
+      selectItem (item) {
+        this.$emit('selected', item)
+      },
+      startLoad() {
+        this.$emit('loadMore')
       }
     },
     components: {
       MHeader,
+      Loading,
       Scroll
     }
   }

@@ -1,20 +1,16 @@
 <template>
   <scroll ref="scroll" class="scroll-box">
     <div class="sign-box" ref="signBox">
-      <h3 class="title">Welecome Home</h3>
+      <h3 class="title">{{signTitle}}</h3>
       <div class="sign-content">
-        <div class="user-types border-1px-b" v-if="isSignUp">
-          <span class="type" :class="{selected: selectType}" @click="selectUser">投资用户</span>
-          <span class="type" :class="{selected: !selectType}" @click="selectUser">借款用户</span>
-        </div>
         <div class="input-wrapper">
           <ul class="input-box">
             <li class="input-item">
-              <input type="text" v-model="phoneNumber" class="input-box" @focus="focus" @blur="blurTel" @keyup="checkPhoneVal">
+              <input type="tel" v-model="phoneNumber" class="input-box" @focus="focus" @blur="blurTel" @keyup="checkPhoneVal" maxLength="11">
               <p class="place-desc" v-show="phoneNumber.length <= 0">手机号</p>
             </li>
             <li class="input-item">
-              <input type="text" v-model="passWord" class="input-box" @focus="focus" v-show="shPass" @blur="blurPassword" @keyup="checkPassVal">
+              <input type="text" v-model="passWord" class="input-box" @focus="focus" v-show="shPass" @blur="blurPassword" onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false" @keyup="checkPassVal">
               <input type="password" v-model="passWord" class="input-box" @focus="focus" v-show="!shPass" @blur="blurPassword" onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false" @keyup="checkPassVal">
               <span class="showPassword" @click.stop.prevent="shPassword" :class="{hidePassword: shPass}"></span>
               <p class="place-desc" v-show="passWord.length <= 0">填写密码<span class="styl">(长度为8-16位的字符串)</span></p>
@@ -27,15 +23,23 @@
               <p class="place-desc" v-show="imgVerify.length <= 0">图形验证码</span></p>
             </li>
             <li class="input-item" v-if="isSignUp">
-              <input type="text" v-model="serviceNumber" class="input-box" @focus="focus" @keyup="checkVal">
+              <input type="tel" v-model="serviceNumber" class="input-box" @focus="focus" @keyup="checkVal">
               <p class="place-desc" v-show="serviceNumber.length <= 0">填写客服顾问工号或手机号（选填）</p>
             </li>
             <li class="input-item" v-if="isSignUp || isForget">
-              <input type="text" v-model="verificationCode" class="input-box" @focus="focus">
+              <input type="tel" v-model="verificationCode" class="input-box" @focus="focus">
               <span class="code-btn" @click.stop.prevent="getCode" :class="{clo: !codeClick}">{{codeTxt}}</span>
               <p class="place-desc" v-show="verificationCode.length <= 0">输入验证码</p>
             </li>
           </ul>
+          <div class="user-types" v-if="isSignUp">
+            <p class="line-type" :class="{selected: selectType}">
+              <span class="type" @click="selectUser">勾选成为投资人</span>
+            </p>
+            <p class="line-type" :class="{selected: !selectType}">
+              <span class="type" @click="selectUserBl">勾选成为借款人</span>
+            </p>
+          </div>
           <div class="err-desc">
             <router-link v-if="isSignIn" tag="div" class="forget-btns" to="/forget">忘记密码</router-link>
             <span class="errTxt" v-show="errTxt">{{errTxt}}</span>
@@ -43,8 +47,8 @@
           <div class="sign-btn" @click.stop.prevent="signFun">{{signBtnTxt}}</div>
         </div>
       </div>
+      <p class="desc" @click="lookHttp" v-show="lookBool">《有人贷用户服务协议》</p>
     </div>
-    <p class="desc">《有人贷用户服务协议》</p>
   </scroll>
 </template>
 
@@ -85,7 +89,15 @@
         type: String,
         default: ''
       },
+      signTitle: {
+        type: String,
+        default: 'Welcome Home'
+      },
       passwordLength: {
+        type: Boolean,
+        default: true
+      },
+      codeClick: {
         type: Boolean,
         default: true
       }
@@ -100,7 +112,7 @@
         verificationCode: '',
         imgVerify: '',
         codeTxt: '点击发送',
-        codeClick: true,
+        lookBool: true,
         codeTime: 60,
         setInter: null,
         userType: 'invest',
@@ -129,17 +141,16 @@
         }
       },
       selectUser () {
-        this.selectType = !this.selectType
-        if (this.selectType) {
-          this.userType = 'invest'
-        } else {
-          this.userType = 'jk'
-        }
+        this.selectType = true
+        this.userType = 'invest'
+      },
+      selectUserBl () {
+        this.selectType = false
+        this.userType = 'jk'
       },
       focus () {
         setTimeout(() => {
           this.$emit('signErr', '')
-          // this.$refs.signBox.style.height = windowHei - 44 + 'px'
           this.$refs.scroll.refresh()
         }, 20)
       },
@@ -184,7 +195,6 @@
             return
           }
         }
-
         this.$emit('signMethods', this.phoneNumber, this.passWord, this.$route.params.id, this.verificationCode, this.userType, this.imgVerify)
       },
       shPassword () {
@@ -198,13 +208,7 @@
           return
         }
 
-        if (!this.mdNum || this.mdNum.length <= 0) {
-          return
-        }
-
-        this.codeClick = false
-
-        this.$emit('getPhoneCode', this.phoneNumber, this.mdNum)
+        this.$emit('getPhoneCode', this.phoneNumber)
       },
       needCode () {
         getImgCode().then((res) => {
@@ -212,7 +216,6 @@
             this.changeVerify()
             this.$emit('imgCodeOk')
           }
-          console.log(res)
         })
       },
       codeClickOk () {
@@ -233,6 +236,9 @@
           this.codeTxt = '点击发送'
           this.codeClickOk()
         }
+      },
+      lookHttp () {
+        location.href = '/newApp/Agreement.html'
       },
       _getRecommend () {
         let _id = this.$route.params.id
@@ -273,9 +279,8 @@
             this.$emit('signErr', '密码必须由大小写字母以及数字组成！')
             return false
           }
-        } else {
-          const reg = /^\w+$/
-          let mathes = this.passWord.match(reg)
+          const reg = /^[a-zA-Z0-9]\w{7,15}$/
+          const mathes = reg.test(this.passWord)
           if (!mathes) {
             this.$emit('signErr', '密码不能含有特殊字符！')
             return false
@@ -339,6 +344,7 @@
       position: relative
       margin: 10px 20px 0
       min-height: 100%
+      z-index: 998
       .title
         text-align: center
         font-size: $font-size-large
@@ -346,24 +352,34 @@
       .sign-content
         position: absolute
         width: 100%
-        top: 43.5%
+        top: 48%
         transform: translateY(-50%)
-        border-radius: 8px
+        border-radius: 4px
         overflow: hidden
         background-color: $color-text-ll
+        z-index: 1
         .user-types
           display: flex
-          border-1px-b(#eee)
-          .type
+          padding-top: 15px
+          .line-type
             flex: 1
-            line-height: 44px
             text-align: center
-            height: 44px
-            color: $color-dialog-background
-            font-size: $font-size-medium
+            .type
+              display: inline-block
+              margin: 0 auto
+              padding-left: 16px
+              line-height: 44px
+              color: $color-dialog-background
+              font-size: $font-size-medium
+              background-size: 12px 12px
+              background-position: left center
+              background-repeat: no-repeat
+              bg-image('select')
             &.selected
-              background-color: $btn-clo
-              color: $color-text
+              background-color: #4a81ff
+              .type
+                bg-image('selected')
+                color: $color-text
         .input-wrapper
           padding: 6px 20px 20px 20px
           .input-item
@@ -405,13 +421,13 @@
                 bg-image('pw2')
             .input-box
               position: absolute
-              top: 0
+              top: 10px
               left: 0
               outline: none
               background-color: transparent
               width: 100%
-              line-height: 44px
-              height: 44px
+              line-height: 24px
+              height: 24px
               font-size: $font-size-medium
               z-index: 10
             .place-desc
@@ -452,13 +468,14 @@
             height: 44px
             text-align: center
             color: $color-text
-            border-radius: 44px
+            border-radius: 3px
             font-size: $font-size-large
     .desc
-      position: relative
+      extend-click()
+      position: absolute
       width: 100%
       left: 0
-      bottom: 35px
+      bottom: 20px
       text-align: center
       font-size: $font-size-small
       color: $color-text

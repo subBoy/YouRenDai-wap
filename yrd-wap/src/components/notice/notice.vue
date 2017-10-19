@@ -42,7 +42,7 @@
         pullup: true,
         hasMore: true,
         titleTxt: '公告列表',
-        loadTitle: '松手加载更多...',
+        loadTitle: '正在加载更多...',
         isShow: false,
         isIndex: false,
         nowList: [],
