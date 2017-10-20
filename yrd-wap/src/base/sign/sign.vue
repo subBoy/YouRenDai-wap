@@ -225,15 +225,16 @@
         this.codeClick = false
       },
       setInterFuc () {
-        this.setInter = setInterval(this.setval, 1000)
+        const _this = this
+        this.setInter = setInterval(_this.setval, 1000)
       },
       setval () {
         this.codeTime--
-        this.codeTxt = `${this.codeTime}秒后重试`
+        this.codeTxt = `${this.codeTime}s后重试`
         if (this.codeTime < 1) {
           clearInterval(this.setInter)
           this.codeTime = 60
-          this.codeTxt = '点击发送'
+          this.codeTxt = '重新发送'
           this.codeClickOk()
         }
       },

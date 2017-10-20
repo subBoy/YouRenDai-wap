@@ -1,6 +1,6 @@
 <template>
   <div class="assets-wrapper">
-    <m-header :isShow="isShow" :opcity="opcity" :whiteIcon="whiteIcon"></m-header>
+    <m-header :isShow="isShow" :opcity="opcity" :whiteIcon="whiteIcon" @logined="logined"></m-header>
     <div class="assets-grounp">
       <scroll class="assets-scroll" :listenScroll="listenScroll" :probeType="probeType" @scroll="scroll" ref="scroll">
         <div>
@@ -11,8 +11,8 @@
                 <p class="desc">账户余额</p>
               </div>
               <div class="btns-wrapper">
-                <router-link tag="span" class="withdraw btn" to="/assets/withdraw">提现</router-link>
-                <router-link tag="span" class="recharge btn" to="/assets/recharge">立即充值</router-link>
+                <span class="withdraw btn" @click="GotoWithdraw">提现</span>
+                <span class="recharge btn" @click="GotoRecharge">立即充值</span>
               </div>
             </div>
           </div>
@@ -92,6 +92,7 @@
         titleTxt: '我的资产',
         showFlag: true,
         activeIndex: 2,
+        realNameOk: false,
         assetsInfo: {}
       }
     },
@@ -118,6 +119,44 @@
       },
       callMe () {
         this.$refs.call.show()
+      },
+      GotoWithdraw () {
+        if (this.changeLoginState === '') {
+          this.changeReturnPath(this.$route.path)
+          this.$router.push({
+            path: '/signIn'
+          })
+          return
+        } else {
+
+        }
+        this.$router.push({
+          path: '/user-center/withdraw'
+        })
+      },
+      GotoRecharge () {
+        if (this.changeLoginState === '') {
+          this.changeReturnPath(this.$route.path)
+          this.$router.push({
+            path: '/signIn'
+          })
+          return
+        } else if (!this.realNameOk) {
+          this.$router.push({
+            path: '/user-center/real-name'
+          })
+          return
+        }
+        this.$router.push({
+          path: '/user-center/recharge'
+        })
+      },
+      logined (res) {
+        if (res.usernameCh === '') {
+          this.realNameOk = false
+        } else {
+          this.realNameOk = true
+        }
       },
       _getAssets () {
         getAssets(this.changeLoginState).then((res) => {

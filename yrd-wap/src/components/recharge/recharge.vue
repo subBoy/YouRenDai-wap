@@ -44,7 +44,7 @@
                 <p class="desc">手机号</p>
                 <div class="info-input-wrapper">
                   <span class="info-input-group">
-                    <input type="text" class="info-input" v-model="mobilePhone" placeholder="请输入手机号">
+                    <input type="text" class="info-input" v-model="mobilePhone" maxLength="11" placeholder="请输入手机号">
                   </span>
                 </div>
               </li>
@@ -54,7 +54,7 @@
                   <span class="info-input-group">
                     <input type="text" class="info-input" v-model="verificationCode" placeholder="请输入验证码">
                   </span>
-                  <span class="btn-code">{{codeBtnTxt}}</span>
+                  <span class="btn-code" @click="rechCode">{{codeBtnTxt}}</span>
                 </div>
               </li>
             </ul>
@@ -126,7 +126,9 @@
         rows: 5,
         accessList: [],
         hasMore: true,
-        caveatText: ''
+        caveatText: '',
+        codeTime: 60,
+        codeClick: true
       }
     },
     created () {
@@ -145,13 +147,56 @@
         this.money = parseFloat(this.money)
         if (!this.money) {
           this.caveatText = '请输入充值金额'
-          this.$refs.accessEl.caveat()
+          this.caveat()
           return
         }
         if (this.money < 0.01) {
           this.caveatText = '充值金额不能小于0.01元'
-          this.$refs.accessEl.caveat()
+          this.caveat()
           return
+        }
+        if (!this.realNameOk) {
+          const reg = /^[\u4e00-\u9fa5]+$/gi
+
+          const reg2 = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/
+
+          const reg3 = /^(0|86|17951)?(13[0-9]|15[0-9]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+
+          if (!this.realName || this.realName === '') {
+            this.caveatText = '真实姓名不能为空！'
+            this.caveat()
+            return
+          }
+
+          if (!reg.test(this.realName)) {
+            this.caveatText = '请输入中文名字！'
+            this.caveat()
+            return
+          }
+
+          if (this.realName.length < 2 || this.realName.length > 5) {
+            this.caveatText = '请输入正确的姓名（长度2到5个汉字）！'
+            this.caveat()
+            return
+          }
+
+          if (this.idCard === '') {
+            this.caveatText = '身份证号不能为空！'
+            this.caveat()
+            return
+          }
+
+          if (!reg2.test(this.idCard)) {
+            this.caveatText = '身份证号格式错误, 请核对后重新输入！'
+            this.caveat()
+            return
+          }
+
+          if (!reg3.test(this.mobilePhone)) {
+            this.caveatText = '手机号码格式错误, 请核对后重新输入！'
+            this.caveat()
+            return
+          }
         }
         userRecharge(this.money, this.realName, this.idCard, this.mobilePhone, this.verificationCode).then((res) => {
           if (res.status) {
@@ -159,9 +204,43 @@
             location.href = '/dist/air.html'
           } else {
             this.caveatText = res.msg
-            this.$refs.accessEl.caveat()
+            this.caveat()
           }
         })
+      },
+      rechCode() {
+        const reg3 = /^(0|86|17951)?(13[0-9]|15[0-9]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+        if (!this.codeClick) {
+          return
+        }
+
+        if (!reg3.test(this.mobilePhone)) {
+          this.caveatText = '手机号码格式错误, 请核对后重新输入！'
+          this.caveat()
+          return
+        }
+        this.setInterFuc()
+        this.codeClickErr()
+      },
+      codeClickOk () {
+        this.codeClick = true
+      },
+      codeClickErr () {
+        this.codeClick = false
+      },
+      setInterFuc () {
+        const _this = this
+        this.setInter = setInterval(_this.setval, 1000)
+      },
+      setval () {
+        this.codeTime--
+        this.codeBtnTxt = `${this.codeTime}后重试`
+        if (this.codeTime < 1) {
+          clearInterval(this.setInter)
+          this.codeTime = 60
+          this.codeBtnTxt = '重新发送'
+          this.codeClickOk()
+        }
       },
       closeItem(item) {
         console.log('item:', item)
@@ -208,6 +287,9 @@
       },
       airBtnMethod() {
         this.submitFuc()
+      },
+      caveat () {
+        this.$refs.accessEl.caveat()
       },
       _rechargeRecord() {
         this.page = 1

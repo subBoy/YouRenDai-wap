@@ -19,8 +19,8 @@
                 </div>
               </div>
               <div class="btns-wrapper">
-                <span class="withdraw btn" @click="GotoWithdraw" to="/user-center/withdraw">提现</span>
-                <span class="recharge btn" @click="GotoRecharge" to="/user-center/recharge">立即充值</span>
+                <span class="withdraw btn" @click="GotoWithdraw">提现</span>
+                <span class="recharge btn" @click="GotoRecharge">立即充值</span>
               </div>
             </div>
           </div>
@@ -69,6 +69,7 @@
         btnTxt: '请先完成',
         winDesc: '为保障您的投资安全',
         realClass: true,
+        realNameOk: false,
         user_id: '',
         userInfo: {},
         activeIndex: 3,
@@ -142,6 +143,8 @@
             path: '/signIn'
           })
           return
+        } else {
+
         }
         this.$router.push({
           path: '/user-center/withdraw'
@@ -152,6 +155,11 @@
           this.changeReturnPath(this.$route.path)
           this.$router.push({
             path: '/signIn'
+          })
+          return
+        } else if (!this.realNameOk) {
+          this.$router.push({
+            path: '/user-center/real-name'
           })
           return
         }
@@ -169,6 +177,9 @@
         console.log(res)
         if (res.usernameCh === '') {
           this._real()
+          this.realNameOk = false
+        } else {
+          this.realNameOk = true
         }
         this.user_id = res.user_Id
         this._getUser()
