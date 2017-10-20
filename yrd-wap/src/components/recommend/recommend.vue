@@ -39,10 +39,10 @@
                 </router-link>
               </li>
               <li class="recommed-group-item">
-                <router-link tag="div" to="/recommend/share-back">
+                <div @click="shareBack">
                   <div class="item-icons item-icons-3"></div>
                   <p class="item-text">分享返现</p>
-                </router-link>
+                </div>
               </li>
               <li class="recommed-group-item">
                 <div @click="latestNews">
@@ -114,7 +114,7 @@
   import {_UA} from 'common/js/ua'
   import {getLoginState} from 'api/sign'
   import {getIndexData} from 'api/index'
-  import {mapGetters} from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     data () {
@@ -176,7 +176,7 @@
         })
       },
       reception () {
-        location.href = '/loan/activity/app-reception.shtml'
+        location.href = '/loan/activity/wap-novice.shtml'
       },
       latestNews () {
         getLoginState(this.changeLoginState).then((res) => {
@@ -187,6 +187,14 @@
             this.$router.push('/recommend/to-user')
           }
         })
+      },
+      shareBack () {
+        if (this.changeLoginState !== '') {
+          this.$router.push('/recommend/share-back')
+        } else {
+          this.changeReturnPath('/recommend/share-back')
+          this.$router.push('/signIn')
+        }
       },
       _getIndexData () {
         getIndexData(this.changeLoginState).then((res) => {
@@ -199,7 +207,10 @@
             this.newsNum = indexData.memssageNum
           }
         })
-      }
+      },
+      ...mapActions([
+        'changeReturnPath'
+      ])
     },
     components: {
       MHeader,

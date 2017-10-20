@@ -88,17 +88,16 @@
         inviteUrl: ''
       }
     },
-    mounted() {
-      this.$nextTick(() => {
-        require('jquery/dist/jquery.qrcode.min.js')
-        this.qrcode()
-      })
-    },
     methods: {
       shareBack () {
-        this.show()
+        require('jquery/dist/jquery.qrcode.min.js')
+        this.qrcode()
+        setTimeout(() => {
+          this.show()
+        }, 20)
       },
       qrcode () {
+        console.log('inviteUrl:', this.inviteUrl)
         $('#qrcode').qrcode({
           text: this.inviteUrl,
           width: 110,
@@ -112,6 +111,7 @@
         this.winShow = false
       },
       logined (res) {
+        console.log('inviteUrl res: ', res)
         this.inviteUrl = res.wap_invite_url
       }
     },
