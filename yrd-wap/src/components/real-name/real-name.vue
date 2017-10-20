@@ -11,12 +11,10 @@
     <div class="content-wrapper">
       <ul class="content-list">
         <li class="content-item border-1px-b">
-          <input type="text" class="input-box" placeholder="输入姓名" @focus="clearNameErr" v-model="nameVal">
-          <p class="err-desc">{{nameErr}}</p>
+          <input type="text" class="input-box" placeholder="输入姓名" v-model="nameVal">
         </li>
          <li class="content-item">
-          <input type="text" class="input-box" placeholder="身份证号" @focus="clearCodeErr" v-model="codeVal">
-          <p class="err-desc">{{codeErr}}</p>
+          <input type="text" class="input-box" placeholder="身份证号" v-model="codeVal">
         </li>
       </ul>
     </div>
@@ -38,8 +36,6 @@
         isShow: false,
         opcity: 1,
         submitBtnTxt: '确认提交',
-        nameErr: '',
-        codeErr: '',
         nameVal: '',
         codeVal: '',
         caveatText: '',
@@ -58,22 +54,41 @@
     },
     methods: {
       submitFuc() {
-        if (this.nameVal === '') {
-          this.nameErr = '真实姓名不能为空！'
+        const reg = /^[\u4e00-\u9fa5]+$/gi
+
+        const reg2 = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/
+
+        if (!this.nameVal || this.nameVal === '') {
+          this.caveatText = '真实姓名不能为空！'
+          this.caveat()
           return
         }
+
+        if (!reg.test(this.nameVal)) {
+          this.caveatText = '请输入中文名字！'
+          this.caveat()
+          return
+        }
+
+        if (this.nameVal.length < 2 || this.nameVal.length > 5) {
+          this.caveatText = '请输入正确的姓名（长度2到5个汉字）！'
+          this.caveat()
+          return
+        }
+
         if (this.codeVal === '') {
-          this.codeErr = '身份证号不能为空！'
+          this.caveatText = '身份证号不能为空！'
+          this.caveat()
+          return
+        }
+
+        if (!reg2.test(this.codeVal)) {
+          this.caveatText = '身份证号格式错误, 请核对后重新输入！'
+          this.caveat()
           return
         }
 
         this._setRealName()
-      },
-      clearNameErr() {
-        this.nameErr = ''
-      },
-      clearCodeErr() {
-        this.codeErr = ''
       },
       caveat() {
         this.$refs.topTip.show()
