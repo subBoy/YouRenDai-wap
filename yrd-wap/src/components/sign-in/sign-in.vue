@@ -28,7 +28,7 @@
   import MHeader from 'components/m-header/m-header'
   import Sign from 'base/sign/sign'
   // import {encryption, compareEncrypt} from 'common/js/bcrypt'
-  import {encode64} from 'common/js/util'
+  // import {encode64} from 'common/js/util'
   import {signIn} from 'api/sign'
   import {mapGetters, mapActions} from 'vuex'
 
@@ -62,9 +62,9 @@
         // compareEncrypt(passWord, this.password, (res) => {
         //   // console.log(res)
         // })
-        signIn(encode64(phoneNumber), encode64(passWord), imgVerify).then((res) => {
-          if (res.flag) {
-            this.changeLoginState(res.userId)
+        signIn(phoneNumber, passWord, imgVerify).then((res) => {
+          if (res.ret_code === '1') {
+            this.changeLoginState(res.ret_set.user_id)
             this.imgCodeErr()
             if (this.changeReturnPath === '') {
               this.$router.push('/')
@@ -77,9 +77,9 @@
             //   path: redirect
             // })
           } else {
-            this.$refs.sign.changeVerify()
-            this.imgCodeOk()
-            this.signErr(res.msg)
+            // this.$refs.sign.changeVerify()
+            // this.imgCodeOk()
+            this.signErr(res.ret_msg)
           }
           console.log(res)
         })

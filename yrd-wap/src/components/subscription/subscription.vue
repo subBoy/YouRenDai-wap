@@ -110,7 +110,42 @@
     },
     methods: {
       submitFuc () {
-        console.log('确认认购')
+        if (!this.realed) {
+          const reg = /^[\u4e00-\u9fa5]+$/gi
+
+          const reg2 = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/
+
+          if (!this.realName || this.realName === '') {
+            this.caveatText = '真实姓名不能为空！'
+            this.caveat()
+            return
+          }
+
+          if (!reg.test(this.realName)) {
+            this.caveatText = '请输入中文名字！'
+            this.caveat()
+            return
+          }
+
+          if (this.realName.length < 2 || this.realName.length > 5) {
+            this.caveatText = '请输入正确的姓名（长度2到5个汉字）！'
+            this.caveat()
+            return
+          }
+
+          if (this.idCard === '') {
+            this.caveatText = '身份证号不能为空！'
+            this.caveat()
+            return
+          }
+
+          if (!reg2.test(this.idCard)) {
+            this.caveatText = '身份证号格式错误, 请核对后重新输入！'
+            this.caveat()
+            return
+          }
+        }
+
         this._subscription()
       },
       logined (res) {
@@ -219,7 +254,6 @@
             this.caveatText = res.ret_msg
             this.caveat()
           }
-          console.log('认购确认：', res)
         })
       }
     },

@@ -1,6 +1,10 @@
 import * as types from './mutation-types'
 import {setChangeLogin, setReturnPath} from 'common/js/cache'
 
+export const setLoginState2 = function ({commit}, loginState) {
+  commit(types.CHANGE_LOGIN_STATE, setChangeLogin(loginState))
+}
+
 export const changeLoginState = function ({commit}, loginState) {
   commit(types.CHANGE_LOGIN_STATE, setChangeLogin(loginState))
 }

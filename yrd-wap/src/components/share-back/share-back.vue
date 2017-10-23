@@ -13,7 +13,7 @@
           <p class="app-invited-page-desc-1">新手注册更有1888现金送给您</p>
           <a class="app-invited-loginUp"><span class="kaonima invite-0519-btn">新手注册立即就送</span></a>
           <div class="app-invited-page-2">
-            <img src="./invited-20170512-rule.png" width="100%">
+            <img src="./invited-20170512-rule.png" @load="loadImage" width="100%">
           </div>
           <input type="hidden" id="invite_url">
         </div>
@@ -91,6 +91,7 @@
     methods: {
       shareBack () {
         require('jquery/dist/jquery.qrcode.min.js')
+        $('#qrcode').html('')
         this.qrcode()
         setTimeout(() => {
           this.show()
@@ -113,6 +114,9 @@
       logined (res) {
         console.log('inviteUrl res: ', res)
         this.inviteUrl = res.wap_invite_url
+      },
+      loadImage () {
+        this.$refs.backScroll.refresh()
       }
     },
     components: {
@@ -154,7 +158,7 @@
       height: 100%
       left: 0
       top: 0
-      z-index: 1000
+      z-index: 10000
     .slide-wrapper .bg
       display: block
       width: 100%

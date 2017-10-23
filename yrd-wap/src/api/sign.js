@@ -6,17 +6,17 @@ const debug = process.env.NODE_ENV !== 'production'
 let url = ''
 
 // 注册获取短信验证码
-export function getCodeNumber (loginName, mdNum) {
+export function getCodeNumber (loginName) {
   if (debug) {
     url = '/api/getCode'
   } else {
-    url = '/front/register.do'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
-    cmd: 'getPhoneCode',
+    cmd: 'sendTelCode',
     loginName,
-    mdNum
+    state: 'zc'
   })
 
   return axios({
@@ -43,17 +43,17 @@ export function getCodeNumber (loginName, mdNum) {
 }
 
 // 忘记密码获取短信验证码
-export function getPassCodeNumber (loginName, mdNum) {
+export function getPassCodeNumber (loginName) {
   if (debug) {
-    url = '/api/getCode'
+    url = '/api/getPassCodeNumber'
   } else {
-    url = '/front/register.do'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
-    cmd: 'getPhoneCode4ForgetPwd',
+    cmd: 'sendTelCode',
     loginName,
-    mdNum
+    state: 'zh'
   })
 
   return axios({
@@ -72,9 +72,6 @@ export function getPassCodeNumber (loginName, mdNum) {
       'Content-Type': 'application/x-www-form-urlencoded'
     }
   }).then((res) => {
-    if (debug) {
-      return Promise.resolve({msg: '短信发送成功', flag: true})
-    }
     return Promise.resolve(res.data)
   })
 }
@@ -216,16 +213,16 @@ export function signUp (loginName, telcode, lcNum, userType, password) {
   if (debug) {
     url = '/api/signUp'
   } else {
-    url = '/front/register.do'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
     cmd: 'register',
-    source: 'PC',
-    loginName,
+    source: 'WAP',
+    loginname: loginName,
     telcode,
     lcNum,
-    userType,
+    type: userType,
     password
   })
 
@@ -254,14 +251,14 @@ export function signIn (loginName, passWord, checkCode) {
   if (debug) {
     url = '/api/signIn'
   } else {
-    url = '/front/register.do'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
     cmd: 'login',
-    source: 'PC',
-    loginName,
-    passWord,
+    source: 'WAP',
+    loginname: loginName,
+    password: passWord,
     checkCode
   })
 
@@ -289,14 +286,14 @@ export function signIn (loginName, passWord, checkCode) {
 // 忘记密码
 export function forgetPassword (loginName, telcode, mdNum, pwd) {
   if (debug) {
-    url = '/api/signUp'
+    url = '/api/forgetPassword'
   } else {
     url = '/front/register.do'
   }
 
   const data = Object.assign({}, {
     cmd: 'forgetPwd',
-    source: 'PC',
+    source: 'WAP',
     loginName,
     telcode,
     mdNum,

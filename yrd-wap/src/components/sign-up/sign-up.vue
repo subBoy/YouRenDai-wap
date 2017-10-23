@@ -20,6 +20,8 @@
         @blurPassword="blurPassword"
         @getPhoneCode="getPhoneCode"
         @boxHeight="boxHeight"
+        @codeClickOk="codeClickOk"
+        @codeClickErr="codeClickErr"
       ></sign>
     </div>
   </transition>
@@ -29,7 +31,7 @@
   import MHeader from 'components/m-header/m-header'
   import Sign from 'base/sign/sign'
   // import {encryption, compareEncrypt} from 'common/js/bcrypt'
-  import {encode64} from 'common/js/util'
+  // import {encode64} from 'common/js/util'
   import {getCodeNumber, checkTel, signUp, signIn} from 'api/sign'
   import {mapGetters, mapActions} from 'vuex'
 
@@ -66,22 +68,22 @@
         // })
 
         signUp(phoneNumber, verificationCode, _id, userType, passWord).then((res) => {
-          if (res.flag) {
+          if (res.ret_code === '1') {
             const _this = this
-            signIn(encode64(phoneNumber), encode64(passWord), '').then((signRes) => {
-              if (signRes.flag) {
-                _this.changeLoginState(signRes.userId)
+            signIn(phoneNumber, passWord, '').then((signRes) => {
+              if (signRes.ret_code === '1') {
+                _this.changeLoginState(signRes.ret_set.user_id)
                 if (_this.changeReturnPath === '') {
                   _this.$router.push('/')
                   return
                 }
                 _this.$router.push(this.changeReturnPath)
               } else {
-                _this.$router.push('/sign-in')
+                _this.$router.push('/signIn')
               }
             })
           } else {
-            this.signErr(res.msg)
+            this.signErr(res.ret_msg)
           }
         })
       },
@@ -116,15 +118,21 @@
           }
 
           getCodeNumber(phoneNumber, this.mdNum).then((res) => {
-            if (res.flag) {
-              this.codeClick = false
+            if (res.ret_code === '1') {
+              this.codeClickErr()
               this.$refs.sign.setInterFuc()
             } else {
               this.signErr(res.msg)
-              this.$refs.sign.codeClickOk()
+              this.codeClickOk()
             }
           })
         }, 200)
+      },
+      codeClickOk () {
+        this.codeClick = true
+      },
+      codeClickErr () {
+        this.codeClick = false
       },
       boxHeight() {
         this.$refs.signWrapper.style.height = windowHei + 'px'

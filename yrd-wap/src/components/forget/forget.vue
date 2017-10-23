@@ -14,6 +14,8 @@
         @blurTel="blurTel"
         @blurPassword="blurPassword"
         @getPhoneCode="getPhoneCode"
+        @codeClickOk="codeClickOk"
+        @codeClickErr="codeClickErr"
       ></sign>
       <confirm ref="customerConfirm" @confirm="confirm" :text="text" :confirmBtnText="confirmBtnText" :realClass="realClass"></confirm>
     </div>
@@ -98,15 +100,21 @@
           }
 
           getPassCodeNumber(phoneNumber, this.mdNum).then((res) => {
-            if (res.flag) {
-              this.codeClick = false
+            if (res.ret_code === '1') {
+              this.codeClickErr()
               this.$refs.sign.setInterFuc()
             } else {
-              this.signErr(res.msg)
-              this.$refs.sign.codeClickOk()
+              this.signErr(res.ret_msg)
+              this.codeClickOk()
             }
           })
         }, 200)
+      },
+      codeClickOk () {
+        this.codeClick = true
+      },
+      codeClickErr () {
+        this.codeClick = false
       },
       confirm () {
         this.$router.back()

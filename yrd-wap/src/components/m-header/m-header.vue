@@ -19,7 +19,6 @@
 </template>
 
 <script>
-  import {setChangeLogin} from 'common/js/cache'
   import {getLoginState} from 'api/sign'
   import {mapGetters, mapActions} from 'vuex'
 
@@ -122,7 +121,7 @@
           getLoginState(this.userId).then((res) => {
             if (res.isLogin === 'true') {
               this.$emit('logined', res)
-              setChangeLogin(this.userId)
+              this.setLoginState2(this.userId)
             } else {
               this.$emit('noLogin', res)
             }
@@ -130,7 +129,8 @@
         }
       },
       ...mapActions([
-        'changeReturnPath'
+        'changeReturnPath',
+        'setLoginState2'
       ])
     }
   }

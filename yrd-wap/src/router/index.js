@@ -37,7 +37,6 @@ const Contract6 = () => import('components/contract-6/contract-6')
 const ProjectInfo = () => import('components/project-info/project-info')
 const RepaymentPlan = () => import('components/repayment-plan/repayment-plan')
 const RiskWarning = () => import('components/risk-warning/risk-warning')
-const Report = () => import('components/report/report')
 const Subscription = () => import('components/subscription/subscription')
 const Guide = () => import('components/guide/guide')
 const InvestorNotice = () => import('components/investor-notice/investor-notice')
@@ -217,13 +216,7 @@ const routes = [
       },
       {
         path: 'disclosure',
-        component: Disclosure,
-        children: [
-          {
-            path: 'report',
-            component: Report
-          }
-        ]
+        component: Disclosure
       },
       {
         path: 'customer-service',

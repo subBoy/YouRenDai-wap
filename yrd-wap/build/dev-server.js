@@ -257,7 +257,33 @@ apiRoutes.post('/checkTel', function (req, res) {
 })
 
 apiRoutes.post('/getCode', function (req, res) {
-  var url = refererTxt + 'front/register.do'
+  var url = refererTxt + 'wap/wapUserAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/getPassCodeNumber', function (req, res) {
+  var url = refererTxt + 'wap/wapUserAction.do'
   axios({
     url,
     method: 'post',
@@ -335,7 +361,7 @@ apiRoutes.post('/getImgCode', function (req, res) {
 })
 
 apiRoutes.post('/signIn', function (req, res) {
-  var url = refererTxt + 'front/register.do'
+  var url = refererTxt + 'wap/wapUserAction.do'
   axios({
     url,
     method: 'post',
@@ -362,7 +388,7 @@ apiRoutes.post('/signIn', function (req, res) {
 })
 
 apiRoutes.post('/signUp', function (req, res) {
-  var url = refererTxt + 'front/register.do'
+  var url = refererTxt + 'wap/wapUserAction.do'
   axios({
     url,
     method: 'post',
@@ -380,6 +406,33 @@ apiRoutes.post('/signUp', function (req, res) {
       referer: refererTxt + '',
       host: hostTxt
     }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.post('/forgetPassword', function (req, res) {
+  var url = refererTxt + 'front/register.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    },
+    withCredentials: true
   }).then((response) => {
     res.json(response.data)
   }).catch((e) => {

@@ -121,9 +121,9 @@
     },
     created () {
       this._getRecommend()
-      setTimeout(() => {
-        this.$emit('ifImgcode')
-      }, 20)
+      // setTimeout(() => {
+      //   this.$emit('ifImgcode')
+      // }, 20)
     },
     activated () {
       this.phoneNumber = ''
@@ -218,12 +218,6 @@
           }
         })
       },
-      codeClickOk () {
-        this.codeClick = true
-      },
-      codeClickErr () {
-        this.codeClick = false
-      },
       setInterFuc () {
         const _this = this
         this.setInter = setInterval(_this.setval, 1000)
@@ -235,7 +229,7 @@
           clearInterval(this.setInter)
           this.codeTime = 60
           this.codeTxt = '重新发送'
-          this.codeClickOk()
+          this.$emit('codeClickOk')
         }
       },
       lookHttp () {

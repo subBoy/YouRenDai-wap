@@ -61,14 +61,14 @@
               <div class="reception-link" @click="reception">立即领取</div>
             </div>
           </div>
-          <div class="project-wrapper">
+          <div class="project-wrapper" v-for="item in disclist">
             <h3 class="name">智甄投资
               <router-link class="list-btn" to="/product-list">查看更多</router-link>
-              <span class="pro-bz"></span>
+              <span class="pro-bz" v-if="item.is_open === 'yes'"><span class="open-txt">{{item.content}}</span></span>
             </h3>
             <div v-if="disclist.length" class="slider-wrapper">
               <div class="slider-content">
-                <div class="product-message-item swiper-slide swiper-no-swiping" v-for="item in disclist">
+                <div class="product-message-item swiper-slide swiper-no-swiping">
                   <p class="return"><span class="num">{{item.year_rate}}</span>%</p>
                   <div class="info">
                     <span class="desc">{{item.time_limit}}个月</span>
@@ -273,18 +273,22 @@
           .pro-bz
             position: absolute
             left: 20px
-            top: 0px
+            top: -3px
             display: block
-            padding-top: 6px
-            line-height: 14px
-            width: 30px
-            height: 40px
+            width: 45px
+            height: 54px
             bg-image('ic-n')
             background-position: top center
-            background-size: 30px 40px
-            color: $color-text
-            font-size: $font-size-small-s
+            background-size: 45px 54px
             text-align: center
+            .open-txt
+              margin: 0 auto
+              display: block
+              padding-top: 5px
+              line-height: 14px
+              width: 26px
+              color: $color-text
+              font-size: $font-size-small-s
         .slider-wrapper
           position: relative
           padding-bottom: 30px
