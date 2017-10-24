@@ -72,7 +72,6 @@
       },
       _setCustomer() {
         setCustomer(this.changeLoginState, this.customerNumber).then((res) => {
-          console.log(res)
           if (res.ret_code && res.ret_code === 1) {
             this.operateState = true
             this._bindOk()

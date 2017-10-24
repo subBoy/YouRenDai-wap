@@ -60,7 +60,6 @@
 
         forgetPassword(phoneNumber, verificationCode, this.mdNum, passWord).then((res) => {
           if (res.flag) {
-            console.log(res.flag)
             this._real()
             // this.$router.push('signIn')
           } else {
@@ -80,7 +79,6 @@
           } else {
             this.mdNum = res.mdNum
           }
-          console.log(res)
         })
       },
       blurPassword (password) {

@@ -50,10 +50,9 @@
     },
     methods: {
       readAllNews () {
-        console.log('readAllNews')
         readAllNews(this.changeLoginState).then((res) => {
-          if (res.ret_code === '1') {
-            console.log('readAllNews: ', res)
+          if (res.ret_code !== '1') {
+            alert(res.ret_msg)
           }
         })
       },
@@ -64,7 +63,6 @@
 
         this.page++
         getLatestNews(this.page, this.rows, this.changeLoginState).then((res) => {
-          console.log('news+1', res)
           if (res.ret_code === '1') {
             this.newsListArr = this.newsListArr.concat(res.ret_set)
             this._checkMore(res)
@@ -72,7 +70,6 @@
         })
       },
       selected(item) {
-        console.log('item:', item)
         if (item.message_type_name === '账单信息') {
           setMessageId(item.message_id)
           setCreateDate(item.create_date)
@@ -91,7 +88,6 @@
             this.newsListArr = res.ret_set
             this._checkMore(res)
           }
-          console.log('news:', res)
         })
       },
       _checkMore (data) {

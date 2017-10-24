@@ -81,7 +81,6 @@
             // this.imgCodeOk()
             this.signErr(res.ret_msg)
           }
-          console.log(res)
         })
       },
       signErr (errTxt) {

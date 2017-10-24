@@ -5,7 +5,7 @@
       :titleTxt="titleTxt"
       :hasMore="hasMore"
       :newsListArr="billListArr"
-      @readAllNews="readAllNews"
+      @readAllNews="readAllNews2"
       @selected="selected"
       @newsList="billList"
       @loadMore="loadMore"
@@ -26,6 +26,7 @@
 <script>
   import News from 'base/news/news'
   import {getBillList} from 'api/user'
+  import {readAllNews} from 'api/notice'
   import {setMessageId, setCreateDate} from 'common/js/cache'
   import {mapGetters} from 'vuex'
 
@@ -52,11 +53,14 @@
       ])
     },
     methods: {
-      readAllNews () {
-        console.log('readAllNews')
+      readAllNews2 () {
+        readAllNews(this.changeLoginState).then((res) => {
+          if (res.ret_code !== '1') {
+            alert(res.ret_msg)
+          }
+        })
       },
       selected (item) {
-        console.log('item:', item)
         setMessageId(item.message_id)
         setCreateDate(item.create_date)
         this.$router.push({
@@ -67,7 +71,6 @@
         this.page = 1
         this.hasMore = true
         getBillList(this.changeLoginState, this.page, this.rows).then((res) => {
-          console.log('bill', res)
           if (res.ret_code === '1') {
             this.billListArr = res.ret_set
             this._checkMore(res)
@@ -81,7 +84,6 @@
 
         this.page++
         getBillList(this.changeLoginState, this.page, this.rows).then((res) => {
-          console.log('bill+1', res)
           if (res.ret_code === '1') {
             this.billListArr = this.billListArr.concat(res.ret_set)
             this._checkMore(res)

@@ -79,7 +79,6 @@
         getInvestRecord(this.userId, this.page, this.rows).then((res) => {
           this.recordList = res.ret_set
           this._checkMore(res)
-          console.log(this.recordList)
         })
       },
       _checkMore (data) {

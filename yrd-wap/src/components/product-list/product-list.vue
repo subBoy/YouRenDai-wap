@@ -89,7 +89,6 @@
         getProjectList(this.page, DATA_LEN).then((res) => {
           this.productList = this._genResult(res.rows)
           this._checkMore(res)
-          console.log('list:', this.productList)
         })
       },
       _genResult (data) {

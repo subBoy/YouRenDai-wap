@@ -180,7 +180,6 @@
       },
       latestNews () {
         getLoginState(this.changeLoginState).then((res) => {
-          console.log('login:', res.isLogin)
           if (res.isLogin === 'true') {
             this.$router.push('/recommend/latest-news')
           } else {
@@ -199,7 +198,6 @@
       _getIndexData () {
         getIndexData(this.changeLoginState).then((res) => {
           if (res.ret_code === '1') {
-            console.log('indexData:', res)
             const indexData = res.ret_set
             this.recommends = indexData.banner_list
             this.disclist.push(indexData.main_push_list[0])

@@ -192,7 +192,6 @@
         }, 20)
       },
       logined(res) {
-        console.log('guide', res)
         if (res.usernameCh === '') {
           this.realed = false
         } else {

@@ -6,7 +6,7 @@
         <div class="project-intro">
           <div class="project-intro-list-bg">
             <h3><span class="icon-2017-2"></span>项目介绍</h3>
-            <p>{{info.projectDesc}}</p>
+            <p v-html="info.projectDesc"></p>
           </div>
           <div class="project-intro-list-bg styl">
             <h3><span class="icon-2017-1"></span>借款企业信息</h3>

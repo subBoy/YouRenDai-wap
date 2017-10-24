@@ -174,7 +174,6 @@
         this.$router.push('user-center/real-name')
       },
       logined (res) {
-        console.log(res)
         if (res.usernameCh === '') {
           this._real()
           this.realNameOk = false

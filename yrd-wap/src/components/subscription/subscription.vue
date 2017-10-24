@@ -203,7 +203,6 @@
       _getRewardList() {
         getRewardList(this.projectId, this.loanMoney).then((res) => {
           this.rewardList = this._formatData(res.data_list)
-          console.log(res)
         })
       },
       _formatData(data) {

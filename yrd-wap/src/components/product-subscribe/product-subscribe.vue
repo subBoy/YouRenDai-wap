@@ -181,7 +181,6 @@
           this.addBool = false
           this.removeBool = true
         }
-        console.log(this.investAmount)
         this._invest()
       },
       investBlur () {
@@ -399,8 +398,6 @@
     watch: {
       screenHeight (newVal, oldVal) {
         if (!this.timer) {
-          console.log('oldVal', oldVal)
-          console.log('newVal', newVal)
           if (this.pathNow !== this.$route.path) return
           this.screenHeight = newVal
           this.timer = true

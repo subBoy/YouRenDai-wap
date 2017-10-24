@@ -79,10 +79,17 @@
           return
         }
         this.page++
-        getPacks(this.changeLoginState, this.page, this.rows).then((res) => {
-          this.packsList = this.packsList.concat(res.ret_set.jsonArray)
-          this._checkMore(res)
-        })
+        if (!this.$route.query.userId) {
+          getPacks(this.changeLoginState, this.page, this.rows).then((res) => {
+            this.packsList = this.packsList.concat(res.ret_set.jsonArray)
+            this._checkMore(res)
+          })
+        } else {
+          getPacks(this.$route.query.userId, this.page, this.rows).then((res) => {
+            this.packsList = this.packsList.concat(res.ret_set.jsonArray)
+            this._checkMore(res)
+          })
+        }
       },
       btnTxt(item) {
         if (item.isEnable === '未使用') {
@@ -91,7 +98,6 @@
         return item.isEnable
       },
       selectedItem(item) {
-        console.log(this.projectId)
         if (this.projectId && this.projectId !== '') {
           this.$router.push({
             path: `/product-list/subscribe/${this.projectId}`
@@ -104,13 +110,21 @@
         this.page = 1
         this.hasMore = true
 
-        getPacks(this.changeLoginState, this.page, this.rows).then((res) => {
-          this.allLen = res.ret_set.totle
-          this.packsList = res.ret_set.jsonArray
-          this.projectId = res.ret_set.projectId
-          this._checkMore(res)
-          console.log('packs:', res)
-        })
+        if (!this.$route.query.userId) {
+          getPacks(this.changeLoginState, this.page, this.rows).then((res) => {
+            this.allLen = res.ret_set.totle
+            this.packsList = res.ret_set.jsonArray
+            this.projectId = res.ret_set.projectId
+            this._checkMore(res)
+          })
+        } else {
+          getPacks(this.$route.query.userId, this.page, this.rows).then((res) => {
+            this.allLen = res.ret_set.totle
+            this.packsList = res.ret_set.jsonArray
+            this.projectId = res.ret_set.projectId
+            this._checkMore(res)
+          })
+        }
       },
       _checkMore (data) {
         const rows = data.ret_set

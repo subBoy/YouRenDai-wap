@@ -99,7 +99,6 @@
           return
         }
         userWithdrawal(this.money).then((res) => {
-          console.log('res', res)
           if (res.status === 'success') {
             storage.set('SECHARGE', res.data1.form)
             location.href = '/dist/withdraw.html'
@@ -121,7 +120,6 @@
 
         this.page++
         withdrawalRecord(this.changeLoginState, this.page, this.rows).then((res) => {
-          console.log('moreData:', res)
           this.accessList = this.accessList.concat(res.rows)
           this._checkMore(res)
         })
@@ -133,7 +131,6 @@
         this.page = 1
         this.hasMore = true
         withdrawalRecord(this.changeLoginState, this.page, this.rows).then((res) => {
-          console.log('firstData:', res)
           this.accessList = res.rows
           this._checkMore(res)
         })

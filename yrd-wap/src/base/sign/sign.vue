@@ -239,7 +239,6 @@
         let _id = this.$route.params.id
         if (_id && _id.length > 0) {
           getRecommend(_id).then((res) => {
-            console.log(res)
             this.serviceNumber = res.result
           })
         }

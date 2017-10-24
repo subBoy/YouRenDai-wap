@@ -54,7 +54,6 @@
               this.$refs.detailsScroll.refresh()
             }, 20)
           }
-          console.log('resss:', res)
         })
       }
     },

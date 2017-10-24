@@ -243,7 +243,6 @@
         }
       },
       closeItem(item) {
-        console.log('item:', item)
         closeRecharge(item.orderCode).then((res) => {
           if (res.msg) {
             for (let i = 0; i < this.accessList.length; i++) {
@@ -256,7 +255,6 @@
       },
       continueItem(item) {
         continueRecharge(item.rechargeMoney, item.orderCode).then((res) => {
-          console.log('继续支付', res)
           if (res.status) {
             storage.set('SECHARGE', res.form)
             location.href = '/dist/air.html'

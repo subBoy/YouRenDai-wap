@@ -8,7 +8,7 @@ export function getNoticeList (page, rows) {
   if (debug) {
     url = '/api/getNoticeList'
   } else {
-    url = '/app/index.do'
+    url = '/wap/wapIndexAction.do'
   }
 
   const data = Object.assign({}, {

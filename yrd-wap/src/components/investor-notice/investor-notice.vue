@@ -213,10 +213,7 @@
           selectIdCom += item.selectedId + ','
         })
         this.qaAnsContent = selectIdCom.substring(0, selectIdCom.length - 1)
-        console.log(this.qaAnsContent)
-        submitInvestorNotice(this.changeLoginState, this.qaPaperId, this.qaAnsContent).then((res) => {
-          console.log(res.msg)
-        })
+        submitInvestorNotice(this.changeLoginState, this.qaPaperId, this.qaAnsContent).then((res) => {})
       }
     },
     components: {

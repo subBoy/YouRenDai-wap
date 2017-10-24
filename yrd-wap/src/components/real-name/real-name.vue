@@ -95,7 +95,6 @@
       },
       _setRealName() {
         setRealName(this.nameVal, this.codeVal, this.changeLoginState).then((res) => {
-          console.log(res)
           if (res.ret_code === '0') {
             this.caveatText = res.ret_msg
             this.caveat()

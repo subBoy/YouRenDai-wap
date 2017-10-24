@@ -109,7 +109,6 @@
         this.sum = this.sum.replace(/^\./g, '')
         this.sum = this.sum.replace(/\.{2,}/g, '.')
         this.sum = this.sum.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
-        console.log('sum:', this.sum)
       },
       airRecord() {
         this.$emit('airBtnMethod')

@@ -81,7 +81,7 @@ apiRoutes.get('/getRecommendPro', function (req, res) {
 })
 
 apiRoutes.get('/getNoticeList', function (req, res) {
-  var url = refererTxt + 'app/index.do'
+  var url = refererTxt + 'wap/wapIndexAction.do'
   axios.get(url, {
     headers: {
       referer: refererTxt,
