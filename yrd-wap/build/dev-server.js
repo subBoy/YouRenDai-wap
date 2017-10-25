@@ -797,6 +797,32 @@ apiRoutes.get('/getBillDetails', function (req, res) {
   })
 })
 
+apiRoutes.post('/readAllBill', function (req, res) {
+  var url = refererTxt + 'wap/wapIndexAction.do'
+  axios({
+    url,
+    method: 'post',
+    data: req.body,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      referer: refererTxt + '',
+      host: hostTxt
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
 apiRoutes.post('/submitInvestorNotice', function (req, res) {
   var url = refererTxt + 'wap/wapUserAction.do'
   axios({

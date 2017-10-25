@@ -64,7 +64,7 @@
           <div class="project-wrapper" v-for="item in disclist">
             <h3 class="name">智甄投资
               <router-link class="list-btn" to="/product-list">查看更多</router-link>
-              <span class="pro-bz" v-if="item.is_open === 'yes'"><span class="open-txt">{{item.content}}</span></span>
+              <!-- <span class="pro-bz" v-if="item.is_open === 'yes'"><span class="open-txt">{{item.content}}</span></span> -->
             </h3>
             <div v-if="disclist.length" class="slider-wrapper">
               <div class="slider-content">

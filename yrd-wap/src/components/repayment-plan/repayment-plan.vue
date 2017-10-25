@@ -1,7 +1,7 @@
 <template>
   <div class="repayment-plan-wrapper">
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
-    <scroll class="repayment-plan-scroll">
+    <scroll class="repayment-plan-scroll" :data="plans">
       <div class="repayment-plan-group">
         <div class="repayment-plan">
           <h3 class="repayment-plan-title-box">还款期数<output id="totle">共{{plans.length}}期</output></h3>

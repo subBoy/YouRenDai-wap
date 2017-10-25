@@ -590,3 +590,36 @@ export function getBillDetails(userId, createDate, messageId) {
     return Promise.resolve(res.data)
   })
 }
+
+// 全部已读 账单列表
+export function readAllBill (userId) {
+  if (debug) {
+    url = '/api/readAllBill'
+  } else {
+    url = '/wap/wapIndexAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'allOrderState',
+    userId
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}

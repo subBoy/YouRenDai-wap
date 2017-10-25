@@ -10,7 +10,7 @@
     >
       <div class="latest-news-group">
         <ul class="latest-news-list" ref="LatestNewsList">
-          <li class="latest-news-item border-1px-b" @click="selectItem(item)" v-for="(item, index) in newsListArr" :class="{'readed': item.status === '1' || !item.status}">
+          <li class="latest-news-item border-1px-b" v-for="(item, index) in newsListArr" :class="{'readed': item.status === '1' || !item.status}" @click="selectItem(item, index)">
             <span class="remind"></span>
             <p class="name ellipsis">【{{item.message_type_name}}】{{item.message_title}}</p>
             <p class="time">{{item.create_date}}</p>
@@ -70,7 +70,9 @@
         }
         this.$emit('readAllNews')
       },
-      selectItem (item) {
+      selectItem (item, index) {
+        let _child = this.$refs.LatestNewsList.children
+        addClass(_child[index], 'readed')
         this.$emit('selected', item)
       },
       startLoad() {

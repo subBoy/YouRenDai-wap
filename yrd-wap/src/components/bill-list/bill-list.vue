@@ -5,7 +5,7 @@
       :titleTxt="titleTxt"
       :hasMore="hasMore"
       :newsListArr="billListArr"
-      @readAllNews="readAllNews2"
+      @readAllNews="readAllNews"
       @selected="selected"
       @newsList="billList"
       @loadMore="loadMore"
@@ -25,8 +25,7 @@
 
 <script>
   import News from 'base/news/news'
-  import {getBillList} from 'api/user'
-  import {readAllNews} from 'api/notice'
+  import {getBillList, readAllBill} from 'api/user'
   import {setMessageId, setCreateDate} from 'common/js/cache'
   import {mapGetters} from 'vuex'
 
@@ -53,8 +52,9 @@
       ])
     },
     methods: {
-      readAllNews2 () {
-        readAllNews(this.changeLoginState).then((res) => {
+      readAllNews () {
+        console.log(0)
+        readAllBill(this.changeLoginState).then((res) => {
           if (res.ret_code !== '1') {
             alert(res.ret_msg)
           }

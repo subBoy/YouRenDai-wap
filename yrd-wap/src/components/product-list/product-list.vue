@@ -11,7 +11,7 @@
           <div class="banner"></div>
           <ul class="product-list">
             <li class="product-item" v-for="(item, index) in productList">
-              <h3 class="name">{{item.project_name}} <span v-if="item.is_open === 'yes'" class="label" :class="{'activity-over': !item.btnClass}">{{item.content}}</span></h3>
+              <h3 class="name">{{item.project_name}} <!-- <span v-if="item.is_open === 'yes'" class="label" :class="{'activity-over': !item.btnClass}">{{item.content}}</span> --></h3>
               <div class="item-info">
                 <div class="rate-info">
                   <p class="txt">预期年化收益</p>
