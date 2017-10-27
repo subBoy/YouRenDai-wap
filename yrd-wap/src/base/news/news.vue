@@ -12,7 +12,7 @@
         <ul class="latest-news-list" ref="LatestNewsList">
           <li class="latest-news-item border-1px-b" v-for="(item, index) in newsListArr" :class="{'readed': item.status === '1' || !item.status}" @click="selectItem(item, index)">
             <span class="remind"></span>
-            <p class="name ellipsis">【{{item.message_type_name}}】{{item.message_title}}</p>
+            <p class="name ellipsis">【{{item.message_type_name}}】{{formartTitle(item)}}</p>
             <p class="time">{{item.create_date}}</p>
           </li>
         </ul>
@@ -77,6 +77,20 @@
       },
       startLoad() {
         this.$emit('loadMore')
+      },
+      formartTitle(item) {
+        let month = item.create_date.split('-')[1] + ''
+        const dan = month.substring(0, 1)
+
+        if (dan < 1) {
+          month = month.substring(1, 2)
+        }
+
+        if (item.message_type_name === '账单信息') {
+          return `${month}月${item.message_title}`
+        } else {
+          return `${item.message_title}`
+        }
       }
     },
     components: {

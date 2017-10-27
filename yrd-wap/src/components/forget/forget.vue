@@ -9,6 +9,7 @@
         :mdNum="mdNum"
         :errTxt="errTxt"
         :codeClick="codeClick"
+        :passTxt="titleTxt"
         @signMethods="signMethods"
         @signErr="signErr"
         @blurTel="blurTel"

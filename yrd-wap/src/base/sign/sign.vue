@@ -13,7 +13,7 @@
               <input type="text" v-model="passWord" class="input-box" @focus="focus" v-show="shPass" @blur="blurPassword" onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false" @keyup="checkPassVal">
               <input type="password" v-model="passWord" class="input-box" @focus="focus" v-show="!shPass" @blur="blurPassword" onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false" @keyup="checkPassVal">
               <span class="showPassword" @click.stop.prevent="shPassword" :class="{hidePassword: shPass}"></span>
-              <p class="place-desc" v-show="passWord.length <= 0">填写密码<span class="styl">(长度为8-16位的字符串)</span></p>
+              <p class="place-desc" v-show="passWord.length <= 0">{{passTxt}}<span class="styl" v-if="!isSignIn">(长度为8-16位的字符串)</span></p>
             </li>
             <li class="input-item" v-if="isImgVerify">
               <input type="text" v-model="imgVerify" class="input-box" @focus="focus">
@@ -34,10 +34,10 @@
           </ul>
           <div class="user-types" v-if="isSignUp">
             <p class="line-type" :class="{selected: selectType}">
-              <span class="type" @click="selectUser">勾选成为投资人</span>
+              <span class="type" @click="selectUser">成为投资人</span>
             </p>
             <p class="line-type" :class="{selected: !selectType}">
-              <span class="type" @click="selectUserBl">勾选成为借款人</span>
+              <span class="type" @click="selectUserBl">成为借款人</span>
             </p>
           </div>
           <div class="err-desc">
@@ -100,6 +100,10 @@
       codeClick: {
         type: Boolean,
         default: true
+      },
+      passTxt: {
+        type: String,
+        default: '填写密码'
       }
     },
     data () {
@@ -233,7 +237,7 @@
         }
       },
       lookHttp () {
-        location.href = '/newApp/Agreement.html'
+        location.href = '/dist/Agreement.html'
       },
       _getRecommend () {
         let _id = this.$route.params.id
@@ -350,7 +354,7 @@
         transform: translateY(-50%)
         border-radius: 4px
         overflow: hidden
-        background-color: $color-text-ll
+        background-color: $color-text
         z-index: 1
         .user-types
           display: flex

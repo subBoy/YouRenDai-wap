@@ -77,7 +77,7 @@
           padding: 3px 0
           color: $color-tle
         .tab-icon
-          margin-top: 6px;
+          margin-top: 6px
           height: 25px
           background-size: auto 28px
           background-position: center
@@ -93,6 +93,7 @@
           .tab-link
             color: $color-theme
           .tab-icon
+            background-size: auto 22px
             &.tab-icon-1
               bg-image('index-ok')
             &.tab-icon-2
