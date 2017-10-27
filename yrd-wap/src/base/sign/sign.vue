@@ -6,30 +6,30 @@
         <div class="input-wrapper">
           <ul class="input-box">
             <li class="input-item">
-              <input type="tel" v-model="phoneNumber" class="input-box" @focus="focus" @blur="blurTel" @keyup="checkPhoneVal" maxLength="11">
-              <p class="place-desc" v-show="phoneNumber.length <= 0">手机号</p>
+              <input type="tel" v-model="phoneNumber" class="input-box" @focus="phonePromptFuc" @blur="blurTel" @keyup="checkPhoneVal" maxLength="11">
+              <p class="place-desc" v-show="phonePrompt">手机号</p>
             </li>
             <li class="input-item">
-              <input type="text" v-model="passWord" class="input-box" @focus="focus" v-show="shPass" @blur="blurPassword" onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false" @keyup="checkPassVal">
-              <input type="password" v-model="passWord" class="input-box" @focus="focus" v-show="!shPass" @blur="blurPassword" onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false" @keyup="checkPassVal">
+              <input type="text" v-model="passWord" class="input-box" @focus="passPromptFuc" v-show="shPass" @blur="blurPassword" onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false" @keyup="checkPassVal">
+              <input type="password" v-model="passWord" class="input-box" @focus="passPromptFuc" v-show="!shPass" @blur="blurPassword" onpaste="return false" oncontextmenu="return false" oncopy="return false" oncut="return false" @keyup="checkPassVal">
               <span class="showPassword" @click.stop.prevent="shPassword" :class="{hidePassword: shPass}"></span>
-              <p class="place-desc" v-show="passWord.length <= 0">{{passTxt}}<span class="styl" v-if="!isSignIn">(长度为8-16位的字符串)</span></p>
+              <p class="place-desc" v-show="passPrompt">{{passTxt}}<span class="styl" v-if="!isSignIn">(长度为8-16位的字符串)</span></p>
             </li>
             <li class="input-item" v-if="isImgVerify">
-              <input type="text" v-model="imgVerify" class="input-box" @focus="focus">
+              <input type="text" v-model="imgVerify" class="input-box" @focus="imgPromptFuc" @blur="promptImg">
               <span class="change-verify" @click.stop.prevent="changeVerify">
                 <img :src="verifyImg" width="100%" height="100%">
               </span>
-              <p class="place-desc" v-show="imgVerify.length <= 0">图形验证码</span></p>
+              <p class="place-desc" v-show="imgPrompt">图形验证码</span></p>
             </li>
             <li class="input-item" v-if="isSignUp">
-              <input type="tel" v-model="serviceNumber" class="input-box" @focus="focus" @keyup="checkVal">
-              <p class="place-desc" v-show="serviceNumber.length <= 0">填写客服顾问工号或手机号（选填）</p>
+              <input type="tel" v-model="serviceNumber" class="input-box" @focus="servicePromptFuc" @keyup="checkVal" @blur="promptService">
+              <p class="place-desc" v-show="servicePrompt">填写客服顾问工号或手机号（选填）</p>
             </li>
             <li class="input-item" v-if="isSignUp || isForget">
-              <input type="tel" v-model="verificationCode" class="input-box" @focus="focus">
+              <input type="tel" v-model="verificationCode" class="input-box" @focus="codePromptFuc" @blur="promptCode">
               <span class="code-btn" @click.stop.prevent="getCode" :class="{clo: !codeClick}">{{codeTxt}}</span>
-              <p class="place-desc" v-show="verificationCode.length <= 0">输入验证码</p>
+              <p class="place-desc" v-show="codePrompt">输入验证码</p>
             </li>
           </ul>
           <div class="user-types" v-if="isSignUp">
@@ -108,6 +108,11 @@
     },
     data () {
       return {
+        phonePrompt: true,
+        passPrompt: true,
+        imgPrompt: true,
+        servicePrompt: true,
+        codePrompt: true,
         selectType: true,
         shPass: false,
         phoneNumber: '',
@@ -152,6 +157,26 @@
         this.selectType = false
         this.userType = 'jk'
       },
+      phonePromptFuc () {
+        this.phonePrompt = false
+        this.focus()
+      },
+      passPromptFuc () {
+        this.passPrompt = false
+        this.focus()
+      },
+      imgPromptFuc () {
+        this.imgPrompt = false
+        this.focus()
+      },
+      servicePromptFuc () {
+        this.servicePrompt = false
+        this.focus()
+      },
+      codePromptFuc () {
+        this.codePrompt = false
+        this.focus()
+      },
       focus () {
         setTimeout(() => {
           this.$emit('signErr', '')
@@ -177,10 +202,41 @@
         return temp
       },
       blurTel () {
+        if (!this.phoneNumber || this.phoneNumber.length <= 0) {
+          this.phonePrompt = true
+        } else {
+          this.phonePrompt = false
+        }
         this.$emit('blurTel', this.phoneNumber)
       },
       blurPassword () {
+        if (!this.passWord || this.passWord.length <= 0) {
+          this.passPrompt = true
+        } else {
+          this.passPrompt = false
+        }
         this.$emit('blurPassword', this.passWord)
+      },
+      promptImg () {
+        if (!this.imgVerify || this.imgVerify.length <= 0) {
+          this.imgPrompt = true
+        } else {
+          this.imgPrompt = false
+        }
+      },
+      promptService () {
+        if (!this.serviceNumber || this.serviceNumber.length <= 0) {
+          this.servicePrompt = true
+        } else {
+          this.servicePrompt = false
+        }
+      },
+      promptCode () {
+        if (!this.verificationCode || this.verificationCode.length <= 0) {
+          this.codePrompt = true
+        } else {
+          this.codePrompt = false
+        }
       },
       signFun () {
         if (!this._phone()) {

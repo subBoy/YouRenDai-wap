@@ -21,7 +21,7 @@
                 <li class="t-align-r">￥{{plan.repayment_money}}</li>
               </ul>
               <!-- 无记录 -->
-              <p class="not-repay" v-show="!plans.length || plans.length <= 0">暂无记录</p>
+              <p class="not-repay" v-show="!plans.length || plans.length <= 0">暂未产生还款计划</p>
             </div>
           </div>
           <div class="repayment-plan pt-none">

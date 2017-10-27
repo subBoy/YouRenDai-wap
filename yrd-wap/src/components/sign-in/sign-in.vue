@@ -70,7 +70,8 @@
               this.$router.push('/')
               return
             }
-            this.$router.push(this.changeReturnPath)
+            this.$router.back()
+            // this.$router.push(this.changeReturnPath)
             // 登录拦截
             // let redirect = decodeURIComponent(this.$route.query.redirect || '/')
             // this.$router.push({
