@@ -74,6 +74,13 @@
     created () {
       this.userId = this.$route.query.userId
       this._getLoginState()
+      this.$router.beforeEach((to, from, next) => {
+        if (!navigator.onLine) {
+          location.href = 'www.yourendai.com'
+          return
+        }
+        next()
+      })
     },
     computed: {
       bgColor () {

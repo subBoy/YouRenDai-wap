@@ -95,6 +95,11 @@
                   <p class="plat-ul-p1 plat-ul-p2">高可用性、高扩展性</p>
                 </li>
               </ul>
+              <div class="palt-add-wrapper">
+                <img class="palt-add-icon" src="./icon-7.png" width="15%">
+                <p class="palt-add-txt">可信时间戳是由联合信任时间戳服务中心（TSA：Time Stamp Authority）颁发的具有法律效力的电子凭证, 时间戳与电子数据唯一对应。</p>
+                <p class="palt-add-txt">有人贷平台通过可信时间戳与电子签名技术相结合，对电子合同内容、时间及签署人等信息进行固化，使电子凭证具有法律效力，不可被篡改和伪造，让投资者在平台交易的同时，通过网络签订具有法律效力的电子合同，更有效保障平台投资者的合法权益。</p>
+              </div>
             </div>
           </div>
         </div>
@@ -214,4 +219,12 @@
         text-align: center
       .plat-five-cont
         padding-bottom: 25px
+      .palt-add-wrapper
+        .palt-add-icon
+          margin: 0 auto
+        .palt-add-txt
+          padding: 0 20px
+          line-height: 18px
+          font-size: 10px
+          color: #666
 </style>
