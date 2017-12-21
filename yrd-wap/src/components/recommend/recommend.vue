@@ -83,6 +83,7 @@
             </div>
           </div>
           <div class="scroll-ft-desc">
+            <a href="/index.shtml?force=1" class="pc-link-btn">返回PC端</a>
             <p class="desc-txt">Copyright @ Reserved 2013 </p>
             <p class="desc-txt">有人贷创建于贰零壹叁年 @ 2013 安信卓越版权所有</p>
           </div>
@@ -352,6 +353,12 @@
           font-size: $font-size-medium-x
           transform: scale(0.5) translate3d(-50%, 0, 0)
           color: $color-q
+        .pc-link-btn
+          display: block
+          text-align: center;
+          line-height: 16px;
+          font-size: $font-size-small-s
+          color: #288cf0
       .loading-container
         position: absolute
         width: 100%

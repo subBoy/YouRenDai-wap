@@ -41,7 +41,7 @@
           <div class="swiper-slide">
             <img src="./disclosureBg4.jpg" class="bgPic">
             <img src="./mouthBg.png" class="yrdPic3 content-img">
-            <p class="mouthP1">9月运营报告</p>
+            <p class="mouthP1">11月运营报告</p>
             <a class="lookbtn" href="/loan/h5/app-report.shtml">
               <img src="./lookBtn.png" width="55%">
             </a>

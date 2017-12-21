@@ -30,6 +30,7 @@
   // import {encryption, compareEncrypt} from 'common/js/bcrypt'
   // import {encode64} from 'common/js/util'
   import {signIn} from 'api/sign'
+  import {getHisy} from 'common/js/cache'
   import {mapGetters, mapActions} from 'vuex'
 
   const windowHei = document.documentElement.clientHeight
@@ -66,11 +67,18 @@
           if (res.ret_code === '1') {
             this.changeLoginState(res.ret_set.user_id)
             this.imgCodeErr()
-            if (this.changeReturnPath === '') {
-              this.$router.push('/')
+            const HISY = getHisy()
+            if (HISY !== '/' && HISY !== '/signUp') {
+              this.$router.push(HISY)
               return
             }
-            this.$router.back()
+
+            if (document.referrer !== '') {
+              self.location = document.referrer
+              return
+            }
+
+            this.$router.push('/')
             // this.$router.push(this.changeReturnPath)
             // 登录拦截
             // let redirect = decodeURIComponent(this.$route.query.redirect || '/')

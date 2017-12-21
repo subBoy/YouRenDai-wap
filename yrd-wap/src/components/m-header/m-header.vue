@@ -21,6 +21,7 @@
 <script>
   import {getLoginState} from 'api/sign'
   import {mapGetters, mapActions} from 'vuex'
+  import {getHisy, getNexty} from 'common/js/cache'
 
   export default {
     props: {
@@ -85,21 +86,33 @@
     },
     methods: {
       gobackAndNotice () {
+        const HISY = getHisy()
+        const NEXTY = getNexty()
         if (this.isIndex) {
           this.$router.push('/recommend/notice')
           return
-        } else if (this.gobool) {
+        }
+        if (this.gobool) {
           this.$router.push('/user-center')
           return
-        } else if (this.$route.path === '/user-center/share-back') {
+        }
+        if (this.$route.path === '/user-center/share-back') {
           this.$router.back()
           return
-        } else if (this.guideBool) {
+        }
+        if (this.guideBool) {
           this.$router.push('/')
           return
-        } else {
-          this.$router.back()
         }
+        if ((HISY === '/signIn' || HISY === '/signUp' || NEXTY === '/signIn' || NEXTY === '/signUp') && (this.changeLoginState || this.userId)) {
+          this.$router.push('/')
+          return
+        }
+        if (HISY === '/' && document.referrer !== '') {
+          self.location = document.referrer
+          return
+        }
+        this.$router.back()
       },
       signMethod (str) {
         if (this.goBack) {

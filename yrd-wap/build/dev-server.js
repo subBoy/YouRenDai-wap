@@ -32,7 +32,7 @@ app.use(bodyParser.json())
 var apiRoutes = express.Router()
 
 // md 192.168.1.138:8080 // wwz 192.168.1.13:8080 // http://pre.yourendai.com/
-var refererTxt = 'http://pre.yourendai.com/'
+var refererTxt = 'https://pre.yourendai.com/'
 var hostTxt = 'pre.yourendai.com'
 
 apiRoutes.get('/getIndexData', function (req, res) {

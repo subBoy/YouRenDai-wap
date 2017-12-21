@@ -187,15 +187,15 @@
           return `${reward.rewardLines}元现金券`
         }
         if (reward.rewardName === '返现券') {
-          if (reward.rewardLines === 1.8 || reward.rewardLines === 1.2) {
-            return `${reward.rewardLines}%返现券`
-          }
-          return `${reward.rewardLines}元返现券`
+          // if (reward.rewardLines === 1.8 || reward.rewardLines === 1.2) {
+          //   return `${reward.rewardLines}%返现券`
+          // }
+          return `${reward.rewardLines}%返现券`
         }
         if (reward.rewardName === '加息券') {
-          if (reward.rewardLines === 1) {
-            return `${reward.rewardLines}%八月奖励加息券`
-          }
+          // if (reward.rewardLines === 1) {
+          //   return `${reward.rewardLines}%八月奖励加息券`
+          // }
           return `${reward.rewardLines}%加息券`
         }
         return `${reward.rewardLines}%收益券`

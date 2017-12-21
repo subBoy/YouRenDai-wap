@@ -51,3 +51,33 @@ export function setCreateDate(createdate) {
 export function getCreateDate() {
   return storage.get(CREATE_DATE, '')
 }
+
+// 获取上级路由信息
+
+const HISY = '__hisy__'
+
+export function setHisy(hisy) {
+  let returnVal = storage.get(HISY, '')
+  returnVal = hisy
+  storage.set(HISY, returnVal)
+  return returnVal
+}
+
+export function getHisy() {
+  return storage.get(HISY, '')
+}
+
+// 获取下级路由信息
+
+const NEXTY = '__nexty__'
+
+export function setNexty(nexty) {
+  let returnVal = storage.get(NEXTY, '')
+  returnVal = nexty
+  storage.set(NEXTY, returnVal)
+  return returnVal
+}
+
+export function getNexty() {
+  return storage.get(NEXTY, '')
+}

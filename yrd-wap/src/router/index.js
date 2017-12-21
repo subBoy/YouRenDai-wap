@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import {getChangeLogin} from 'common/js/cache'
+import {setHisy, setNexty} from 'common/js/cache'
 
 const Recommend = () => import('components/recommend/recommend')
 const Assets = () => import('components/assets/assets')
@@ -317,20 +317,10 @@ const router = new Router({
   routes
 })
 
-const userId = getChangeLogin()
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(r => r.meta.requireAuth)) {
-    if (userId !== '') {
-      next()
-    } else {
-      next({
-        path: '/login',
-        query: {redirect: to.fullPath}
-      })
-    }
-  } else {
-    next()
-  }
+  setHisy(from.path)
+  setNexty(to.path)
+  next()
 })
 
 export default router
