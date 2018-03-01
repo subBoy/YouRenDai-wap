@@ -41,7 +41,7 @@
           <div class="swiper-slide">
             <img src="./disclosureBg4.jpg" class="bgPic">
             <img src="./mouthBg.png" class="yrdPic3 content-img">
-            <p class="mouthP1">11月运营报告</p>
+            <p class="mouthP1">1月运营报告</p>
             <a class="lookbtn" href="/loan/h5/app-report.shtml">
               <img src="./lookBtn.png" width="55%">
             </a>
@@ -209,8 +209,8 @@
         toopacity: 1
     .content-img
       position: absolute
-      width: 90%
-      left: 5%
+      width: 94%
+      left: 3%
       top: 43%
     .yrdPic1
       top: 45%
@@ -246,7 +246,7 @@
       font-size: 18px
       color: #fff
       left: 50%
-      top: 54%
+      top: 56%
       width: 100%
       text-align: center
       transform: translate3d(-50%, -50%, 0)

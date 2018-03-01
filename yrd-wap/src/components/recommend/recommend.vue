@@ -23,7 +23,7 @@
             </div>
           </div>
           <div class="recommed-group">
-            <ul class="recommed-group-list">
+            <ul class="recommed-group-list" :class="XNTime()">
               <li class="recommed-group-item">
                 <router-link tag="div" to="/recommend/platform">
                   <div class="item-icons item-icons-1"></div>
@@ -33,7 +33,7 @@
               <li class="recommed-group-item">
                 <router-link tag="div" to="/recommend/packs">
                   <div class="item-icons item-icons-2">
-                    <span class="item-new-num" v-if="hbNum > 0">{{hbNum}}</span>
+                    <span class="item-new-num-wrapper" v-if="hbNum > 0"><span class="item-new-num">{{hbNum}}</span></span>
                   </div>
                   <p class="item-text">现金红包</p>
                 </router-link>
@@ -47,14 +47,14 @@
               <li class="recommed-group-item">
                 <div @click="latestNews">
                   <div class="item-icons item-icons-4">
-                    <span class="item-new-num" v-if="newsNum > 0">{{newsNum}}</span>
+                    <span class="item-new-num-wrapper" v-if="newsNum > 0"><span class="item-new-num">{{newsNum}}</span></span>
                   </div>
                   <p class="item-text">最新消息</p>
                 </div>
               </li>
             </ul>
           </div>
-          <div class="recommed-new-user">
+          <div class="recommed-new-user" :class="XNTime()">
             <div class="recommed-new-user-info">
               <p class="name">新手专享</p>
               <p class="desc"><span class="num">1888</span>元现金红包</p>
@@ -66,7 +66,7 @@
               <router-link class="list-btn" to="/product-list">查看更多</router-link>
               <!-- <span class="pro-bz" v-if="item.is_open === 'yes'"><span class="open-txt">{{item.content}}</span></span> -->
             </h3>
-            <div v-if="disclist.length" class="slider-wrapper">
+            <div v-if="disclist.length" class="slider-wrapper" :class="XNTime()">
               <div class="slider-content">
                 <div class="product-message-item swiper-slide swiper-no-swiping">
                   <p class="return"><span class="num">{{item.year_rate}}</span>%</p>
@@ -117,6 +117,9 @@
   import {getIndexData} from 'api/index'
   import {mapGetters, mapActions} from 'vuex'
 
+  const STARTTIME = new Date('2018-02-09 17:00:00').getTime()
+  const ENDTIME = new Date('2018-02-21 23:59:59').getTime()
+  const NOWTIME = new Date().getTime()
   export default {
     data () {
       return {
@@ -144,6 +147,12 @@
       this.$refs.scroll.refresh()
     },
     methods: {
+      XNTime () {
+        if (STARTTIME < NOWTIME && NOWTIME < ENDTIME) {
+          return 'XN2018'
+        }
+        return ''
+      },
       scroll (pos) {
         if (pos.y < 0) {
           this.opcity = Math.abs(pos.y / 44)
@@ -291,6 +300,25 @@
         .slider-wrapper
           position: relative
           padding-bottom: 30px
+          &.XN2018
+            bg-image('/static/img/xn-2018-6')
+            background-size: 100% 90px
+            background-position: center
+            background-repeat: no-repeat
+            .slider-content
+              background: inherit
+              .product-message-item
+                .details-btn
+                  width: 228px
+                  height: 36px
+                  bg-image('/static/img/xn-2018-5')
+                  background-position: center
+                  background-size: 228px 36px
+                  background-repeat: no-repeat
+                  border-radius: 0px
+                  background-color: inherit
+                  .btn-txt
+                    color: #fdca83
           .slider-content
             background: $color-text
             .product-message-item
@@ -367,10 +395,43 @@
       .recommed-group
         width: 100%
         .recommed-group-list
-          margin-bottom: 5px;
-          padding: 25px 20px;
-          background-color: $color-text
           display: flex
+          margin-bottom: 5px
+          padding: 25px 20px
+          background-color: $color-text
+          &.XN2018
+            bg-image('/static/img/xn-2018-0')
+            background-repeat: no-repeat
+            background-size: 94% 100px
+            background-position: center
+            .recommed-group-item
+              .item-icons
+                &.item-icons-1
+                  bg-image('/static/img/xn-2018-1')
+                &.item-icons-2
+                  bg-image('/static/img/xn-2018-2')
+                &.item-icons-3
+                  bg-image('/static/img/xn-2018-3')
+                &.item-icons-4
+                  bg-image('/static/img/xn-2018-4')
+                .item-new-num-wrapper
+                  right: -14px
+                  top: -12px
+                  padding: 2px
+                  .item-new-num
+                    display: inline-block
+                    background-color: #ff5a00
+                    border-radius: 100%
+                    border: 2px solid #fff
+                    padding: 5px
+                    color: $color-text
+                    font-size: $font-size-medium-x
+                    min-width: 18px
+                    height: 18px
+                    text-align: center
+                    line-height: 18px
+              .item-text
+                color: #666
           .recommed-group-item
             flex: 1
             text-align: center
@@ -382,7 +443,7 @@
               width: 45px
               height: 45px
               background-size: 45px 45px
-              .item-new-num
+              .item-new-num-wrapper
                 position: absolute
                 right: -8px
                 top: -8px
@@ -393,10 +454,6 @@
                 color: $color-text
                 font-size: $font-size-medium-x
                 transform: scale(0.5)
-                min-width: 18px
-                height: 18px
-                text-align: center
-                line-height: 18px
               &.item-icons-1
                 bg-image('lj')
               &.item-icons-2
@@ -416,6 +473,9 @@
         bg-image('new-user')
         background-size: 90px 90px
         background-position: 90% center
+        &.XN2018
+          background-size: 116px 98px
+          bg-image('/static/img/xn-2018-12')
         .recommed-new-user-info
           width: 200px
           text-align: center

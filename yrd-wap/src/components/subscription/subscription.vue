@@ -41,7 +41,7 @@
         </div>
         <div class="reward-wrapper">
           <h3 class="title border-1px-b">使用平台奖励</h3>
-          <ul class="reward-group" v-show="rewardList.length > 0">
+          <!-- <ul class="reward-group" v-show="rewardList.length > 0">
             <li class="reward-item" v-for="(reward, index) in rewardList">
               <div class="reward-view-wrapper" :class="{'selected': reward.selected}" @click="selectReward(index)">
                 <div class="reward-bg"><span class="reward-val">{{ckeckVal(reward)}}</span><span class="reward-name">{{reward.rewardName}}</span></div>
@@ -58,8 +58,10 @@
                 </div>
               </div>
             </li>
-          </ul>
-          <div class="air-reward" v-show="!rewardList.length || rewardList.length === 0">暂无奖励可用~</div>
+          </ul> -->
+          <!-- v-show="rewardList.length > 0" -->
+          <div class="air-reward">暂不支持使用奖励券，如有奖励券，<br/>请到<a class="styl" :href="getPc()">电脑</a>或<a class="styl" @click="downLoadApp">下载APP</a>使用</div>
+          <!-- <div class="air-reward" v-show="!rewardList.length || rewardList.length === 0">暂无奖励可用~</div> -->
         </div>
       </div>
     </scroll>
@@ -73,6 +75,7 @@
   import FootBtn from 'base/foot-btn/foot-btn'
   import TopTip from 'base/top-tip/top-tip'
   import {subscription, getRewardList} from 'api/user'
+  import {_UA} from 'common/js/ua'
   import {mapGetters} from 'vuex'
 
   export default {
@@ -109,6 +112,20 @@
       ])
     },
     methods: {
+      downLoadApp () {
+        if (_UA.isWeixin()) {
+          window.alert('请使用浏览器打开！！！')
+        } else {
+          if (_UA.isIOS()) {
+            location.href = 'https://itunes.apple.com/cn/app/you-ren-dai/id923214967?mt=8'
+          } else {
+            location.href = 'http://www.yourendai.com/app_download/YouRenDai.apk'
+          }
+        };
+      },
+      getPc () {
+        return `/loan/order2.0.shtml?projectId=${this.projectId}&loanMoney=${this.loanMoney}`
+      },
       submitFuc () {
         if (!this.realed) {
           const reg = /^[\u4e00-\u9fa5]+$/gi
@@ -235,7 +252,7 @@
         })
         this.selectItems.forEach((rewardItem) => {
           this.reward += `${rewardItem.rewardId}_${rewardItem.investAmount},`
-          this.rewardType += `${rewardItem.rewardEnName},`
+          this.rewardType += `${rewardItem.reward_type_name_ch},`
           this.rewardLines += `${rewardItem.rewardLines},`
         })
 
@@ -439,8 +456,13 @@
                     color: $color-tle
                     text-align: center
           .air-reward
-            line-height: 54px
+            padding-top: 30px;
+            line-height: 30px
             text-align: center
             font-size: $font-size-small
             color: $color-q
+            .styl
+              display: inline-block
+              padding: 0 5px
+              color: #ff4e49
 </style>
