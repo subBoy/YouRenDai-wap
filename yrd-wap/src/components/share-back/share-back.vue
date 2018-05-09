@@ -7,7 +7,7 @@
           <img src="./invited-20170512-bg.jpg" @load="loadImage" width="100%">
           <em class="app-20170512-invited-time">活动时间: 2017年4月17日起</em>
           <div class="app-invited-page-1">
-            <p class="app-invited-page-desc">活动期内，邀请好友注册并完成首笔投资，可获现金奖励，奖励规则如下：</p>
+            <p class="app-invited-page-desc">活动期内，邀请好友注册并完成首笔出借，可获现金奖励，奖励规则如下：</p>
             <img src="./invited-20170512-rule-1.png" width="100%">
           </div>
           <p class="app-invited-page-desc-1">新手注册更有1888现金送给您</p>

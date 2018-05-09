@@ -48,7 +48,7 @@
         mdNum: '',
         whiteIcon: true,
         codeClick: true,
-        signTitle: '1步开启，投资就这么简单！'
+        signTitle: '1步开启，出借就这么简单！'
       }
     },
     computed: {

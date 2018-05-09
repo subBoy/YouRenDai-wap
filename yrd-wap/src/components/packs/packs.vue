@@ -7,8 +7,8 @@
     </div>
     <div class="null-packs" v-if="!packsList.length">
       <p class="desc">暂无记录</p>
-      <p class="desc">先进行投资体验吧</p>
-      <router-link tag="div" class="invest-btn" to="/product-list">立即投资</router-link>
+      <p class="desc">先进行出借体验吧</p>
+      <router-link tag="div" class="invest-btn" to="/product-list">立即出借</router-link>
     </div>
     <div class="packs-group" v-else>
       <scroll

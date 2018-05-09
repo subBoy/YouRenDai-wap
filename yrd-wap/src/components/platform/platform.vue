@@ -45,7 +45,7 @@
           <div class="plat-first bg-fff">
             <img src="./pic-5.png" class="plat-tit" @load="refresh" width="80%" />
             <h3 class="plat-h3 plats-h3">提高大数据应用能力 摸索智能量化风控体系</h3>
-            <p class="plat-p1">有人贷一直关注和提升自身数据应用能力，持续探索大数据风控，通过与大数据机构和专业风控机构的合作，不断建设智能量化风控模型和体系，为投资人提供更为安全的投资环境。</p>
+            <p class="plat-p1">有人贷一直关注和提升自身数据应用能力，持续探索大数据风控，通过与大数据机构和专业风控机构的合作，不断建设智能量化风控模型和体系，为出借人提供更为安全的出借环境。</p>
           </div>
           <div class="plat-sec-box">
             <div class="plat-first">
@@ -55,7 +55,7 @@
             </div>
           </div>
           <div class="plat-five bg-fff">
-            <img src="./title-5.png" width="55%" />
+            <img src="./title-5.png" width="60%" />
             <div class="plat-five-cont">
               <ul class="palt-ul">
                 <li>
@@ -98,7 +98,7 @@
               <div class="palt-add-wrapper">
                 <img class="palt-add-icon" src="./icon-7.png" width="15%">
                 <p class="palt-add-txt">可信时间戳是由联合信任时间戳服务中心（TSA：Time Stamp Authority）颁发的具有法律效力的电子凭证, 时间戳与电子数据唯一对应。</p>
-                <p class="palt-add-txt">有人贷平台通过可信时间戳与电子签名技术相结合，对电子合同内容、时间及签署人等信息进行固化，使电子凭证具有法律效力，不可被篡改和伪造，让投资者在平台交易的同时，通过网络签订具有法律效力的电子合同，更有效保障平台投资者的合法权益。</p>
+                <p class="palt-add-txt">有人贷平台通过可信时间戳与电子签名技术相结合，对电子合同内容、时间及签署人等信息进行固化，使电子凭证具有法律效力，不可被篡改和伪造，让出借者在平台交易的同时，通过网络签订具有法律效力的电子合同，更有效保障平台出借者的合法权益。</p>
               </div>
             </div>
           </div>

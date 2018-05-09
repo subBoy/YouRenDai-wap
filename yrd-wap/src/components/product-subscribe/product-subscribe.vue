@@ -12,14 +12,14 @@
               <progress-circle :percent="percent">
                 <div class="subscribe-return">
                   <h3 class="return">{{subscribe.yearRate}}<span class="unti">%</span></h3>
-                  <p class="desc">预期年化收益</p>
+                  <p class="desc">期待年化回报率</p>
                 </div>
               </progress-circle>
             </div>
             <div class="subscribe-info">
               <p class="desc-info">借款期限 {{subscribe.limit}}个月</p>
-              <p class="desc-info styl-flex">起投金额 {{subscribe.ascendmoney}}元</p>
-              <p class="desc-info">剩余投资额 {{conversion(subscribe.surplus)}}万元</p>
+              <p class="desc-info styl-flex">起借金额 {{subscribe.ascendmoney}}元</p>
+              <p class="desc-info">剩余出借额 {{conversion(subscribe.surplus)}}万元</p>
             </div>
           </div>
           <div class="expected-income">
@@ -28,7 +28,7 @@
               <span class="item" v-for="item in incomeList"><em class="icon"></em>{{formatMoney(item)}} <span class="until" v-show="item === incomeList[incomeList.length - 1]">(元)</span></span>
             </div>
             <div class="icon-b">
-              <p class="desc-text">{{income.toFixed(2)}}(预期收益)</p>
+              <p class="desc-text">{{income.toFixed(2)}}(期待回报)</p>
             </div>
           </div>
           <div class="invest-amount">
@@ -39,7 +39,7 @@
               </div>
               <div class="btn-add" :class="{add: !addBool}" @click="addInvest"></div>
             </div>
-            <p class="input-desc">请输入投资金额，{{subscribe.minmoney}}元的整数倍</p>
+            <p class="input-desc">请输入出借金额，{{subscribe.minmoney}}元的整数倍</p>
           </div>
           <ul class="product-info">
             <li class="info-item info-item-1" @click="httpTxt">协议范本</li>
@@ -196,7 +196,7 @@
       },
       subscribeSubmit () {
         if (!this.userType) {
-          this.caveatText = '借款人不允许投资！'
+          this.caveatText = '借款人不允许出借！'
           this.caveat()
           return
         }
@@ -205,7 +205,7 @@
         }
 
         if (this.investAmount < 100) {
-          this.caveatText = '请输入100的整数倍金额，且最小投资额100！'
+          this.caveatText = '请输入100的整数倍金额，且最小出借额100！'
           this.caveat()
           return
         }

@@ -4,19 +4,19 @@
     <scroll class="bill-details-scroll" ref="billScroll" :data="recordList">
       <div class="bill-details-content">
         <div class="Investment-details common-block">
-          <h3 class="block-name ic-1">投资明细</h3>
+          <h3 class="block-name ic-1">出借明细</h3>
           <div class="not-investment-wrapper" v-show="!recordList.length || !recordList.length === 0">
             <div class="txt-box">
-              <p class="txt">本月您还未投资~~~</p>
+              <p class="txt">本月您还未出借~~~</p>
             </div>
-            <router-link tag="div" class="invest-btn" to="/product-list">立即投资</router-link>
+            <router-link tag="div" class="invest-btn" to="/product-list">立即出借</router-link>
           </div>
           <div class="investment-wrapper" v-show="recordList.length && recordList.length > 0">
             <ul class="investment-title-list">
               <li class="investment-title-item flex-1"><span class="txt">项目名称</span></li>
-              <li class="investment-title-item flex-1-1"><span class="txt">投资时间</span></li>
-              <li class="investment-title-item flex-1-1"><span class="txt">投资到期日</span></li>
-              <li class="investment-title-item flex-1-2"><span class="txt">投资金额/元</span></li>
+              <li class="investment-title-item flex-1-1"><span class="txt">出借时间</span></li>
+              <li class="investment-title-item flex-1-1"><span class="txt">出借到期日</span></li>
+              <li class="investment-title-item flex-1-2"><span class="txt">出借金额/元</span></li>
               <li class="investment-title-item flex-1-2"><span class="txt">利息收益/元</span></li>
             </ul>
             <ul class="investment-record-item" v-for="item in recordList">
@@ -33,9 +33,9 @@
           <div class="not-investment-wrapper" v-show="!oldRules && !newRules">
             <div class="txt-box">
               <p class="txt">暂无活动，热情不减</p>
-              <p class="txt">投资再继续~~~</p>
+              <p class="txt">出借再继续~~~</p>
             </div>
-            <router-link tag="div" class="invest-btn" to="/product-list">立即投资</router-link>
+            <router-link tag="div" class="invest-btn" to="/product-list">立即出借</router-link>
           </div>
           <div class="activity-recommend-wrapper" v-show="oldRules || newRules">
             <div class="img-wrapper" v-show="oldRules">
@@ -51,19 +51,19 @@
           <h3 class="block-name ic-3">备注</h3>
           <div class="remarks-wrapper">
             <ul class="rules-list" v-show="oldRules">
-              <li class="rules-item"><span class="serial">1.</span>投资10000元（包含10000）以上使用；</li>
+              <li class="rules-item"><span class="serial">1.</span>出借10000元（包含10000）以上使用；</li>
               <li class="rules-item"><span class="serial">2.</span>本活动不与其他活动同享，不与新手红包同享，只限老用户使用；</li>
-              <li class="rules-item"><span class="serial">3.</span>在平台投资超过1次，为老用户。</li>
+              <li class="rules-item"><span class="serial">3.</span>在平台出借超过1次，为老用户。</li>
             </ul>
             <ul class="desc-list" v-show="newRules">
               <li class="desc-item">平台标的均可使用，本活动不与其他活动同享，不与现金券同享，只限注册新用户使用；</li>
-              <li class="desc-item"><span class="hb">18元红包</span><span class="desc-txt">投资满1800元</span></li>
-              <li class="desc-item"><span class="hb">20元红包</span><span class="desc-txt">投资满2000元</span></li>
-              <li class="desc-item"><span class="hb">50元红包</span><span class="desc-txt">投资满5000元</span></li>
-              <li class="desc-item"><span class="hb">100元红包</span><span class="desc-txt">投资满10,000元</span></li>
-              <li class="desc-item"><span class="hb">200元红包</span><span class="desc-txt">投资满20,000元</span></li>
-              <li class="desc-item"><span class="hb">500元红包</span><span class="desc-txt">投资满50,000元</span></li>
-              <li class="desc-item"><span class="hb">1000元红包</span><span class="desc-txt">投资满100,000元</span></li>
+              <li class="desc-item"><span class="hb">18元红包</span><span class="desc-txt">出借满1800元</span></li>
+              <li class="desc-item"><span class="hb">20元红包</span><span class="desc-txt">出借满2000元</span></li>
+              <li class="desc-item"><span class="hb">50元红包</span><span class="desc-txt">出借满5000元</span></li>
+              <li class="desc-item"><span class="hb">100元红包</span><span class="desc-txt">出借满10,000元</span></li>
+              <li class="desc-item"><span class="hb">200元红包</span><span class="desc-txt">出借满20,000元</span></li>
+              <li class="desc-item"><span class="hb">500元红包</span><span class="desc-txt">出借满50,000元</span></li>
+              <li class="desc-item"><span class="hb">1000元红包</span><span class="desc-txt">出借满100,000元</span></li>
             </ul>
           </div>
         </div>

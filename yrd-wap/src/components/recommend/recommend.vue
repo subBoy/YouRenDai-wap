@@ -62,7 +62,7 @@
             </div>
           </div>
           <div class="project-wrapper" v-for="item in disclist">
-            <h3 class="name">智甄投资
+            <h3 class="name">智甄出借
               <router-link class="list-btn" to="/product-list">查看更多</router-link>
               <!-- <span class="pro-bz" v-if="item.is_open === 'yes'"><span class="open-txt">{{item.content}}</span></span> -->
             </h3>
@@ -76,7 +76,7 @@
                     <span class="desc">{{item.minimum_investment}}元起投</span>
                   </div>
                   <div class="details-btn" @click="selectItem(item)">
-                    <span class="btn-txt">立即投资</span>
+                    <span class="btn-txt">立即出借</span>
                   </div>
                 </div>
               </div>
@@ -451,6 +451,7 @@
                 background-color: #ff5a00
                 border-radius: 100%
                 padding: 6px
+                min-width: 16px
                 color: $color-text
                 font-size: $font-size-medium-x
                 transform: scale(0.5)

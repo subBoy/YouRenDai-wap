@@ -35,6 +35,21 @@ var apiRoutes = express.Router()
 var refererTxt = 'https://pre.yourendai.com/'
 var hostTxt = 'pre.yourendai.com'
 
+apiRoutes.get('/getDisclosure', function (req, res) {
+  var url = refererTxt + '/app/user.do'
+  axios.get(url, {
+    headers: {
+      referer: refererTxt,
+      host: hostTxt
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
 apiRoutes.get('/getIndexData', function (req, res) {
   var url = refererTxt + 'wap/wapIndexAction.do'
   axios.get(url, {

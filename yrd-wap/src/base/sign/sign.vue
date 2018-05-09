@@ -34,7 +34,7 @@
           </ul>
           <div class="user-types" v-if="isSignUp">
             <p class="line-type" :class="{selected: selectType}">
-              <span class="type" @click="selectUser">成为投资人</span>
+              <span class="type" @click="selectUser">成为出借人</span>
             </p>
             <p class="line-type" :class="{selected: !selectType}">
               <span class="type" @click="selectUserBl">成为借款人</span>

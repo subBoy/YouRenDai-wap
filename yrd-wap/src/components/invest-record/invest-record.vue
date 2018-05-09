@@ -14,9 +14,9 @@
             <ul class="record-list">
               <li class="record-item border-1px" v-for="item in recordList">
                 <p class="info">产品名称<span class="text">{{item.project_name}}</span></p>
-                <p class="info">投资时间<span class="text">{{item.create_date}}</span></p>
-                <p class="info">投资金额<span class="text">￥{{item.invest_money}}</span></p>
-                <p class="info styl">预期收益<span class="text">￥{{item.earnings}}</span></p>
+                <p class="info">出借时间<span class="text">{{item.create_date}}</span></p>
+                <p class="info">出借金额<span class="text">￥{{item.invest_money}}</span></p>
+                <p class="info styl">期待回报<span class="text">￥{{item.earnings}}</span></p>
                 <p class="info">状态<span class="text">{{item.code}}</span></p>
               </li>
             </ul>
@@ -26,8 +26,8 @@
       </div>
       <div class="no-record-wrapper" v-show="!recordList.length || recordList.length === 0">
         <p class="desc">暂无记录</p>
-        <p class="desc">先进行投资体验吧</p>
-        <router-link tag="div" class="invest-btn" to="/product-list">立即投资</router-link>
+        <p class="desc">先进行出借体验吧</p>
+        <router-link tag="div" class="invest-btn" to="/product-list">立即出借</router-link>
       </div>
     </div>
   </div>
@@ -41,7 +41,7 @@
   export default {
     data() {
       return {
-        titleTxt: '投资记录',
+        titleTxt: '出借记录',
         loadTitle: '正在载入更多...',
         isShow: false,
         opcity: 1,

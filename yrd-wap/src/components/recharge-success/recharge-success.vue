@@ -3,9 +3,9 @@
     <div class="desc-btn-wrapper">
       <div class="txt-group">
         <div class="txt">不再等<span class="styl">~~~</span></div>
-        <div class="txt">投资快人一步 收益<span class="styl">轻松</span>赚取</div>
+        <div class="txt">出借快人一步 收益<span class="styl">轻松</span>赚取</div>
       </div>
-      <router-link tag="div" class="invite-btn" to="/product-list">立即投资</router-link>
+      <router-link tag="div" class="invite-btn" to="/product-list">立即出借</router-link>
     </div>
   </success>
 </template>

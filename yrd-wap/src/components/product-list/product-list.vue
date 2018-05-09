@@ -14,7 +14,7 @@
               <h3 class="name">{{item.project_name}} <!-- <span v-if="item.is_open === 'yes'" class="label" :class="{'activity-over': !item.btnClass}">{{item.content}}</span> --></h3>
               <div class="item-info">
                 <div class="rate-info">
-                  <p class="txt">预期年化收益</p>
+                  <p class="txt">期待年化回报率</p>
                   <p class="rate-desc">{{item.year_rate}}<span class="muti">%</span></p>
                 </div>
                 <div class="loan-info">

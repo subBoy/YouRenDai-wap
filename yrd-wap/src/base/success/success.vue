@@ -41,7 +41,7 @@
         if (this.titleTxt === '充值成功') {
           return 're-ic'
         }
-        if (this.titleTxt === '投资成功') {
+        if (this.titleTxt === '出借成功') {
           return 'su-ic'
         }
       }

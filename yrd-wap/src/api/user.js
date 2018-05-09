@@ -623,3 +623,22 @@ export function readAllBill (userId) {
     return Promise.resolve(res.data)
   })
 }
+
+// 信息披露
+export function getDisclosure () {
+  if (debug) {
+    url = '/api/getDisclosure'
+  } else {
+    url = '/app/user.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'disclosureWap'
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}

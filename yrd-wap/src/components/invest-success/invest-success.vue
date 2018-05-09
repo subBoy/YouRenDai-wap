@@ -16,8 +16,8 @@
   export default {
     data() {
       return {
-        titleTxt: '投资成功',
-        descTxt: '恭喜您。成功完成一笔投资！'
+        titleTxt: '出借成功',
+        descTxt: '恭喜您。成功完成一笔出借！'
       }
     },
     components: {

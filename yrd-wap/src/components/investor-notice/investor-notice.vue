@@ -27,24 +27,24 @@
         <div class="notice-btn">
           <p class="desc-notice">
             <span class="icon" @click="readCtrol" :class="{'selected': readed}"></span>
-            <span class="desc">我已阅读<a class="notice-details" @click="detailsCtrol">《投资者须知》</a>并同意</span>
+            <span class="desc">我已阅读<a class="notice-details" @click="detailsCtrol">《出借者须知》</a>并同意</span>
           </p>
-          <p class="desc-notice-tx">请阅读并勾选投资者须知</p>
+          <p class="desc-notice-tx">请阅读并勾选出借者须知</p>
           <div class="sumbit-btn" @click="sumbit" :class="{'ok': clickOk}">确认提交</div>
         </div>
       </div>
     </scroll>
     <div class="investor-notice-details" v-show="isWin">
       <div class="content-details-wrapper">
-        <h3 class="title">投资者须知</h3>
+        <h3 class="title">出借者须知</h3>
         <scroll class="content-details-scroll" ref="detailsScroll">
           <div class="content-details-group">
-            <p class="txt special">尊敬的投资者</p>
-            <p class="txt">当您准备在本平台投资的时候，请您务必了解以下事项：</p>
+            <p class="txt special">尊敬的出借者</p>
+            <p class="txt">当您准备在本平台出借的时候，请您务必了解以下事项：</p>
             <p class="txt">1.本平台为依法成立的、专门从事网络借贷信息中介业务活动的金融信息中介机构。</p>
             <p class="txt">2.本平台依据法律法规及合同约定为出借人与借款人提供直接借贷信息的采集整理、甄别筛选、网上发布，以及资信评估、借贷撮合、融资咨询、在线争议解决等相关服务；不提供增信服务，不设立资金池，不进行非法集资，不损害国家利益和社会公共利益。</p>
             <p class="txt">3.出借人与借款人遵循“借贷自愿、诚实守信、责任自负、风险自担”的原则承担借贷风险。</p>
-            <p class="txt">4.出借人应具备投资风险意识、风险识别能力、拥有非保本类金融产品投资的经历并熟悉互联网。</p>
+            <p class="txt">4.出借人应具备出借风险意识、风险识别能力、拥有非保本类金融产品出借的经历并熟悉互联网。</p>
             <p class="txt">5.出借人的出借资金应为来源合法的自有资金。</p>
             <p class="txt">6.出借人应了解融资项目信贷风险，理性谨慎、量力而行，具有相应的风险认知和承受能力，自行承担借贷产生的本息损失。</p>
             <p class="txt">7.出借人在本平台上进行的出借决策均应由出借人本人亲自确认。</p>
@@ -71,7 +71,7 @@
       return {
         isShow: false,
         opcity: 1,
-        titleTxt: '投资者须知',
+        titleTxt: '出借者须知',
         readed: false,
         qaPaperTitle: '',
         qaPaperSubTitle: '',

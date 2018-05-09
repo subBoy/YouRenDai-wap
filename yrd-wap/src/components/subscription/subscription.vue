@@ -30,11 +30,11 @@
         <div class="real-name-operate">
           <ul class="real-operate-wrapper">
             <li class="real-operate-item border-1px-b">
-              <input type="text" class="operate-input" disabled="disabled" placeholder="剩余可投资">
+              <input type="text" class="operate-input" disabled="disabled" placeholder="剩余可出借">
               <p class="prompt-txt">{{surplus}}元</p>
             </li>
             <li class="real-operate-item border-1px-b">
-              <input type="text" class="operate-input" disabled="disabled" placeholder="本次投资">
+              <input type="text" class="operate-input" disabled="disabled" placeholder="本次出借">
               <p class="prompt-txt">{{loanMoney}}元</p>
             </li>
           </ul>
@@ -48,7 +48,7 @@
                 <div class="reward-num">共计：<span class="styl">{{reward.rewardNum}}</span></div>
               </div>
               <div class="reward-desc-wrapper">
-                <p class="desc-txt">本次投资可用：<span class="num">{{reward.descTxtNum}}</span></p>
+                <p class="desc-txt">本次出借可用：<span class="num">{{reward.descTxtNum}}</span></p>
                 <div class="reward-input">
                   <div class="btn-remove" @click="removeInvest(index)"></div>
                   <div class="input-wrapper">

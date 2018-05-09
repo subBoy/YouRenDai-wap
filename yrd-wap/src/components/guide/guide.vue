@@ -21,7 +21,7 @@
             <div class="swiper-slide">
               <div class="swiper-slide-box">
                 <img src="./bank-07.png" width="100%">
-                <p class="g-operating-desc">您已有账号，当登录有人贷，首次进入用户中心或当您进行充值、投资或提现时，会收到开户提示，其中已实名用户数据已同步至新网银行，已实名用户会收到激活提示，点击【立即开通/激活】。</p>
+                <p class="g-operating-desc">您已有账号，当登录有人贷，首次进入用户中心或当您进行充值、出借或提现时，会收到开户提示，其中已实名用户数据已同步至新网银行，已实名用户会收到激活提示，点击【立即开通/激活】。</p>
               </div>
             </div>
             <div class="swiper-slide">
@@ -46,7 +46,7 @@
             <div class="swiper-slide">
               <div class="swiper-slide-box">
                 <img src="./bank-02.png" width="100%">
-                <p class="g-operating-desc">还未注册有人贷账号，则您可通过点击“我的”-“1888元现金红包”进入到注册界面，输入手机号、密码、选填写客服顾问工号或手机号，填写正确的短信验证码即可验证成为有人贷投资用户。</p>
+                <p class="g-operating-desc">还未注册有人贷账号，则您可通过点击“我的”-“1888元现金红包”进入到注册界面，输入手机号、密码、选填写客服顾问工号或手机号，填写正确的短信验证码即可验证成为有人贷出借用户。</p>
               </div>
             </div>
             <div class="swiper-slide">
@@ -82,7 +82,7 @@
           <h3 class="g-title">银行存管优势</h3>
           <div class="g-bank-item">
             <div class="g-bank-item-icon ic-1">监管合规</div>
-            <div class="g-bank-item-desc">接入银行存管，有人贷交易平台与资金账户系统分离，为平台每一位投资人、借款人分配独立的银行存管账户，最大程度上的规避资金挪用风险。</div>
+            <div class="g-bank-item-desc">接入银行存管，有人贷交易平台与资金账户系统分离，为平台每一位出借人、借款人分配独立的银行存管账户，最大程度上的规避资金挪用风险。</div>
           </div>
           <div class="g-bank-item">
             <div class="g-bank-item-icon ic-2">资金安全</div>
@@ -117,7 +117,7 @@
     </scroll>
     <div class="g-bank-activation" id="tishi1" v-if="!realed">
       <h3 class="g-title">开通银行存管账户，资金安全保障系数更高</h3>
-      <p class="g-activation-desc">（届时开通存管账户后才能正常充值、投资、提现哦）</p>
+      <p class="g-activation-desc">（届时开通存管账户后才能正常充值、出借、提现哦）</p>
       <a class="g-bank-btn box-sd" id="login" @click="activation">马上开通/激活</a>
     </div>
   </div>

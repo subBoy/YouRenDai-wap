@@ -3,83 +3,157 @@
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
     <div class="disclosure-group">
       <div class="swiper-container" id="swiper-container01">
-        <div class="swiper-wrapper" ref="swiperWrapper">
+        <div class="swiper-wrapper">
           <div class="swiper-slide">
-            <img src="./disclosureBg1.jpg" class="bgPic">
-            <img src="./yrdFont1.png" ref="slideOne" class="yrdPic1 content-img animated fadeIn">
+            <div class="ct-wrapper" :style="wpH">
+              <div class="ct-title-wrapper">公司简介</div>
+              <img src="./disclosureBg.jpg" @load="setHeight" class="bgPic">
+              <div class="ct-group">
+                <img src="./ct-1.png" ref="slideOne" width="100%" :class="CN1">
+              </div>
+            </div>
           </div>
           <div class="swiper-slide">
-            <img src="./disclosureBg2.jpg" class="bgPic">
-            <img src="./yrdFont2.png" class="yrdPic2 content-img">
+            <div class="ct-wrapper" :style="wpH">
+              <div class="ct-title-wrapper">组织架构</div>
+              <img src="./disclosureBg.jpg" class="bgPic">
+              <div class="ct-group">
+                <img src="./ct-2.png" width="100%" :class="CN2">
+              </div>
+            </div>
           </div>
           <div class="swiper-slide">
-            <img src="./disclosureBg3.jpg" class="bgPic">
-            <div class="swiperScont">
-              <div class="swiper-container" id="swiper-container02">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide">
-                    <img src="./yrdFont3.png" width="90%">
-                  </div>
-                  <div class="swiper-slide">
-                    <img src="./yrdFont4.png" width="90%">
-                  </div>
-                  <div class="swiper-slide">
-                    <img src="./yrdFont5.png" width="90%">
-                  </div>
-                  <div class="swiper-slide">
-                    <img src="./yrdFont6.png" width="80%">
-                  </div>
-                  <div class="swiper-slide">
-                    <img src="./yrdFont7.png" width="80%">
+            <div class="ct-wrapper" :style="wpH">
+              <div class="ct-title-wrapper">公司高管</div>
+              <img src="./disclosureBg.jpg" class="bgPic">
+              <div class="ct-group">
+                <div class="swiper-container" id="swiper-container02">
+                  <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                      <img src="./ct-3-1.png" width="100%">
+                    </div>
+                    <div class="swiper-slide">
+                      <img src="./ct-3-2.png" width="100%">
+                    </div>
+                    <div class="swiper-slide">
+                      <img src="./ct-3-3.png" width="100%">
+                    </div>
+                    <div class="swiper-slide">
+                      <img src="./ct-3-4.png" width="100%">
+                    </div>
+                    <div class="swiper-slide">
+                      <img src="./ct-3-5.png" width="100%">
+                    </div>
                   </div>
                 </div>
+                <div class="swiper-button-next next-btn"></div>
+                <div class="swiper-button-prev prev-btn"></div>
               </div>
-              <div class="swiper-button-next next-btn"></div>
-              <div class="swiper-button-prev prev-btn"></div>
             </div>
           </div>
           <div class="swiper-slide">
-            <img src="./disclosureBg4.jpg" class="bgPic">
-            <img src="./mouthBg.png" class="yrdPic3 content-img">
-            <p class="mouthP1">1月运营报告</p>
-            <a class="lookbtn" href="/loan/h5/app-report.shtml">
-              <img src="./lookBtn.png" width="55%">
-            </a>
+            <div class="ct-wrapper" :style="wpH">
+              <div class="ct-title-wrapper">月度运营报告</div>
+              <img src="./disclosureBg.jpg" class="bgPic">
+              <div class="ct-group">
+                <img src="./ct-4.png" width="100%" >
+                <p class="mouthP1">{{reportTitle}}</p>
+                <a class="lookbtn" href="/loan/h5/app-report.shtml"></a>
+              </div>
+            </div>
           </div>
           <div class="swiper-slide">
-            <img src="./disclosureBg5.jpg" class="bgPic">
-            <div class="fileBox">
-              <ul>
-                <li>
-                  <a href="/loan/blacklist/pdf/huodongguanli.pdf">
-                    <img src="./01.png" width="">
-                    <p class="fileFont">网络借贷信息中介机构<br/>业务活动管理暂行办法</p>
-                  </a>
-                </li>
-                <li>
-                  <a href="/loan/blacklist/pdf/10.pdf">
-                    <img src="./02.png" width="">
-                    <p class="fileFont">电子认证服务<br/>管理办法</p>
-                  </a>
-                </li>
-                <li>
-                  <a href="/loan/blacklist/pdf/09.pdf">
-                    <img src="./03.png" width="">
-                    <p class="fileFont">借贷知识条款</p>
-                  </a>
-                </li>
-                <li>
-                  <a href="/loan/blacklist/pdf/07.pdf">
-                    <img src="./04.png" width="">
-                    <p class="fileFont">风险提示条款</p>
-                  </a>
-                </li>
-              </ul>
+            <div class="ct-wrapper" :style="wpH">
+              <div class="ct-title-wrapper">监管文件</div>
+              <img src="./disclosureBg.jpg" class="bgPic">
+              <div class="ct-group">
+                <div class="swiper-container" id="swiper-container03">
+                  <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                      <img src="./ct-5-1.png" width="100%">
+                      <ul class="fileBox">
+                        <li>
+                          <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/07.pdf"></a>
+                        </li>
+                        <li>
+                          <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/08.pdf"></a>
+                        </li>
+                        <li>
+                          <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/09.pdf"></a>
+                        </li>
+                        <li>
+                          <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/10.pdf"></a>
+                        </li>
+                        <li>
+                          <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/11.pdf"></a>
+                        </li>
+                        <li>
+                          <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/12.pdf"></a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="swiper-slide">
+                      <img src="./ct-5-2.png" width="100%">
+                      <ul class="fileBox">
+                        <li>
+                          <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/01.pdf"></a>
+                        </li>
+                        <li>
+                          <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/02.pdf"></a>
+                        </li>
+                        <li>
+                          <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/03.pdf"></a>
+                        </li>
+                        <li>
+                          <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/04.pdf"></a>
+                        </li>
+                        <li>
+                          <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/05.pdf"></a>
+                        </li>
+                        <li>
+                          <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/06.pdf"></a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="swiper-button-next next-btn-1"></div>
+                <div class="swiper-button-prev prev-btn-1"></div>
+              </div>
             </div>
-            <img src="./overFont.png" class="overPic">
+          </div>
+          <div class="swiper-slide">
+            <div class="ct-wrapper" :style="wpH">
+              <div class="ct-title-wrapper">风控制度</div>
+              <img src="./disclosureBg.jpg" class="bgPic">
+              <div class="ct-group">
+                <img src="./ct-6.png" width="100%">
+                <ul class="fileBox">
+                  <li>
+                    <router-link tag="a" to="/user-center/disclosure/sadety"></router-link>
+                  </li>
+                  <li>
+                    <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/13.pdf"></a>
+                  </li>
+                  <li>
+                    <router-link tag="a" to="/user-center/disclosure/qualification"></router-link>
+                  </li>
+                  <li>
+                    <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/15.pdf"></a>
+                  </li>
+                  <li>
+                    <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/16.pdf"></a>
+                  </li>
+                  <li>
+                    <a href="/dist/pdf/web/viewer.html?file=/loan/blacklist/pdf/14.pdf"></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
         <div class="swiper-button-next common-btn" v-show="nextOk"></div>
+        <div class="swiper-button-prev common-btn-1" v-show="!nextOk"></div>
       </div>
     </div>
     <transition name="slide">
@@ -89,58 +163,82 @@
 </template>
 <script>
   import MHeader from 'components/m-header/m-header'
-  import {addClass, removeClass} from 'common/js/dom'
+  import {getDisclosure} from 'api/user'
 
   import 'animate.css/animate.css'
   import 'swiper/dist/css/swiper.css'
   import Swiper from 'swiper/dist/js/swiper.js'
 
   export default {
-    data() {
+    data () {
       return {
         titleTxt: '信息披露',
         isShow: false,
         opcity: 1,
         mySwiper: '',
         mySwiper2: '',
-        nextOk: true
+        mySwiper3: '',
+        nextOk: true,
+        CN1: 'animated fadeIn',
+        CN2: '',
+        wpH: 0,
+        reportTitle: ''
       }
     },
     created () {
+      this._getDisclosure()
       setTimeout(() => {
         this._swiper()
-        this._swiper2()
       }, 20)
     },
     methods: {
+      setHeight () {
+        const _h = 1246 * (window.innerWidth / 750)
+        this.wpH = `height: ${_h}px`
+      },
       _swiper () {
         const _this = this
         this.mySwiper = new Swiper('#swiper-container01', {
-          // loop: true,
           paginationClickable: true,
           direction: 'vertical',
           nextButton: '.common-btn',
+          prevButton: '.common-btn-1',
           spaceBetween: 0,
           onSlideChangeStart: function(swiper) {
-            removeClass(_this.$refs.slideOne, 'animated fadeIn fadeInLeft')
+            _this.CN1 = ''
+            _this.CN2 = ''
             let _index = swiper.activeIndex
-            let _child = _this.$refs.swiperWrapper.children
+            _this.nextOk = true
+
+            if (_index !== 2 && _this.mySwiper2) {
+              _this.mySwiper2.slideTo(1, 0, false)
+            }
+
             if (_index === 0) {
-              addClass(_child[_index].children[1], 'animated fadeIn')
+              _this.CN1 = 'animated fadeIn'
             } else if (_index === 1) {
-              addClass(_child[_index].children[1], 'animated fadeInLeft')
-            } else if (_index === 4) {
+              _this.CN2 = 'animated fadeInLeft'
+            } else if (_index === 5) {
               _this.nextOk = false
             }
           }
         })
-      },
-      _swiper2 () {
         this.mySwiper2 = new Swiper('#swiper-container02', {
           loop: true,
           paginationClickable: true,
           nextButton: '.next-btn',
           prevButton: '.prev-btn'
+        })
+        this.mySwiper3 = new Swiper('#swiper-container03', {
+          loop: true,
+          paginationClickable: true,
+          nextButton: '.next-btn-1',
+          prevButton: '.prev-btn-1'
+        })
+      },
+      _getDisclosure () {
+        getDisclosure().then((res) => {
+          this.reportTitle = res.ret_set.titel
         })
       }
     },
@@ -165,7 +263,7 @@
     bottom: 0
     left: 0
     z-index: 999
-    background-color: $color-background
+    background-color: #f3fdff
     .disclosure-group
       position: absolute
       top: 44px
@@ -181,108 +279,116 @@
       font-size: 18px
       display: flex
       justify-content: center
-      align-items: center
-    .bgPic
+      overflow: hidden
+    .ct-title-wrapper
       position: absolute
-      left: 50%
-      top: 0
+      top: 32.5%
+      left: 0
+      transform: translateY(-50%)
+      line-height: 30px
+      font-size: 15px
+      color: #fe4c42
+      width: 100%
+      text-align: center
+    .ct-wrapper
+      position: relative
+      margin-top: -10%
+    .ct-group
+      position: absolute
+      top: 40%
+      left: 5.5%
+      width: 89%
+      height: 45.4%
+    .bgPic
       width: 100%
       height: auto
-      min-height: 100%
-      transform: translateX(-50%)
     .common-btn
       top: auto
-      bottom: 20px
+      bottom: 10px
       margin-top: 0
       left: 50%
       margin-left: -15px
-      width: 11px
-      height: 50px
-      background: url("upicon.png")
+      width: 24px
+      height: 23px
+      background: url("next.png")
+      background-size: 100% 100%
+      animation: fade 2s linear infinite alternate
+    .common-btn-1
+      top: auto
+      bottom: 10px
+      margin-top: 0
+      left: 50%
+      margin-left: -15px
+      width: 24px
+      height: 23px
+      background: url("prev.png")
       background-size: 100% 100%
       animation: fade 2s linear infinite alternate
     @-wibkit-keyframes fade
-        fromopacity: 0.1
-        toopacity: 1
+        from
+          opacity: 0.1
+        to
+          opacity: 1
     @keyframes fade
-        fromopacity: 0.1
-        toopacity: 1
-    .content-img
-      position: absolute
-      width: 94%
-      left: 3%
-      top: 43%
-    .yrdPic1
-      top: 45%
+        from
+          opacity: 0.1
+        to
+          opacity: 1
     .swiper-slide .animated.fadeIn
       animation-duration:3s
-    .yrdPic2
-      top: 30%
-    .swiperScont
-      position: absolute
-      top: 38.5%
-      width: 90%
-      left: 50%
-      transform: translateX(-50%)
-    .swiperScont .next-btn
-      background: url(rightSide.png) no-repeat
-      background-size: 100% 100%
+    .ct-group .next-btn, .ct-group .next-btn-1
+      background: url("next-1.png") no-repeat
+      background-size: 8px 16px
+      background-position: center
       width: 30px
       height: 30px
       animation: unset
       right: 0
-      top: 38%
-    .swiperScont .prev-btn
-      background: url(leftSide.png) no-repeat
-      background-size: 100% 100%
+      top: 50%
+      transform: translateY(-50%)
+      z-index: 10
+    .ct-group .prev-btn, .ct-group .prev-btn-1
+      background: url("prev-1.png") no-repeat
+      background-size: 8px 16px
+      background-position: center
       width: 30px
       height: 30px
       animation: unset
-      left: 0
-      top: 38%
+      top: 50%
+      transform: translateY(-50%)
+      z-index: 10
     .mouthP1
       display: block
       position: absolute
       font-size: 18px
       color: #fff
       left: 50%
-      top: 56%
+      top: 37%
       width: 100%
       text-align: center
       transform: translate3d(-50%, -50%, 0)
     .lookbtn
+      display: block
       position: absolute
-      top: 69%
+      top: 85%
       left: 50%
-      transform: translateX(-50%)
+      width: 50%;
+      height: 20%;
+      transform: translate3d(-50%, -50%, 0)
       text-align: center
-      img
-        margin: 0 auto
     .fileBox
       position: absolute
-      top: 50%
-      width: 100%
-      overflow: hidden
+      top: 0
       left: 0
-      transform: translateY(-50%)
-    .fileBox ul li
+      width: 100%
+      height: 100%
+      z-index: 1
+    .fileBox li
       float: left
       width: 50%
-    .fileBox ul li a
+      height: 33.333%;
+    .fileBox li a
       display: block
-      text-align: center
-    .fileBox ul li a img
-      display: block
-      width: 50%
-      margin: 0 auto
-    .fileFont
-      font-size: 12px
-      color: #fff
-      line-height: 20px
-    .overPic
-      width: 50%
-      left: 50%
-      position: absolute
-      bottom: 50px
-      transform: translateX(-50%)
+      width: 100%
+      height: 100%;
 </style>

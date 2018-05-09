@@ -16,6 +16,8 @@ const investRecord = () => import('components/invest-record/invest-record')
 const Packs = () => import('components/packs/packs')
 const Invite = () => import('components/invite/invite')
 const Disclosure = () => import('components/disclosure/disclosure')
+const Qualification = () => import('components/disclosure/qualification')
+const Sadety = () => import('components/disclosure/sadety')
 const CustomerService = () => import('components/customer-service/customer-service')
 const Undefind = () => import('components/undefind/400')
 const serverError = () => import('components/undefind/500')
@@ -42,6 +44,7 @@ const Guide = () => import('components/guide/guide')
 const InvestorNotice = () => import('components/investor-notice/investor-notice')
 const InvestSuccess = () => import('components/invest-success/invest-success')
 const LatestNewsDetails = () => import('components/latest-news-details/latest-news-details')
+const CalendarPayment = () => import('components/calendar/calendar-payment')
 
 Vue.use(Router)
 
@@ -49,6 +52,10 @@ const routes = [
   {
     path: '*',
     component: Undefind
+  },
+  {
+    path: '/calendar-payment',
+    component: CalendarPayment
   },
   {
     path: '/server-error',
@@ -216,7 +223,17 @@ const routes = [
       },
       {
         path: 'disclosure',
-        component: Disclosure
+        component: Disclosure,
+        children: [
+          {
+            path: 'qualification',
+            component: Qualification
+          },
+          {
+            path: 'sadety',
+            component: Sadety
+          }
+        ]
       },
       {
         path: 'customer-service',

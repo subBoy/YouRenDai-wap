@@ -25,7 +25,7 @@
                   <p>{{info.registDate}}</p>
                 </li>
                 <li id="endDayTd">
-                  <span>投资剩余时间：</span>
+                  <span>出借剩余时间：</span>
                   <p>{{cruntTxt}}</p>
                 </li>
                 <li>
@@ -105,7 +105,7 @@
             this.endT = new Date(this.info.end_dateTime).getTime()
             this.cruntTime()
           } else {
-            this.cruntTxt = '投资已结束'
+            this.cruntTxt = '出借已结束'
           }
           setTimeout(() => {
             this.$refs.infoScroll.refresh()
@@ -119,7 +119,7 @@
         if (intervalT > 0) {
           this.cruntTxt = this._d_h_s(intervalT)
         } else {
-          this.cruntTxt = '投资已结束'
+          this.cruntTxt = '出借已结束'
           clearInterval(this.sh)
         }
       },

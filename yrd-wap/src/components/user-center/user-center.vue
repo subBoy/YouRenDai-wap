@@ -15,7 +15,7 @@
                     <p class="name">{{userInfo.username}}<span class="vip" :class="countVip(userInfo.level)"><span class="num">V{{userInfo.level}}</span></span></p>
                     <p class="balance">账户余额 <span class="sum">￥{{checkVal(userInfo.activity)}}</span></p>
                   </div>
-                  <router-link tag="div" class="user-no-login" to="/signIn" v-else>立即登录</router-link>
+                  <router-link tag="div" class="user-no-login" to="/signIn" v-else>Hello,</br>您还未开启出借之旅~~</router-link>
                 </div>
               </div>
               <div class="btns-wrapper">
@@ -67,7 +67,7 @@
         text: '您还未实名认证！',
         confirmBtnText: '实名认证',
         btnTxt: '请先完成',
-        winDesc: '为保障您的投资安全',
+        winDesc: '为保障您的出借安全',
         realClass: true,
         realNameOk: false,
         user_id: '',
@@ -81,7 +81,7 @@
           },
           {
             path: 'invest-record',
-            text: '投资记录',
+            text: '出借记录',
             icon: 'ic-2'
           },
           {
