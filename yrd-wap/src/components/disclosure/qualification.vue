@@ -1,12 +1,13 @@
 <template>
   <div class="qualification-wrapper">
-    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
+    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" v-show="isWap" style="display: none"></m-header>
     <Scroll
       class="qualification-group"
       ref="setScroll"
       :data="disclist"
       :listenScroll="listenScroll"
       :probeType="probeType"
+      :style="positionTop1"
     >
       <div class="scroll-group">
         <img src="./quali.jpg" @load="refresh" width="100%">
@@ -20,6 +21,12 @@
   import Scroll from 'base/scroll/scroll'
 
   export default {
+    props: {
+      isWap: {
+        type: Boolean,
+        default: false
+      }
+    },
     data () {
       return {
         titleTxt: '公司资质',
@@ -27,7 +34,15 @@
         opcity: 1,
         disclist: [],
         listenScroll: true,
-        probeType: 3
+        probeType: 3,
+        positionTop1: 'top: 160px'
+      }
+    },
+    created () {
+      if (!this.isWap) {
+        this.positionTop1 = 'top: 16px'
+      } else {
+        this.positionTop1 = 'top: 60px'
       }
     },
     activated () {

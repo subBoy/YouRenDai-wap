@@ -61,7 +61,7 @@
         accessTitle: '提现金额',
         recordTitle: '提现记录',
         airTxt: '先进行出借体验吧！',
-        airBtnTxt: '立即投标',
+        airBtnTxt: '立即出借',
         submitBtnTxt: '确认提现',
         descTxt: '点击输入提现金额',
         page: 1,

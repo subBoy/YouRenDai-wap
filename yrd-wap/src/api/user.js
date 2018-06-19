@@ -624,7 +624,7 @@ export function readAllBill (userId) {
   })
 }
 
-// 信息披露
+// 运营报告标题
 export function getDisclosure () {
   if (debug) {
     url = '/api/getDisclosure'
@@ -634,6 +634,44 @@ export function getDisclosure () {
 
   const data = Object.assign({}, {
     cmd: 'disclosureWap'
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 信息披露
+export function getDisclosureInfo () {
+  if (debug) {
+    url = '/api/getDisclosureInfo'
+  } else {
+    url = '/front/indexData.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'filingInformation'
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 运营数据
+export function getOperateData () {
+  if (debug) {
+    url = '/api/getOperateData'
+  } else {
+    url = '/front/indexData.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'dataOperation'
   })
 
   return axios.get(url, {

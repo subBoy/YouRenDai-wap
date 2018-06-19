@@ -50,6 +50,36 @@ apiRoutes.get('/getDisclosure', function (req, res) {
   })
 })
 
+apiRoutes.get('/getOperateData', function (req, res) {
+  var url = refererTxt + '/front/indexData.do'
+  axios.get(url, {
+    headers: {
+      referer: refererTxt,
+      host: hostTxt
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+apiRoutes.get('/getDisclosureInfo', function (req, res) {
+  var url = refererTxt + '/front/indexData.do'
+  axios.get(url, {
+    headers: {
+      referer: refererTxt,
+      host: hostTxt
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
 apiRoutes.get('/getIndexData', function (req, res) {
   var url = refererTxt + 'wap/wapIndexAction.do'
   axios.get(url, {

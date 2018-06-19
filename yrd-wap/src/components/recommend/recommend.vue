@@ -44,12 +44,18 @@
                   <p class="item-text">分享返现</p>
                 </div>
               </li>
-              <li class="recommed-group-item">
+              <!-- <li class="recommed-group-item">
                 <div @click="latestNews">
                   <div class="item-icons item-icons-4">
                     <span class="item-new-num-wrapper" v-if="newsNum > 0"><span class="item-new-num">{{newsNum}}</span></span>
                   </div>
                   <p class="item-text">最新消息</p>
+                </div>
+              </li> -->
+              <li class="recommed-group-item">
+                <div @click="lookDis">
+                  <div class="item-icons item-icons-5"> </div>
+                  <p class="item-text">信息披露</p>
                 </div>
               </li>
             </ul>
@@ -204,6 +210,9 @@
           this.changeReturnPath('/recommend/share-back')
           this.$router.push('/signIn')
         }
+      },
+      lookDis () {
+        this.$router.push('/user-center/disclosure')
       },
       _getIndexData () {
         getIndexData(this.changeLoginState).then((res) => {
@@ -463,6 +472,8 @@
                 bg-image('fx')
               &.item-icons-4
                 bg-image('zx')
+              &.item-icons-5
+                bg-image('xp')
             .item-text
               padding-top: 15px
               font-size: $font-size-small

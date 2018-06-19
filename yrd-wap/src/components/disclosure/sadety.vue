@@ -1,23 +1,24 @@
 <template>
   <div class="safety-wrapper">
-    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
+    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" v-show="isWap" style="display: none"></m-header>
     <Scroll
       class="safety-group"
       ref="setScroll"
       :data="disclist"
       :listenScroll="listenScroll"
       :probeType="probeType"
+      :style="positionTop1"
     >
       <div class="swiper-container" id="swiper-container" :style="wpH1">
         <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <img src="./safety-3.jpg" @load="refresh" width="100%">
+          </div>
           <div class="swiper-slide">
             <img src="./safety-1.jpg" width="100%">
           </div>
           <div class="swiper-slide">
             <img src="./safety-2.jpg" width="100%">
-          </div>
-          <div class="swiper-slide">
-            <img src="./safety-3.jpg" @load="refresh" width="100%">
           </div>
         </div>
         <div class="swiper-pagination"></div>
@@ -34,6 +35,12 @@
   import Swiper from 'swiper/dist/js/swiper.js'
 
   export default {
+    props: {
+      isWap: {
+        type: Boolean,
+        default: false
+      }
+    },
     data () {
       return {
         titleTxt: '安全证书',
@@ -43,10 +50,16 @@
         disclist: [],
         listenScroll: true,
         probeType: 3,
-        wpH1: ''
+        wpH1: '',
+        positionTop1: 'top: 16px'
       }
     },
     created () {
+      if (!this.isWap) {
+        this.positionTop1 = 'top: 16px'
+      } else {
+        this.positionTop1 = 'top: 60px'
+      }
       setTimeout(() => {
         this._swiper()
       }, 20)

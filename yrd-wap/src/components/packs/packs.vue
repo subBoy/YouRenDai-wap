@@ -27,7 +27,7 @@
               <div class="info-desc">
                 <div class="text">
                   <p class="name ellipsis">{{item.rewardName}}</p>
-                  <p class="term ellipsis">({{item.note}})</p>
+                  <p class="term ellipsis">{{item.note}}</p>
                   <p class="time ellipsis">过期时间: {{item.recordEnableDate}}</p>
                   <p class="state ellipsis">是否已使用: <span :class="{desc: item.isEnable === '未使用'}">{{item.isEnable}}</span></p>
                 </div>

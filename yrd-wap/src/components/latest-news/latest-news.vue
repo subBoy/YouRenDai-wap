@@ -78,7 +78,7 @@
           })
         } else {
           this.$router.push({
-            path: `/recommend/latest-news/latest-news-details/${item.message_id}`
+            path: `/user-center/latest-news/latest-news-details/${item.message_id}`
           })
         }
       },

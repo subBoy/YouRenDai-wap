@@ -12,7 +12,7 @@
               <progress-circle :percent="percent">
                 <div class="subscribe-return">
                   <h3 class="return">{{subscribe.yearRate}}<span class="unti">%</span></h3>
-                  <p class="desc">期待年化回报率</p>
+                  <p class="desc">历史参考年化回报率</p>
                 </div>
               </progress-circle>
             </div>
@@ -28,7 +28,7 @@
               <span class="item" v-for="item in incomeList"><em class="icon"></em>{{formatMoney(item)}} <span class="until" v-show="item === incomeList[incomeList.length - 1]">(元)</span></span>
             </div>
             <div class="icon-b">
-              <p class="desc-text">{{income.toFixed(2)}}(期待回报)</p>
+              <p class="desc-text">{{income.toFixed(2)}}(历史参考回报)</p>
             </div>
           </div>
           <div class="invest-amount">
@@ -267,7 +267,7 @@
       },
       _genResult (data) {
         /**
-          * yugao   期待中
+          * yugao   历史参考中
           * touzi   立即认购
           * checking   复核中
           * repayment  还款中
@@ -277,7 +277,7 @@
         switch (data.canrongzi) {
           case 'yugao':
             obj = {
-              btnTxt: '敬请期待',
+              btnTxt: '敬请历史参考',
               btnClass: false,
               surplus: 0
             }

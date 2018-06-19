@@ -18,6 +18,7 @@ const Invite = () => import('components/invite/invite')
 const Disclosure = () => import('components/disclosure/disclosure')
 const Qualification = () => import('components/disclosure/qualification')
 const Sadety = () => import('components/disclosure/sadety')
+const OperateData = () => import('components/disclosure/operate-data')
 const CustomerService = () => import('components/customer-service/customer-service')
 const Undefind = () => import('components/undefind/400')
 const serverError = () => import('components/undefind/500')
@@ -45,6 +46,7 @@ const InvestorNotice = () => import('components/investor-notice/investor-notice'
 const InvestSuccess = () => import('components/invest-success/invest-success')
 const LatestNewsDetails = () => import('components/latest-news-details/latest-news-details')
 const CalendarPayment = () => import('components/calendar/calendar-payment')
+const Report = () => import('components/report/report')
 
 Vue.use(Router)
 
@@ -232,6 +234,16 @@ const routes = [
           {
             path: 'sadety',
             component: Sadety
+          },
+          {
+            path: 'operate-data',
+            component: OperateData,
+            children: [
+              {
+                path: 'report',
+                component: Report
+              }
+            ]
           }
         ]
       },
@@ -250,6 +262,28 @@ const routes = [
       {
         path: 'real-name',
         component: RealName
+      },
+      {
+        path: 'to-user',
+        component: ToUser
+      },
+      {
+        path: 'latest-news',
+        component: LatestNews,
+        children: [
+          {
+            path: 'news-details',
+            component: NewsDetails
+          },
+          {
+            path: 'bill-details',
+            component: BillDetails
+          },
+          {
+            path: 'latest-news-details/:messageId',
+            component: LatestNewsDetails
+          }
+        ]
       }
     ]
   },
@@ -327,6 +361,30 @@ const routes = [
   {
     path: '/invest-success',
     component: InvestSuccess
+  },
+  {
+    path: '/app-disclosure',
+    component: Disclosure,
+    children: [
+      {
+        path: 'qualification',
+        component: Qualification
+      },
+      {
+        path: 'sadety',
+        component: Sadety
+      },
+      {
+        path: 'operate-data',
+        component: OperateData,
+        children: [
+          {
+            path: 'report',
+            component: Report
+          }
+        ]
+      }
+    ]
   }
 ]
 

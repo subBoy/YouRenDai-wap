@@ -14,7 +14,7 @@
               <h3 class="name">{{item.project_name}} <!-- <span v-if="item.is_open === 'yes'" class="label" :class="{'activity-over': !item.btnClass}">{{item.content}}</span> --></h3>
               <div class="item-info">
                 <div class="rate-info">
-                  <p class="txt">期待年化回报率</p>
+                  <p class="txt">历史参考年化回报率</p>
                   <p class="rate-desc">{{item.year_rate}}<span class="muti">%</span></p>
                 </div>
                 <div class="loan-info">
@@ -95,7 +95,7 @@
         let ret = []
         /**
           * projects[i].caozuo
-          * qidai  期待中
+          * qidai  历史参考中
           * ok   终审完成，可投资
           * overdue  结束不可投资
           * checking  复核中
@@ -107,7 +107,7 @@
           switch (data[i].caozuo) {
             case 'qidai':
               obj = {
-                btnTxt: '敬请期待',
+                btnTxt: '敬请历史参考',
                 btnClass: false,
                 surplus: 0,
                 loanTerm: (data[i].rongzilimit / 30).toFixed(0)

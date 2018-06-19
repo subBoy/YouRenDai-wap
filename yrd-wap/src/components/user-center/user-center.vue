@@ -1,7 +1,10 @@
 <template>
   <div class="user-wrapper">
     <m-header :isShow="isShow" :opcity="opcity" :whiteIcon="whiteIcon" @logined="logined" @noLogin="noLogin">
-      <div class="user-install" @click="setUser" v-if="signed"></div>
+      <div v-if="signed">
+        <div class="user-news" @click="lookNews" :style="positionRight"></div>
+        <div class="user-install" @click="setUser"></div>
+      </div>
     </m-header>
     <div class="user-grounp">
       <scroll class="user-scroll" :listenScroll="listenScroll" :probeType="probeType" @scroll="scroll" ref="scroll">
@@ -52,6 +55,7 @@
   import Tab from 'components/tab/tab'
   import Confirm from 'base/confirm/confirm'
   import {userCenter} from 'api/user'
+  // import {getLoginState} from 'api/sign'
   import {mapGetters, mapActions} from 'vuex'
 
   export default {
@@ -73,6 +77,7 @@
         user_id: '',
         userInfo: {},
         activeIndex: 3,
+        positionRight: 'right: 45px',
         applicationList: [
           {
             path: 'assets',
@@ -170,6 +175,16 @@
       setUser () {
         this.$router.push('user-center/set-user')
       },
+      lookNews () {
+        this.$router.push('/user-center/latest-news')
+        // getLoginState(this.changeLoginState).then((res) => {
+        //   if (res.isLogin === 'true') {
+        //     this.$router.push('/user-center/latest-news')
+        //   } else {
+        //     this.$router.push('/user-center/to-user')
+        //   }
+        // })
+      },
       confirm () {
         this.$router.push('user-center/real-name')
       },
@@ -183,10 +198,12 @@
         this.user_id = res.user_Id
         this._getUser()
         this.signed = true
+        this.positionRight = 'right: 45px'
       },
       noLogin (res) {
         this._real()
         this.signed = false
+        this.positionRight = 'right: 45px'
       },
       countVip (num) {
         if (num < 4) {
@@ -258,6 +275,15 @@
     .colorIcon
       .user-install
         bg-image('set-b')
+    .user-news
+      extend-click()
+      position: absolute
+      right: 45px
+      top: 12px
+      width: 20px
+      height: 20px
+      bg-image('news')
+      background-size: 20px 20px
     .user-grounp
       position: absolute
       top: 0

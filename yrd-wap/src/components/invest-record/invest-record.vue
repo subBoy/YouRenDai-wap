@@ -16,7 +16,7 @@
                 <p class="info">产品名称<span class="text">{{item.project_name}}</span></p>
                 <p class="info">出借时间<span class="text">{{item.create_date}}</span></p>
                 <p class="info">出借金额<span class="text">￥{{item.invest_money}}</span></p>
-                <p class="info styl">期待回报<span class="text">￥{{item.earnings}}</span></p>
+                <p class="info styl">历史参考回报<span class="text">￥{{item.earnings}}</span></p>
                 <p class="info">状态<span class="text">{{item.code}}</span></p>
               </li>
             </ul>
