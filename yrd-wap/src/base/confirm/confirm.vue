@@ -1,6 +1,6 @@
 <template>
   <transition name="confirm-fade">
-    <div class="confirm" v-show="showFlag" @click.stop="hide">
+    <div class="confirm" v-show="showFlag">
       <div class="confirm-wrapper">
         <div class="confirm-content">
           <div class="icon" :class="{stateOk: operateState, 'real-class': realClass}"></div>
@@ -13,6 +13,7 @@
             <div class="operate-btn"><span class="btn-box" @click.stop="confirm">{{confirmBtnText}}</span></div>
           </div>
         </div>
+        <span class="close-btn" @click.stop="hide"></span>
       </div>
     </div>
   </transition>
@@ -88,15 +89,26 @@
       left: 50%
       transform: translate(-50%, -50%)
       z-index: 999
+      overflow: hidden
+      .close-btn
+        display: block
+        position: absolute
+        top: 0
+        right: 0
+        width: 40px
+        height: 40px
+        bg-image('close')
+        background-position: right top
+        background-size: 23px
       .confirm-content
         width: 270px
-        padding: 35px 0
+        padding: 24px 0
         border-radius: 13px
         background: $color-text
         .icon
           height: 43px
           bg-image('err')
-          background-size: 43px 43px
+          background-size: 40px 40px
           background-position: bottom center
           &.stateOk
            bg-image('suc')
@@ -104,30 +116,30 @@
             bg-image('real')
         .text
           position: relative
-          padding: 28px 15px 58px 15px
+          padding: 28px 15px 50px
           line-height: 24px
           text-align: center
-          font-size: $font-size-large-z
+          font-size: 14px
           color: $color-tle
           .win-desc
             position: absolute
             left: 0
-            top: 58px
+            top: 54px
             display: block
             line-height: 12px
             width: 100%
             text-align: center
-            font-size: $font-size-medium
+            font-size: 12px
             color: $color-q
           .back-btn
             position: absolute
             left: 0
-            bottom: 10px
+            bottom: 5px
             display: block
             line-height: 12px
             width: 100%
             text-align: center
-            font-size: $font-size-small
+            font-size: 10px
             color: $color-q
         .operate
           display: flex
@@ -140,11 +152,12 @@
               display: block
               margin: 0 auto
               width: 160px
-              line-height: 44px
-              border-radius: 22px
+              line-height: 40px
+              border-radius: 20px
               color: $color-text
               background-color: $btn-clo
-
+              font-size: 14px
+              box-shadow: 0 4px 15px -4px #ccc
   @keyframes confirm-fadein
     0%
       opacity: 0

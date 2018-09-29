@@ -1,5 +1,5 @@
 <template>
-  <div class="risk-warning-wrapper">
+  <div class="risk-warning-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
     <scroll class="risk-warning-scroll">
       <div>

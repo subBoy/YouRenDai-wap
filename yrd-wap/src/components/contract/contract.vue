@@ -1,5 +1,5 @@
 <template>
-  <div class="contract-wrapper">
+  <div class="contract-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
     <scroll class="contract-scroll">
       <div class="contract-group">

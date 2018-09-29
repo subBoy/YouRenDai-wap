@@ -1,5 +1,5 @@
 <template>
-  <div class="project-info-wrapper">
+  <div class="project-info-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
     <scroll class="project-info-scroll" ref="infoScroll">
       <div class="project">
@@ -140,7 +140,7 @@
   }
 </script>
 
-<style lang="stylus" type="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 
@@ -305,7 +305,7 @@
       .project
         margin: 0 15px
       .project-intro
-        padding-top: 10px
+        padding: 10px 0
       .project-intro-list-bg
         background: #fff
         margin-bottom: 10px

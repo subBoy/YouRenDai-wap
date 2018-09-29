@@ -1,5 +1,5 @@
 <template>
-  <div class="news-details-wrapper">
+  <div class="news-details-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
     <scroll class="news-details-group">
       <div class="news-details-content">
@@ -37,7 +37,7 @@
   }
 </script>
 
-<style lang="stylus" type="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 

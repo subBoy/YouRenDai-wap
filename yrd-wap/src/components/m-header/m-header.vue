@@ -15,6 +15,7 @@
       </div>
     </div>
     <slot></slot>
+    <div v-show="isSingDeal" class="refresh-btn" @click="refreshThisPage"></div>
   </div>
 </template>
 
@@ -47,6 +48,10 @@
         default: false
       },
       isSignUp: {
+        type: Boolean,
+        default: false
+      },
+      isSingDeal: {
         type: Boolean,
         default: false
       },
@@ -89,15 +94,15 @@
         const HISY = getHisy()
         const NEXTY = getNexty()
         if (this.isIndex) {
-          this.$router.push('/recommend/notice')
+          this.$router.push('/notice')
           return
         }
         if (this.gobool) {
           this.$router.push('/user-center')
           return
         }
-        if (this.$route.path === '/user-center/share-back') {
-          this.$router.back()
+        if (this.$route.path === '/share-back' || this.$route.path === '/sign-deal') {
+          this.$router.go(-1)
           return
         }
         if (this.guideBool) {
@@ -112,7 +117,10 @@
           self.location = document.referrer
           return
         }
-        this.$router.back()
+        this.$router.go(-1)
+      },
+      refreshThisPage () {
+        location.reload()
       },
       signMethod (str) {
         if (this.goBack) {
@@ -206,4 +214,15 @@
         height: 20px
         bg-image('user')
         background-size: 20px 20px
+    .refresh-btn
+      position: absolute
+      top: 0
+      right: 0
+      width: 44px
+      height: 44px
+      background-image: url('refresh.png')
+      background-position: center
+      background-repeat: no-repeat
+      background-size: 20px 20px
+      background-size: 15px 15px
 </style>

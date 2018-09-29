@@ -14,11 +14,11 @@
               <div class="report-slide-title">产品服务</div>
               <div class="report-slide-main">
                 <div class="report-slide-item animated" :class="{slideInLeft: slide2}">
-                  <p class="report-slide-desc">APP安全防御保护</p>
+                  <p class="report-slide-desc">网站安全监测保护升级</p>
                   <img src="./item-2-1.jpg" width="36%">
                 </div>
                 <div class="report-slide-item animated" :class="{slideInRight: slide2}">
-                  <p class="report-slide-desc">客户服务系统新升级</p>
+                  <p class="report-slide-desc">移动端操作流程优化，提高用户体验</p>
                   <img src="./item-2-2.jpg" width="36%">
                 </div>
               </div>
@@ -69,7 +69,7 @@
                   <p class="report-slide-sub-title">人数占比</p>
                   <div class="silde-distribute">
                     <div class="silde-distribute-item" ref="distributeItem" v-for="item in plData">
-                      <p class="silde-distribute-pn">{{item.startVal}}%</p>
+                      <p class="silde-distribute-pn">{{item.viewVal}}%</p>
                       <div class="silde-distribute-svg" :style="{height: item.pnH + 'px'}"></div>
                       <p class="silde-distribute-name">{{item.tle}}</p>
                     </div>
@@ -79,7 +79,7 @@
                   <p class="report-slide-sub-title">金额占比</p>
                   <div class="silde-distribute">
                     <div class="silde-distribute-item silde-distribute-2" v-for="item in smData">
-                      <p class="silde-distribute-pn">{{item.startVal}}%</p>
+                      <p class="silde-distribute-pn">{{item.viewVal}}%</p>
                       <div class="silde-distribute-svg" :style="{height: item.pnH + 'px'}"></div>
                       <p class="silde-distribute-name">{{item.tle}}</p>
                     </div>
@@ -95,14 +95,20 @@
               <div class="report-slide-title">运营数据—期限分布</div>
               <div class="report-slide-main">
                 <div class="report-slide-item report-slide-box-shadow">
-                  <p class="report-slide-sub-title">期限</p>
-                  <img class="animated" :class="{bounceInRight: slide6}" src="./item-6.png" width="60%">
+                  <p class="report-slide-sub-title">人数</p>
+                  <div class="silde-distribute">
+                    <div class="silde-distribute-item" v-for="(item, index) in pNumData" :class="'item-styl-' + index">
+                      <p class="silde-distribute-pn">{{item.viewVal}}%</p>
+                      <div class="silde-distribute-svg" :style="{height: item.pnH + 'px'}"></div>
+                      <p class="silde-distribute-name">{{item.tle}}</p>
+                    </div>
+                  </div>
                 </div>
                 <div class="report-slide-item">
                   <p class="report-slide-sub-title">金额</p>
                   <div class="silde-distribute">
                     <div class="silde-distribute-item" v-for="(item, index) in feData" :class="'item-styl-' + index">
-                      <p class="silde-distribute-pn">{{item.startVal}}%</p>
+                      <p class="silde-distribute-pn">{{item.viewVal}}%</p>
                       <div class="silde-distribute-svg" :style="{height: item.pnH + 'px'}"></div>
                       <p class="silde-distribute-name">{{item.tle}}</p>
                     </div>
@@ -119,11 +125,11 @@
               <div class="report-slide-main">
                 <div class="report-slide-item">
                   <p class="report-slide-sub-title">人数占比</p>
-                  <img class="animated" :class="{rotateInUpLeft: slide7}" src="./item-7-1.png" width="80%">
+                  <img class="animated mt-10" :class="{rotateInUpLeft: slide7}" src="./item-7-1.png" width="80%">
                 </div>
                 <div class="report-slide-item">
                   <p class="report-slide-sub-title">金额占比</p>
-                  <img class="animated" :class="{rotateInUpLeft: slide7}" src="./item-7-2.png" width="80%">
+                  <img class="animated mt-10" :class="{rotateInUpLeft: slide7}" src="./item-7-2.png" width="80%">
                 </div>
               </div>
             </div>
@@ -163,13 +169,13 @@
         <div class="swiper-slide">
           <div class="report-slide-group">
             <div class="report-slide-config">
-              <div class="report-slide-title">热门活动</div>
+              <div class="report-slide-title">大事件</div>
               <div class="report-slide-main">
                 <div class="report-slide-item">
-                  <img class="animated" :class="{flip: slide9}" src="./item-9-1.jpg" width="60%">
+                  <img class="animated" :class="{flip: slide9}" src="./item-9-1.jpg" width="80%">
                 </div>
                 <div class="report-slide-item">
-                  <img class="animated" :class="{flip: slide9}" src="./item-9-2.jpg" width="60%">
+                  <img class="animated" :class="{flip: slide9}" src="./item-9-2.jpg" width="80%">
                 </div>
               </div>
             </div>
@@ -216,72 +222,120 @@
         plData: [
           {
             tle: '20-29岁',
-            endVal: 33.87,
+            endVal: 27.27,
+            endValStr: '27.27',
             startVal: 3.4,
+            viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '30-39岁',
-            endVal: 19.35,
+            endVal: 24.24,
+            endValStr: '24.24',
             startVal: 2.0,
+            viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '40-49岁',
-            endVal: 24.19,
+            endVal: 24.24,
+            endValStr: '24.24',
             startVal: 2.5,
+            viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '50岁以上',
-            endVal: 22.58,
+            endVal: 24.24,
+            endValStr: '24.24',
             startVal: 2.3,
+            viewVal: '0.00',
             pnH: 0
           }
         ],
         smData: [
           {
             tle: '20-29岁',
-            endVal: 16.67,
+            endVal: 20.64,
+            endValStr: '20.64',
             startVal: 1.7,
+            viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '30-39岁',
-            endVal: 8.25,
+            endVal: 15.76,
+            endValStr: '15.76',
             startVal: 0.9,
+            viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '40-49岁',
-            endVal: 48.76,
+            endVal: 32.37,
+            endValStr: '32.37',
             startVal: 4.9,
+            viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '50岁以上',
-            endVal: 26.31,
+            endVal: 31.23,
+            endValStr: '31.23',
             startVal: 2.7,
+            viewVal: '0.00',
             pnH: 0
           }
         ],
         feData: [
           {
             tle: '3个月',
-            endVal: 36.99,
+            endVal: 32.50,
+            endValStr: '32.50',
             startVal: 3.7,
+            viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '6个月',
-            endVal: 19.16,
+            endVal: 31.65,
+            endValStr: '31.65',
             startVal: 2.0,
+            viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '12个月',
-            endVal: 43.85,
+            endVal: 35.85,
+            endValStr: '35.85',
             startVal: 4.4,
+            viewVal: '0.00',
+            pnH: 0
+          }
+        ],
+        pNumData: [
+          {
+            tle: '3个月',
+            endVal: 44.90,
+            endValStr: '44.90',
+            startVal: 3.7,
+            viewVal: '0.00',
+            pnH: 0
+          },
+          {
+            tle: '6个月',
+            endVal: 24.49,
+            endValStr: '24.49',
+            startVal: 2.0,
+            viewVal: '0.00',
+            pnH: 0
+          },
+          {
+            tle: '12个月',
+            endVal: 30.61,
+            endValStr: '30.61',
+            startVal: 4.4,
+            viewVal: '0.00',
             pnH: 0
           }
         ]
@@ -300,13 +354,25 @@
         for (let i = 0; i < this.plData.length; i++) {
           (function (i) {
             const _to = function () {
-              let startVal = _this.plData[i].startVal + 1 // (_this.plData[i].endVal - _this.plData[i].startVal) / (rate || 2)
+              let startVal = _this.plData[i].startVal + 0.99
               const _startVal = startVal.toFixed(2) - 0
+              let viewVal = _startVal + ''
+              let dIdx = viewVal.indexOf('.')
+              let _viewVal = ''
+              if (dIdx < 0) {
+                _viewVal = viewVal + '.00'
+                _this.$set(_this.plData[i], 'viewVal', _viewVal)
+              } else {
+                _viewVal = viewVal + '00'
+                let _viewVal1 = _viewVal.substring(0, dIdx + 2)
+                _this.$set(_this.plData[i], 'viewVal', _viewVal1)
+              }
               _this.$set(_this.plData[i], 'startVal', _startVal)
-              _this.$set(_this.plData[i], 'pnH', _startVal * cardinalH / 100)
+              _this.$set(_this.plData[i], 'pnH', _startVal * cardinalH / 80)
               if (startVal >= _this.plData[i].endVal - 0.1) {
                 _this.$set(_this.plData[i], 'startVal', _this.plData[i].endVal)
-                _this.$set(_this.plData[i], 'pnH', _this.plData[i].endVal * cardinalH / 100)
+                _this.$set(_this.plData[i], 'viewVal', _this.plData[i].endValStr)
+                _this.$set(_this.plData[i], 'pnH', _this.plData[i].endVal * cardinalH / 80)
                 return
               }
               window.requestAnimationFrame(_to)
@@ -321,13 +387,25 @@
         for (let i = 0; i < this.smData.length; i++) {
           (function (i) {
             const _to = function () {
-              let startVal = _this.smData[i].startVal + 1 // (_this.smData[i].endVal - _this.smData[i].startVal) / (rate || 2)
+              let startVal = _this.smData[i].startVal + 0.99
               const _startVal = startVal.toFixed(2) - 0
+              let viewVal = _startVal + ''
+              let dIdx = viewVal.indexOf('.')
+              let _viewVal = ''
+              if (dIdx < 0) {
+                _viewVal = viewVal + '.00'
+                _this.$set(_this.smData[i], 'viewVal', _viewVal)
+              } else {
+                _viewVal = viewVal + '00'
+                let _viewVal1 = _viewVal.substring(0, dIdx + 2)
+                _this.$set(_this.smData[i], 'viewVal', _viewVal1)
+              }
               _this.$set(_this.smData[i], 'startVal', _startVal)
-              _this.$set(_this.smData[i], 'pnH', _startVal * cardinalH / 100)
+              _this.$set(_this.smData[i], 'pnH', _startVal * cardinalH / 80)
               if (startVal >= _this.smData[i].endVal - 0.1) {
                 _this.$set(_this.smData[i], 'startVal', _this.smData[i].endVal)
-                _this.$set(_this.smData[i], 'pnH', _this.smData[i].endVal * cardinalH / 100)
+                _this.$set(_this.smData[i], 'viewVal', _this.smData[i].endValStr)
+                _this.$set(_this.smData[i], 'pnH', _this.smData[i].endVal * cardinalH / 80)
                 return
               }
               window.requestAnimationFrame(_to)
@@ -342,13 +420,58 @@
         for (let i = 0; i < this.feData.length; i++) {
           (function (i) {
             const _to = function () {
-              let startVal = _this.feData[i].startVal + 1 // (_this.feData[i].endVal - _this.feData[i].startVal) / (rate || 2)
+              let startVal = _this.feData[i].startVal + 0.99
               const _startVal = startVal.toFixed(2) - 0
+              let viewVal = _startVal + ''
+              let dIdx = viewVal.indexOf('.')
+              let _viewVal = ''
+              if (dIdx < 0) {
+                _viewVal = viewVal + '.00'
+                _this.$set(_this.feData[i], 'viewVal', _viewVal)
+              } else {
+                _viewVal = viewVal + '00'
+                let _viewVal1 = _viewVal.substring(0, dIdx + 2)
+                _this.$set(_this.feData[i], 'viewVal', _viewVal1)
+              }
               _this.$set(_this.feData[i], 'startVal', _startVal)
-              _this.$set(_this.feData[i], 'pnH', _startVal * cardinalH / 100)
+              _this.$set(_this.feData[i], 'pnH', _startVal * cardinalH / 80)
               if (startVal >= _this.feData[i].endVal - 0.1) {
                 _this.$set(_this.feData[i], 'startVal', _this.feData[i].endVal)
-                _this.$set(_this.feData[i], 'pnH', _this.feData[i].endVal * cardinalH / 100)
+                _this.$set(_this.feData[i], 'viewVal', _this.feData[i].endValStr)
+                _this.$set(_this.feData[i], 'pnH', _this.feData[i].endVal * cardinalH / 80)
+                return
+              }
+              window.requestAnimationFrame(_to)
+            }
+            _to()
+          })(i)
+        }
+      },
+      tweenLiteTo4(rate) {
+        const _this = this
+        const cardinalH = this.$refs.distributeItem[0].clientHeight
+        for (let i = 0; i < this.pNumData.length; i++) {
+          (function (i) {
+            const _to = function () {
+              let startVal = _this.pNumData[i].startVal + 0.99
+              const _startVal = startVal.toFixed(2) - 0
+              let viewVal = _startVal + ''
+              let dIdx = viewVal.indexOf('.')
+              let _viewVal = ''
+              if (dIdx < 0) {
+                _viewVal = viewVal + '.00'
+                _this.$set(_this.pNumData[i], 'viewVal', _viewVal)
+              } else {
+                _viewVal = viewVal + '00'
+                let _viewVal1 = _viewVal.substring(0, dIdx + 2)
+                _this.$set(_this.pNumData[i], 'viewVal', _viewVal1)
+              }
+              _this.$set(_this.pNumData[i], 'startVal', _startVal)
+              _this.$set(_this.pNumData[i], 'pnH', _startVal * cardinalH / 80)
+              if (startVal >= _this.pNumData[i].endVal - 0.1) {
+                _this.$set(_this.pNumData[i], 'startVal', _this.pNumData[i].endVal)
+                _this.$set(_this.pNumData[i], 'viewVal', _this.pNumData[i].endValStr)
+                _this.$set(_this.pNumData[i], 'pnH', _this.pNumData[i].endVal * cardinalH / 80)
                 return
               }
               window.requestAnimationFrame(_to)
@@ -366,6 +489,9 @@
         }
         for (let k = 0; k < this.feData.length; k++) {
           this.$set(this.feData[k], 'startVal', 0)
+        }
+        for (let l = 0; l < this.pNumData.length; l++) {
+          this.$set(this.pNumData[l], 'startVal', 0)
         }
       },
       reportSwiper() {
@@ -412,6 +538,7 @@
             if (realIndex === 5) {
               _this.slide6 = true
               _this.tweenLiteTo3(5)
+              _this.tweenLiteTo4(5)
               return
             }
             if (realIndex === 6) {
@@ -491,17 +618,17 @@
               top: 1.6%
               left: 0
               width: 100%
-              height: 10%
+              height: 9.5%
               justify-content: center
               align-items: center
-              font-size: 16px
+              font-size: 15px
               color: #fff
               z-index: 1
             .report-slide-main
               position: absolute
               top: 15%
               right: 0
-              bottom: 6%
+              bottom: 2%
               left: 0
               overflow: hidden
               z-index:1
@@ -511,12 +638,12 @@
                 flex-flow: column
                 justify-content: center
                 align-items: center
-                height: 50%
+                height: 45%
                 &.report-slide-box-shadow
                   border-radius: 0 0 15px 15px
-                  box-shadow: 0 1px 20px -2px #ccc
+                  box-shadow: 0 1px 20px -5px #9acb38
                   .report-slide-sub-title
-                    top: 1%
+                    top: 0
                 .report-slide-desc 
                   font-size: 12px
                   padding-bottom: 4%
@@ -525,7 +652,7 @@
                   position: absolute
                   top: 10%
                   left: 10%
-                  color: #8dbb03
+                  color: #9acb38
                   font-size: 14px
                   z-index: 10
                   &.report-slide-desc-sub
@@ -534,6 +661,8 @@
                   padding-top: 5%
                 .item-4-img
                   padding-top: 10%
+                .mt-10
+                  margin-top: 20px
                 .silde-distribute 
                   display: flex
                   position: absolute
@@ -599,7 +728,7 @@
                     .report-slide-risk-desc
                       padding: 10% 0
                       font-size: 14px
-                      color: #8dbb03
+                      color: #9acb38
                   .report-slide-risk-img
                     flex: 1
                     display: flex

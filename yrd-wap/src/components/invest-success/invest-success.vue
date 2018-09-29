@@ -4,8 +4,8 @@
       <div class="txt-group">
         <div class="txt">推荐给好友 我要分享~~</div>
       </div>
-      <router-link tag="div" class="invite-btn" to="/recommend/share-back">立即分享</router-link>
-      <router-link tag="p" class="success-details" to="/user-center/invest-record">查看详情>></router-link>
+      <router-link tag="div" class="invite-btn" to="/share-back">立即分享</router-link>
+      <router-link tag="p" class="success-details" to="/invest-record">查看详情>></router-link>
     </div>
   </success>
 </template>

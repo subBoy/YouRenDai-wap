@@ -1,5 +1,5 @@
 <template>
-  <div class="tran-ani">
+  <div class="tran-ani" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :isIndex="isIndex"></m-header>
     <div class="notice-wrapper">
       <scroll class="notice-content"
@@ -9,7 +9,7 @@
       >
         <div class="notice-group">
           <div class="notice-list">
-            <div class="notice-item border-1px" v-for="(item, index) in nowList" ref="noticeItem" @click="noticeDetails(item.content_url)">
+            <div class="notice-item border-1px" :class="{'isSSkl': item.isStick === '1' || item.isSpecial === '1'}" v-for="(item, index) in nowList" ref="noticeItem" @click="noticeDetails(item.content_url)">
               <p class="name-title">
                 <span class="name" v-if="item.formatTitle.length">{{item.formatTitle}}</span>
                 <span class="desc" :class="{styl: !item.formatTitle.length}">{{item.formatDesc}}</span>
@@ -56,7 +56,7 @@
       noticeDetails(url) {
         this.content_id = this._getParam(url, 'content_id')
         this.$router.push({
-          path: `/recommend/notice/${this.content_id}`
+          path: `/notice-details/${this.content_id}`
         })
       },
       _getParam (url, name) {
@@ -162,6 +162,11 @@
           display: block
           border-1px(#f0f0f0)
           padding: 16px 20px 15px 15px
+          &.isSSkl
+            .name-title
+              color: #ff4d49
+            .time
+              color: #ff4d49
           .name-title
             display: flex
             line-height: 18px

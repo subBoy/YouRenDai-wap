@@ -1,25 +1,32 @@
 <template>
   <div class="subscribe-wrapper" ref="subscribeWrapper" @touchstart="lineBlur">
-    <m-header :titleTxt="titleTxt" :opcity="opcity" :whiteIcon="whiteIcon" @logined="logined"></m-header>
     <top-tip ref="topTip">
       <p class="caveatText">{{caveatText}}</p>
     </top-tip>
     <div class="subscribe-grounp" ref="subscribeGrounp">
-      <scroll class="subscribe-scroll" :listenScroll="listenScroll" :probeType="probeType" @scroll="scroll" ref="scroll">
+      <scroll class="subscribe-scroll" @scroll="scroll" ref="scroll">
         <div>
           <div class="subscribe-bar-wrapper">
+            <m-header class="subscribe-header-wrapper" :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" :whiteIcon="whiteIcon" @logined="logined"></m-header>
+            <div class="user-ct-set-btn-wrapper">
+              <a href="/loan/customer_service_wap.shtml" class="user-ct-set-btn-item item-1"></a>
+            </div>
             <div class="subscribe-bar">
               <progress-circle :percent="percent">
                 <div class="subscribe-return">
                   <h3 class="return">{{subscribe.yearRate}}<span class="unti">%</span></h3>
-                  <p class="desc">历史参考年化回报率</p>
+                  <p class="desc" @click="show1">历史参考年化回报率</p>
                 </div>
               </progress-circle>
             </div>
             <div class="subscribe-info">
-              <p class="desc-info">借款期限 {{subscribe.limit}}个月</p>
-              <p class="desc-info styl-flex">起借金额 {{subscribe.ascendmoney}}元</p>
-              <p class="desc-info">剩余出借额 {{conversion(subscribe.surplus)}}万元</p>
+              <p class="desc-info">借款期限 <span class="fwb">{{subscribe.limit}}个月</span></p>
+              <p class="desc-info styl-flex">起借金额 <span class="fwb">{{subscribe.ascendmoney}}元</span></p>
+              <p class="desc-info">剩余出借额 <span class="fwb">{{conversion(subscribe.surplus)}}万元</span></p>
+            </div>
+            <div class="subscribe-info-2">
+              <p class="desc-info">信用等级 <span class="fwb">{{subscribe.borrowerLevel}}</span></p>
+              <p class="desc-info">出借人评级 <span class="fwb">{{subscribe.borrowerLevelDesc}}</span></p>
             </div>
           </div>
           <div class="expected-income">
@@ -55,8 +62,20 @@
         <span class="btn-txt" :class="{'click-err': !subscribe.btnClass}" @click="subscribeSubmit"><em class="desc">{{subscribe.btnTxt}}</em></span>
       </div>
     </div>
-    <transition name="slide">
-      <router-view></router-view>
+    <transition name="drop">
+      <div class="flag-win" v-show="sFg">
+        <div class="flag-win-ct">
+          <div class="flag-win-box">
+            <div class="flag-win-desc">
+              <p class="flag-win-dtxt">历史参考年化回报率</p>
+              <p class="flag-win-dtxt">不等于实际收益承诺，出借需谨慎！</p>
+            </div>
+            <div class="flag-win-btn" @click="hide1">
+              <span class="flag-win-btn-ctr">确认</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </transition>
   </div>
 </template>
@@ -82,9 +101,8 @@
       return {
         whiteIcon: true,
         subscribe: {},
-        listenScroll: true,
-        probeType: 3,
         titleTxt: '',
+        isShow: false,
         opcity: 0,
         percent: 0,
         investAmount: 1000,
@@ -97,7 +115,8 @@
         project_id: '',
         screenHeight: document.documentElement.clientHeight,
         qaAssess: 'no',
-        caveatText: ''
+        caveatText: '',
+        sFg: false
       }
     },
     created () {
@@ -120,7 +139,7 @@
           this.addBool = false
         }
         this._invest()
-      }, 200))
+      }, 20))
     },
     computed: {
       ...mapGetters([
@@ -128,6 +147,12 @@
       ])
     },
     methods: {
+      hide1 () {
+        this.sFg = false
+      },
+      show1 () {
+        this.sFg = true
+      },
       lineBlur () {
         this.$refs.inputWrapper.blur()
         this.$refs.subscribeWrapper.style.top = 0
@@ -227,12 +252,12 @@
         getLoginState(this.changeLoginState).then((res) => {
           if (!res.isEvaluated) {
             this.$router.push({
-              path: `${this.$route.path}/investor-notice/${this.investAmount}/${this.subscribe.surplus}`
+              path: `/investor-notice/${this.project_id}/${this.investAmount}/${this.subscribe.surplus}/${this.subscribe.limit}`
             })
             return
           }
           this.$router.push({
-            path: `${this.$route.path}/subscription/${this.investAmount}/${this.subscribe.surplus}`
+            path: `/subscription/${this.project_id}/${this.investAmount}/${this.subscribe.surplus}/${this.subscribe.limit}`
           })
         })
       },
@@ -242,27 +267,27 @@
       httpTxt () {
         if (this.subscribe.limit !== 12) {
           this.$router.push({
-            path: `${this.$route.path}/contract-6`
+            path: `/contract-6`
           })
         } else {
           this.$router.push({
-            path: `${this.$route.path}/contract`
+            path: `/contract`
           })
         }
       },
       productInfo () {
         this.$router.push({
-          path: `${this.$route.path}/project-info/${this.project_id}`
+          path: `/project-info/${this.project_id}`
         })
       },
       productRepayment () {
         this.$router.push({
-          path: `${this.$route.path}/repayment-plan/${this.project_id}`
+          path: `/repayment-plan/${this.project_id}`
         })
       },
       riskWarning () {
         this.$router.push({
-          path: `${this.$route.path}/risk-warning`
+          path: `/risk-warning`
         })
       },
       _genResult (data) {
@@ -336,13 +361,13 @@
             }
 
             setTimeout(() => {
-              this._init()
+              this._psInit()
               this._invest()
             }, 20)
           }
         })
       },
-      _init () {
+      _psInit () {
         const len = Math.ceil(parseInt(this.subscribe.surplus) / 10000)
         const width = (len + 1) * ITEM_WIDTH
         this.$refs.expectedIncomeList.style.width = `${width}px`
@@ -438,10 +463,80 @@
     top: 0
     background-color: $color-text
     z-index: 9999
+    .flag-win
+      position: fixed
+      top: 0
+      right: 0
+      bottom: 0
+      left: 0
+      background: rgba(0, 0, 0, 0.8)
+      z-index: 1000
+      opacity: 1
+      text-align: center
+      border-radius: 10px
+      .flag-win-ct
+        position: absolute
+        top: 50%
+        left: 50%
+        width: 75%
+        min-width: 280px
+        transform: translate3d(-50%, -50%, 0) scale(1)
+        background-color: #FFF
+        border-radius: 15px
+        .flag-win-box
+          padding: 20px
+          .flag-win-desc
+            padding-bottom: 40px
+            &.pb-15
+              padding-bottom: 15px
+            .flag-win-dtxt
+              line-height: 30px
+              font-size: 15px
+              color: #333
+              .clo
+                color: #ff4e49
+              &.fz-12
+                text-align: left
+                text-indent: 2em
+                line-height: 24px
+                font-size: 12px
+          .flag-win-btn
+            display: flex
+            align-items: center
+            justify-content: center
+            margin: 0 auto
+            width: 160px
+            height: 44px
+            border-radius: 22px
+            background-color: #ff4e49
+            font-size: 0
+            &.bgcr-c8
+              margin-top: 10px
+              background-color: #c8c8c8
+            .flag-win-btn-ctr
+              display: inline-block
+              padding-left: 1px
+              letter-spacing: 1px
+              font-size: 18px
+              color: #fff
+              &.fz-15
+                font-size: 15px
+      &.drop-enter-active, &.drop-leave-active
+        transition: all 0.3s
+        .flag-win-ct
+          transition: all 0.3s
+      &.drop-enter, &.drop-leave-to
+        opacity: 0
+        .flag-win-ct
+          transform: translate3d(-50%, -50%, 0) scale(0)
+    .subscribe-header-wrapper
+      position: absolute !important
+      top: 0
+      left: 0
+      width: 50%
     .caveatText
       padding: 20px
       line-height: 16px
-      background-color: $btn-clo
       font-size: 12px
       color: #fff
     .subscribe-grounp
@@ -462,6 +557,21 @@
         bg-image('subscribe-bg')
         background-size: 100% auto
         background-repeat: no-repeat
+        z-index: 10000
+        .user-ct-set-btn-wrapper
+          display: flex
+          position: absolute
+          left: 85%
+          top: 0
+          right: 0
+          .user-ct-set-btn-item
+            flex: 1
+            display: block
+            height: 50px
+            background-position: center
+            background-size: 20px
+            &.item-1
+              bg-image('kefu')
         .subscribe-bar
           position: absolute
           top: 40%
@@ -480,21 +590,42 @@
               .unti
                 font-size: $font-size-large
             .desc
+              extend-click()
+              display: inline-block
+              padding-right: 13px
+              bg-image('ii')
+              background-position: right center
+              background-size: 11px 11px
               font-size: $font-size-small
         .subscribe-info
           display: flex
           position: absolute
           width: 100%
-          top: 78%
+          top: 74%
           transform: translateY(-50%)
           .desc-info
             flex: 1
             text-align: center
             font-size: $font-size-small
             color: $color-text
+            .fwb
+              font-weight: bold
             &.styl-flex
               flex: 0 0 90px
               width: 80px
+        .subscribe-info-2
+          display: flex
+          position: absolute
+          width: 100%
+          top: 82%
+          transform: translateY(-50%)
+          .desc-info
+            flex: 1
+            text-align: center
+            font-size: $font-size-small
+            color: $color-text
+            .fwb
+              font-weight: bold
       .expected-income
         position: relative
         padding-top: 70px
@@ -523,11 +654,11 @@
             .icon
               display: block
               position: absolute
-              top: 0
+              top: 1px
               left: 50%
               transform: translateX(-50%)
-              width: 7px
-              height: 7px
+              width: 5px
+              height: 5px
               background-color: $color-text
               border: 1px solid #85d826
               border-radius: 100%

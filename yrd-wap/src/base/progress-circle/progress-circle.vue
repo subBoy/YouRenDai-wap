@@ -1,8 +1,8 @@
 <template>
   <div class="progress-circle">
-    <svg :width="radius" :height="radius" viewBox="0 0 160 160" version="1.1" xmlns="http://www.w3.org/2000/svg">
-      <circle class="progress-background" r="80" cx="80" cy="80" fill="transparent"/>
-      <circle class="progress-bar" r="80" cx="80" cy="80" fill="transparent" :style="styleTxt" :stroke-dasharray="dashArray" :stroke-dashoffset="dashOffset"/>
+    <svg :width="radius" :height="radius" viewBox="0 0 180 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <circle class="progress-background" r="90" cx="90" cy="90" fill="transparent"/>
+      <circle class="progress-bar" r="90" cx="90" cy="90" fill="transparent" :style="styleTxt" :stroke-dasharray="dashArray" :stroke-dashoffset="dashOffset"/>
       <circle class="progress-ba-1" :style="styleRotate" r="5" :cx="cx" :cy="cy" fill="#fff"/>
     </svg>
     <slot></slot>
@@ -14,7 +14,7 @@
     props: {
       radius: {
         type: Number,
-        default: 160
+        default: 180
       },
       percent: {
         type: Number,
@@ -23,12 +23,12 @@
     },
     data() {
       return {
-        dashArray: Math.PI * 160,
+        dashArray: Math.PI * 180,
         degPercent: 0,
         sh: '',
         styleTxt: '',
         styleRotate: '',
-        cx: 80,
+        cx: 90,
         cy: 0
       }
     },
@@ -83,7 +83,8 @@
         transform: scale(0.9) rotate(-90deg)
         stroke: $color-text
       &.progress-ba-1
+        stroke-width: 10px
         transform: scale(0.9) rotate(0deg)
-        transform-origin: 80px 80px
+        transform-origin: 90px 90px
         stroke: $color-text-l
 </style>

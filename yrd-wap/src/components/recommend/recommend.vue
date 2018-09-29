@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isIndex="isIndex" :opcity="opcity"></m-header>
     <div class="recommend">
       <scroll
@@ -8,10 +8,11 @@
         :data="disclist"
         :listenScroll="listenScroll"
         :probeType="probeType"
-         @scroll="scroll"
+        @scroll="scroll"
       >
         <div>
           <div v-if="recommends.length" class="swiper-wrapper-c">
+            <div class="swiper-wrapper-sign"><img src="./sign.png" width="100%"></div>
             <div class="swiper-content-c">
               <swiper>
                 <div v-for="item in recommends" class="swiper-slide">
@@ -25,25 +26,25 @@
           <div class="recommed-group">
             <ul class="recommed-group-list" :class="XNTime()">
               <li class="recommed-group-item">
-                <router-link tag="div" to="/recommend/platform">
+                <router-link tag="div" to="/platform">
                   <div class="item-icons item-icons-1"></div>
                   <p class="item-text">了解平台</p>
                 </router-link>
               </li>
               <li class="recommed-group-item">
-                <router-link tag="div" to="/recommend/packs">
+                <router-link tag="div" to="/packs">
                   <div class="item-icons item-icons-2">
                     <span class="item-new-num-wrapper" v-if="hbNum > 0"><span class="item-new-num">{{hbNum}}</span></span>
                   </div>
                   <p class="item-text">现金红包</p>
                 </router-link>
               </li>
-              <li class="recommed-group-item">
+              <!-- <li class="recommed-group-item">
                 <div @click="shareBack">
                   <div class="item-icons item-icons-3"></div>
                   <p class="item-text">分享返现</p>
                 </div>
-              </li>
+              </li> -->
               <!-- <li class="recommed-group-item">
                 <div @click="latestNews">
                   <div class="item-icons item-icons-4">
@@ -52,6 +53,18 @@
                   <p class="item-text">最新消息</p>
                 </div>
               </li> -->
+              <!-- <li class="recommed-group-item">
+                <div @click="gtKf">
+                  <div class="item-icons item-icons-6"></div>
+                  <p class="item-text">在线客服</p>
+                </div>
+              </li> -->
+              <li class="recommed-group-item">
+                <div @click="gtXszy">
+                  <div class="item-icons item-icons-7"></div>
+                  <p class="item-text">新手指引</p>
+                </div>
+              </li>
               <li class="recommed-group-item">
                 <div @click="lookDis">
                   <div class="item-icons item-icons-5"> </div>
@@ -107,6 +120,10 @@
         <a class="item-txt icon-2">下载有人贷客户端</a>
       </div>
     </div>
+    <a :href="alink" id="alink"></a>
+    <top-tip ref="topTip">
+      <p class="top-tip-desc" v-html="topTipTxt"></p>
+    </top-tip>
     <transition name="slide">
       <router-view></router-view>
     </transition>
@@ -118,6 +135,8 @@
   import Loading from 'base/loading/loading'
   import Scroll from 'base/scroll/scroll'
   import Swiper from 'base/swiper/swiper'
+  import TopTip from 'base/top-tip/top-tip'
+
   import {_UA} from 'common/js/ua'
   import {getLoginState} from 'api/sign'
   import {getIndexData} from 'api/index'
@@ -129,7 +148,9 @@
   export default {
     data () {
       return {
+        alink: '',
         titleTxt: '',
+        topTipTxt: '',
         isIndex: true,
         listenScroll: true,
         recommends: [],
@@ -177,42 +198,58 @@
       },
       downLoadApp () {
         if (_UA.isWeixin()) {
-          window.alert('请使用浏览器打开！！！')
+          this.topTipTxt = '请使用浏览器打开！！！'
+          this.$refs.topTip.show()
         } else {
           if (_UA.isIOS()) {
-            location.href = 'https://itunes.apple.com/cn/app/you-ren-dai/id923214967?mt=8'
+            this.alink = 'https://itunes.apple.com/cn/app/you-ren-dai/id923214967?mt=8'
           } else {
-            location.href = 'http://www.yourendai.com/app_download/YouRenDai.apk'
+            this.alink = 'http://www.yourendai.com/app_download/YouRenDai.apk'
           }
+          setTimeout(() => {
+            document.getElementById('alink').click()
+          }, 20)
         };
       },
       selectItem (item) {
         this.$router.push({
-          path: `/recommend/subscribe/${item.project_id}`
+          path: `/subscribe/${item.project_id}`
         })
       },
       reception () {
-        location.href = '/loan/activity/wap-novice.shtml'
+        this.alink = '/loan/activity/wap-novice.shtml'
+        setTimeout(() => {
+          document.getElementById('alink').click()
+        }, 20)
       },
       latestNews () {
         getLoginState(this.changeLoginState).then((res) => {
           if (res.isLogin === 'true') {
-            this.$router.push('/recommend/latest-news')
+            this.$router.push('/latest-news')
           } else {
-            this.$router.push('/recommend/to-user')
+            this.$router.push('/to-user')
           }
         })
       },
+      gtKf () {
+        this.alink = '/loan/customer_service_wap.shtml'
+        setTimeout(() => {
+          document.getElementById('alink').click()
+        }, 20)
+      },
+      gtXszy () {
+        this.$router.push('/novice')
+      },
       shareBack () {
         if (this.changeLoginState !== '') {
-          this.$router.push('/recommend/share-back')
+          this.$router.push('/share-back')
         } else {
-          this.changeReturnPath('/recommend/share-back')
+          this.changeReturnPath('/share-back')
           this.$router.push('/signIn')
         }
       },
       lookDis () {
-        this.$router.push('/user-center/disclosure')
+        this.$router.push('/disclosure')
       },
       _getIndexData () {
         getIndexData(this.changeLoginState).then((res) => {
@@ -233,7 +270,8 @@
       MHeader,
       Scroll,
       Swiper,
-      Loading
+      Loading,
+      TopTip
     }
   }
 </script>
@@ -245,6 +283,11 @@
     transition: all 0.3s
   .slide-enter, .slide-leave-to
     transform: translate3d(100%, 0, 0)
+  .top-tip-desc
+    padding: 10px 20px
+    line-height: 20px
+    font-size: 12px
+    color: #fff
   .recommend
     position: fixed
     width: 100%
@@ -259,6 +302,12 @@
         height: 0
         padding-top: 53%
         overflow: hidden
+        .swiper-wrapper-sign
+          position: absolute
+          right: 15px
+          bottom: 15px
+          width: 95px
+          z-index: 999
         .swiper-content-c
           position: absolute
           top: 0
@@ -474,6 +523,10 @@
                 bg-image('zx')
               &.item-icons-5
                 bg-image('xp')
+              &.item-icons-6
+                bg-image('kf')
+              &.item-icons-7
+                bg-image('novice')
             .item-text
               padding-top: 15px
               font-size: $font-size-small

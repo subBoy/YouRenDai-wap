@@ -2,6 +2,7 @@
   <div class="foot-btn-wrapper">
     <div class="access-btn-wapper border-1px">
       <div class="access-btn" @click="submitFuc">{{submitBtnTxt}}</div>
+      <slot name="fb"></slot>
     </div>
   </div>
 </template>
@@ -22,7 +23,7 @@
   }
 </script>
 
-<style lang="stylus" type="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 

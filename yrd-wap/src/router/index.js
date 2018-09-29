@@ -4,15 +4,8 @@ import {setHisy, setNexty} from 'common/js/cache'
 
 const Recommend = () => import('components/recommend/recommend')
 const Assets = () => import('components/assets/assets')
-const Usercenter = () => import('components/user-center/user-center')
 const Notice = () => import('components/notice/notice')
 const Productlist = () => import('components/product-list/product-list')
-const SignIn = () => import('components/sign-in/sign-in')
-const SignUp = () => import('components/sign-up/sign-up')
-const Forget = () => import('components/forget/forget')
-const productSubscribe = () => import('components/product-subscribe/product-subscribe')
-const setUser = () => import('components/set-user/set-user')
-const investRecord = () => import('components/invest-record/invest-record')
 const Packs = () => import('components/packs/packs')
 const Invite = () => import('components/invite/invite')
 const Disclosure = () => import('components/disclosure/disclosure')
@@ -22,8 +15,6 @@ const OperateData = () => import('components/disclosure/operate-data')
 const CustomerService = () => import('components/customer-service/customer-service')
 const Undefind = () => import('components/undefind/400')
 const serverError = () => import('components/undefind/500')
-const Recharge = () => import('components/recharge/recharge')
-const Withdraw = () => import('components/withdraw/withdraw')
 const RealName = () => import('components/real-name/real-name')
 const RechargeSuccess = () => import('components/recharge-success/recharge-success')
 const WithdrawSuccess = () => import('components/withdraw-success/withdraw-success')
@@ -31,7 +22,6 @@ const ToUser = () => import('components/to-user/to-user')
 const LatestNews = () => import('components/latest-news/latest-news')
 const NewsDetails = () => import('components/news-details/news-details')
 const BillList = () => import('components/bill-list/bill-list')
-const BillDetails = () => import('components/bill-details/bill-details')
 const Platform = () => import('components/platform/platform')
 const ShareBack = () => import('components/share-back/share-back')
 const NoticeDetails = () => import('components/notice-details/notice-details')
@@ -40,13 +30,35 @@ const Contract6 = () => import('components/contract-6/contract-6')
 const ProjectInfo = () => import('components/project-info/project-info')
 const RepaymentPlan = () => import('components/repayment-plan/repayment-plan')
 const RiskWarning = () => import('components/risk-warning/risk-warning')
-const Subscription = () => import('components/subscription/subscription')
 const Guide = () => import('components/guide/guide')
-const InvestorNotice = () => import('components/investor-notice/investor-notice')
 const InvestSuccess = () => import('components/invest-success/invest-success')
 const LatestNewsDetails = () => import('components/latest-news-details/latest-news-details')
 const CalendarPayment = () => import('components/calendar/calendar-payment')
 const Report = () => import('components/report/report')
+
+const Usercenter = () => import('components/user-center/userCenter')
+const SignUp = () => import('components/sign-up/signUp')
+const Forget = () => import('components/forget/forgetPd')
+const SignIn = () => import('components/sign-in/signIn')
+const signDeal = () => import('components/sign-deal/sign-deal')
+const reviewResult = () => import('components/review-result/review-result')
+const investRecord = () => import('components/invest-record/investRecord')
+const setUser = () => import('components/set-user/setUser')
+const changeIp = () => import('components/change-ip/change-ip')
+const changeIp2 = () => import('components/change-ip/change-ip-2')
+const changeIp3 = () => import('components/change-ip/change-ip-3')
+const changePd = () => import('components/change-pd/change-pd')
+const BillDetails = () => import('components/bill-details/billDetails')
+const InvestorNotice = () => import('components/investor-notice/investorNotice')
+const Recharge = () => import('components/recharge/newRecharge')
+const Withdraw = () => import('components/withdraw/newWithdraw')
+const dealRecord = () => import('components/deal-record/deal-record')
+const Subscription = () => import('components/subscription/newSubscription')
+const publicNotice = () => import('components/disclosure/publicNotice')
+const confirmationLetter = () => import('components/disclosure/confirmation-letter')
+const cashDetail = () => import('components/cash-detail/cash-detail')
+const productSubscribe = () => import('components/product-subscribe/productSubscribe')
+const Novice = () => import('components/novice/novice')
 
 Vue.use(Router)
 
@@ -54,6 +66,58 @@ const routes = [
   {
     path: '*',
     component: Undefind
+  },
+  {
+    path: '/app/novice',
+    component: Novice
+  },
+  {
+    path: '/novice',
+    component: Novice
+  },
+  {
+    path: '/cash-detail',
+    component: cashDetail
+  },
+  {
+    path: '/recharge',
+    component: Recharge
+  },
+  {
+    path: '/withdraw',
+    component: Withdraw
+  },
+  {
+    path: '/investor-notice',
+    component: InvestorNotice
+  },
+  {
+    path: '/review-result/:type/:total/:balance',
+    component: reviewResult
+  },
+  {
+    path: '/change-ip',
+    component: changeIp
+  },
+  {
+    path: '/change-ip/step2',
+    component: changeIp2
+  },
+  {
+    path: '/change-ip/step3',
+    component: changeIp3
+  },
+  {
+    path: '/change-pd',
+    component: changePd
+  },
+  {
+    path: '/set-user',
+    component: setUser
+  },
+  {
+    path: '/real-name',
+    component: RealName
   },
   {
     path: '/calendar-payment',
@@ -64,268 +128,164 @@ const routes = [
     component: serverError
   },
   {
+    path: '/sign-deal/:id/:loanMoney/:surplus/:mh/:realName/:idCard',
+    component: signDeal
+  },
+  {
+    path: '/app/sign-deal',
+    component: signDeal
+  },
+  {
     path: '/',
     redirect: '/recommend'
   },
   {
+    path: '/subscribe/:id',
+    component: productSubscribe
+  },
+  {
+    path: '/contract',
+    component: Contract
+  },
+  {
+    path: '/contract-6',
+    component: Contract6
+  },
+  {
+    path: '/project-info/:projectId',
+    component: ProjectInfo
+  },
+  {
+    path: '/repayment-plan/:projectId',
+    component: RepaymentPlan
+  },
+  {
+    path: '/risk-warning',
+    component: RiskWarning
+  },
+  {
+    path: '/subscription/:id/:loanMoney/:surplus/:mh',
+    component: Subscription
+  },
+  {
+    path: '/subscription/:id/:loanMoney/:surplus/:mh/:isReady/:realName/:idCard',
+    component: Subscription
+  },
+  {
+    path: '/investor-notice/:id/:loanMoney/:surplus/:mh',
+    component: InvestorNotice
+  },
+  {
     path: '/recommend',
-    component: Recommend,
-    children: [
-      {
-        path: 'subscribe/:id',
-        component: productSubscribe,
-        children: [
-          {
-            path: 'contract',
-            component: Contract
-          },
-          {
-            path: 'contract-6',
-            component: Contract6
-          },
-          {
-            path: 'project-info/:projectId',
-            component: ProjectInfo
-          },
-          {
-            path: 'repayment-plan/:projectId',
-            component: RepaymentPlan
-          },
-          {
-            path: 'risk-warning',
-            component: RiskWarning
-          },
-          {
-            path: 'subscription/:loanMoney/:surplus',
-            component: Subscription
-          },
-          {
-            path: 'investor-notice/:loanMoney/:surplus',
-            component: InvestorNotice
-          }
-        ]
-      },
-      {
-        path: 'notice',
-        component: Notice,
-        children: [
-          {
-            path: ':id',
-            component: NoticeDetails
-          }
-        ]
-      },
-      {
-        path: 'to-user',
-        component: ToUser
-      },
-      {
-        path: 'latest-news',
-        component: LatestNews,
-        children: [
-          {
-            path: 'news-details',
-            component: NewsDetails
-          },
-          {
-            path: 'bill-details',
-            component: BillDetails
-          },
-          {
-            path: 'latest-news-details/:messageId',
-            component: LatestNewsDetails
-          }
-        ]
-      },
-      {
-        path: 'platform',
-        component: Platform
-      },
-      {
-        path: 'packs',
-        component: Packs
-      },
-      {
-        path: 'share-back',
-        component: ShareBack
-      }
-    ]
+    component: Recommend
+  },
+  {
+    path: '/bill-list',
+    component: BillList
+  },
+  {
+    path: '/bill-details',
+    component: BillDetails
   },
   {
     path: '/assets',
-    component: Assets,
-    children: [
-      {
-        path: 'recharge',
-        component: Recharge
-      },
-      {
-        path: 'withdraw',
-        component: Withdraw
-      },
-      {
-        path: 'bill-list',
-        component: BillList,
-        children: [
-          {
-            path: 'bill-details',
-            component: BillDetails
-          }
-        ]
-      }
-    ]
+    component: Assets
+  },
+  {
+    path: '/notice-details/:id',
+    component: NoticeDetails
+  },
+  {
+    path: '/notice',
+    component: Notice
+  },
+  {
+    path: '/app/platform',
+    component: Platform
+  },
+  {
+    path: '/platform',
+    component: Platform
+  },
+  {
+    path: '/deal-record',
+    component: dealRecord
+  },
+  {
+    path: '/invest-record',
+    component: investRecord
+  },
+  {
+    path: '/packs',
+    component: Packs
+  },
+  {
+    path: '/invite',
+    component: Invite
+  },
+  {
+    path: '/share-back',
+    component: ShareBack
   },
   {
     path: '/user-center',
-    component: Usercenter,
+    component: Usercenter
+  },
+  {
+    path: '/disclosure',
+    component: Disclosure,
     children: [
       {
-        path: 'assets',
-        component: Assets,
+        path: 'qualification',
+        component: Qualification
+      },
+      {
+        path: 'sadety',
+        component: Sadety
+      },
+      {
+        path: 'public-notice',
+        component: publicNotice
+      },
+      {
+        path: 'confirmation-letter',
+        component: confirmationLetter
+      },
+      {
+        path: 'operate-data',
+        component: OperateData,
         children: [
           {
-            path: 'recharge',
-            component: Recharge
-          },
-          {
-            path: 'withdraw',
-            component: Withdraw
-          },
-          {
-            path: 'bill-list',
-            component: BillList,
-            children: [
-              {
-                path: 'bill-details',
-                component: BillDetails
-              }
-            ]
-          }
-        ]
-      },
-      {
-        path: 'set-user',
-        component: setUser
-      },
-      {
-        path: 'invest-record',
-        component: investRecord
-      },
-      {
-        path: 'packs',
-        component: Packs
-      },
-      {
-        path: 'invite',
-        component: Invite
-      },
-      {
-        path: 'share-back',
-        component: ShareBack
-      },
-      {
-        path: 'disclosure',
-        component: Disclosure,
-        children: [
-          {
-            path: 'qualification',
-            component: Qualification
-          },
-          {
-            path: 'sadety',
-            component: Sadety
-          },
-          {
-            path: 'operate-data',
-            component: OperateData,
-            children: [
-              {
-                path: 'report',
-                component: Report
-              }
-            ]
-          }
-        ]
-      },
-      {
-        path: 'customer-service',
-        component: CustomerService
-      },
-      {
-        path: 'recharge',
-        component: Recharge
-      },
-      {
-        path: 'withdraw',
-        component: Withdraw
-      },
-      {
-        path: 'real-name',
-        component: RealName
-      },
-      {
-        path: 'to-user',
-        component: ToUser
-      },
-      {
-        path: 'latest-news',
-        component: LatestNews,
-        children: [
-          {
-            path: 'news-details',
-            component: NewsDetails
-          },
-          {
-            path: 'bill-details',
-            component: BillDetails
-          },
-          {
-            path: 'latest-news-details/:messageId',
-            component: LatestNewsDetails
+            path: 'report',
+            component: Report
           }
         ]
       }
     ]
   },
   {
+    path: '/customer-service',
+    component: CustomerService
+  },
+  {
+    path: '/to-user',
+    component: ToUser
+  },
+  {
+    path: '/latest-news',
+    component: LatestNews
+  },
+  {
+    path: '/news-details',
+    component: NewsDetails
+  },
+  {
+    path: '/latest-news-details/:messageId',
+    component: LatestNewsDetails
+  },
+  {
     path: '/product-list',
-    component: Productlist,
-    children: [
-      {
-        path: 'subscribe/:id',
-        component: productSubscribe,
-        children: [
-          {
-            path: 'contract',
-            component: Contract
-          },
-          {
-            path: 'contract-6',
-            component: Contract6
-          },
-          {
-            path: 'project-info/:projectId',
-            component: ProjectInfo
-          },
-          {
-            path: 'repayment-plan/:projectId',
-            component: RepaymentPlan
-          },
-          {
-            path: 'risk-warning',
-            component: RiskWarning
-          },
-          {
-            path: 'subscription/:loanMoney/:surplus',
-            component: Subscription
-          },
-          {
-            path: 'investor-notice/:loanMoney/:surplus',
-            component: InvestorNotice
-          }
-        ]
-      }
-    ]
+    component: Productlist
   },
   {
     path: '/signIn',
@@ -373,6 +333,14 @@ const routes = [
       {
         path: 'sadety',
         component: Sadety
+      },
+      {
+        path: 'public-notice',
+        component: publicNotice
+      },
+      {
+        path: 'confirmation-letter',
+        component: confirmationLetter
       },
       {
         path: 'operate-data',

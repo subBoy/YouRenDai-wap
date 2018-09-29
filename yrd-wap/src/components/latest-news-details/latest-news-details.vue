@@ -1,5 +1,5 @@
 <template>
-  <div class="notice-details-wrapper">
+  <div class="notice-details-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
     <scroll class="latest-news-details" ref="detailsScroll">
       <div class="news-details-content">

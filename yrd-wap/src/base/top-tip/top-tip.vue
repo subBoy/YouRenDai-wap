@@ -11,7 +11,7 @@
     props: {
       delay: {
         type: Number,
-        default: 2000
+        default: 1500
       }
     },
     data() {
@@ -39,13 +39,17 @@
 
   .top-tip
     position: fixed
-    top: 0
-    width: 100%
-    z-index: 500
-    background: $color-dialog-background
-    z-index: 999
+    top: 50%
+    left: 50%
+    background: rgba(0, 0, 0, 0.8)
+    transform: translate3d(-50%, -50%, 0) scale(1)
+    z-index: 99999
+    opacity: 1
+    text-align: center
+    border-radius: 10px
     &.drop-enter-active, &.drop-leave-active
       transition: all 0.3s
     &.drop-enter, &.drop-leave-to
-      transform: translate3d(0, -100%, 0)
+      opacity: 0
+      transform: translate3d(-50%, -50%, 0) scale(0)
 </style>

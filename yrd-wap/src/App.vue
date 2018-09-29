@@ -1,6 +1,7 @@
 <template>
-  <div id="app" @touchmove.prevent>
+  <div id="app">
     <router-view></router-view>
+    <a href="www.yourendai.com" id="routerBtn" v-show="false"></a>
   </div>
 </template>
 
@@ -20,7 +21,7 @@ export default {
         }
       }).catch((err) => {
         if (err) {
-          location.href = 'www.yourendai.com'
+          document.getElementById('routerBtn').click()
         }
       })
     })

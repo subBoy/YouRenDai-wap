@@ -1,5 +1,5 @@
 <template>
-  <div class="latest-news-wrapper">
+  <div class="latest-news-wrapper" @touchmove.prevent>
     <news
       :titleTxt="titleTxt"
       :newsListArr="newsListArr"

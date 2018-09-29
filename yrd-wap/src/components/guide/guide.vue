@@ -1,5 +1,5 @@
 <template>
-  <div class="guide-wrapper">
+  <div class="guide-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" :guideBool="guideBool" @logined="logined"></m-header>
     <scroll class="guide-scroll" :class="{'realed': realed}" ref="guideScroll">
       <div class="guide-content">
@@ -223,7 +223,7 @@
   }
 </script>
 
-<style lang="stylus" type="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 

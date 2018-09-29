@@ -1,5 +1,5 @@
 <template>
-  <div class="bill-list-wrapper">
+  <div class="bill-list-wrapper" @touchmove.prevent>
     <news
       :billLength="billLength"
       :titleTxt="titleTxt"
@@ -17,6 +17,9 @@
         <p class="text">发放上个月27日-当月26日账户账单</p>
       </div>
     </div>
+    <top-tip ref="topTip">
+      <p class="caveatText">{{caveatText}}</p>
+    </top-tip>
     <transition name="slide">
       <router-view></router-view>
     </transition>
@@ -25,6 +28,7 @@
 
 <script>
   import News from 'base/news/news'
+  import TopTip from 'base/top-tip/top-tip'
   import {getBillList, readAllBill} from 'api/user'
   import {setMessageId, setCreateDate} from 'common/js/cache'
   import {mapGetters} from 'vuex'
@@ -36,7 +40,8 @@
         page: 1,
         rows: 10,
         hasMore: true,
-        billListArr: []
+        billListArr: [],
+        caveatText: ''
       }
     },
     computed: {
@@ -53,10 +58,10 @@
     },
     methods: {
       readAllNews () {
-        console.log(0)
         readAllBill(this.changeLoginState).then((res) => {
           if (res.ret_code !== '1') {
-            alert(res.ret_msg)
+            this.caveatText = res.ret_msg
+            this.$refs.topTip.show()
           }
         })
       },
@@ -64,7 +69,7 @@
         setMessageId(item.message_id)
         setCreateDate(item.create_date)
         this.$router.push({
-          path: `${this.$route.path}/bill-details`
+          path: `/bill-details`
         })
       },
       billList () {
@@ -98,12 +103,13 @@
       }
     },
     components: {
-      News
+      News,
+      TopTip
     }
   }
 </script>
 
-<style lang="stylus" type="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 

@@ -1,33 +1,12 @@
 <template>
-  <div class="platform-wrapper">
-    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
-    <scroll class="platform-group" ref="platformScroll">
+  <div class="platform-wrapper" @touchmove.prevent>
+    <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" v-show="isWap"></m-header>
+    <scroll class="platform-group" ref="platformScroll" :style="positionTop">
       <div class="platform-content">
         <div class="platform-banner">
           <img src="./app-platform.jpg" @load="refresh" width="100%">
         </div>
         <div class="plat-cont">
-          <div class="plat-first bg-fff">
-            <img src="./title-1.png" width="45%" />
-            <img src="./pic-1.png" class="plat-tit" @load="refresh" width="100%" />
-            <p class="plat-p1">有人贷是兴伟集团旗下互联网金融网络借贷信息中介平台，集团资产规模近过百亿元，实力雄厚，商誉卓著。集团业务涵盖商贸旅游、地产、能源、文化、服务、金融、大健康八大产业。</p>
-          </div>
-          <div class="plat-sec-box">
-            <div class="plat-first plat-sec">
-              <img src="./wangwei.png">
-              <p class="plat-p2">董事长</p>
-              <p class="plat-p3">王伟先生</p>
-              <p class="plat-p4">
-                <em></em>当选全国人大代表、全国工商联常委、贵州省工商联副主席、安顺市政协副主席、安顺市工商联主席。
-              </p>
-              <p class="plat-p4">
-                <em></em>荣获全国关爱员工优秀企业家，全国光彩奖章，全国光彩事业突出贡献奖和中国特色社会主义事业建设者荣誉称号。
-              </p>
-              <h3 class="plat-h3">中央、省、市党关注</h3>
-              <p class="plat-p1">几年来，中央、省、市党政军领导及专家学者多次到集团视察指导工作，并对公司的发展寄予了高度的评价和肯定，使兴伟企业的经济效益和社会效益得以明显提升。</p>
-            </div>
-            <img src="./plat-bg.png" width="100%" class="plat-bg">
-          </div>
           <div class="plat-first bg-fff">
             <img src="./title-2.png" width="35%" />
             <img src="./pic-2.png" class="plat-tit" @load="refresh" width="100%" />
@@ -120,7 +99,19 @@
       return {
         isShow: false,
         opcity: 1,
-        titleTxt: '了解平台'
+        titleTxt: '了解平台',
+        isWap: false,
+        positionTop: 'top: 0px'
+      }
+    },
+    created () {
+      const pathVal = this.$route.path
+      if (pathVal.indexOf('app') >= 0) {
+        this.isWap = false
+        this.positionTop = 'top: 0px'
+      } else {
+        this.positionTop = 'top: 44px'
+        this.isWap = true
       }
     },
     methods: {

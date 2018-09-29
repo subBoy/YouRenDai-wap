@@ -1,5 +1,5 @@
 <template>
-  <div class="disclosure-wrapper">
+  <div class="disclosure-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" v-show="isWap" style="display: none"></m-header>
     <b-scroll class="disclosure-group" ref="disclosureScroll" :style="positionTop">
       <div class="disclosure-scroll">
@@ -114,6 +114,12 @@
                 <li class="ct-item">
                   <span class="ct-item-title">商务合作</span>
                   <span class="ct-item-desc"><a href="tel:010-53358917" class="call-me">010-53358917</a></span>
+                </li>
+                <li class="ct-item">
+                  <span class="ct-item-title">投诉举报电话</span>
+                  <span class="ct-item-desc">
+                    <a href="tel:400-663-9190" class="call-me">400-663-9190</a>
+                  </span>
                 </li>
               </ul>
             </div>
@@ -326,6 +332,26 @@
             </router-link>
           </div>
         </div>
+        <div class="disclosure-content">
+          <div class="stair-title border-1px-b">
+            <span class="title-txt">对外公告</span>
+          </div>
+          <div class="disclosure-ct-list">
+            <router-link class="run-data" tag="div" :to="listPath4">
+              <img class="run-data-img" @load="refresh" src="./ct-9.png" width="88%">
+            </router-link>
+          </div>
+        </div>
+        <div class="disclosure-content">
+          <div class="stair-title border-1px-b">
+            <span class="title-txt">信批确认函</span>
+          </div>
+          <div class="disclosure-ct-list">
+            <router-link class="run-data" tag="div" :to="listPath5">
+              <img class="run-data-img" @load="refresh" src="./ct-10.png" width="88%">
+            </router-link>
+          </div>
+        </div>
         <div class="hr-20"></div>
       </div>
     </b-scroll>
@@ -356,9 +382,11 @@
         status3: false,
         isWap: false,
         positionTop: 'top: 0px',
-        listPath1: '/user-center/disclosure/qualification',
-        listPath2: '/user-center/disclosure/operate-data',
-        listPath3: '/user-center/disclosure/sadety',
+        listPath1: '/disclosure/qualification',
+        listPath2: '/disclosure/operate-data',
+        listPath3: '/disclosure/sadety',
+        listPath4: '/disclosure/public-notice',
+        listPath5: '/disclosure/confirmation-letter',
         disData: {}
       }
     },
@@ -370,12 +398,16 @@
         this.listPath1 = '/app-disclosure/qualification'
         this.listPath2 = '/app-disclosure/operate-data'
         this.listPath3 = '/app-disclosure/sadety'
+        this.listPath4 = '/app-disclosure/public-notice'
+        this.listPath5 = '/app-disclosure/confirmation-letter'
       } else {
         this.positionTop = 'top: 44px'
         this.isWap = true
-        this.listPath1 = '/user-center/disclosure/qualification'
-        this.listPath2 = '/user-center/disclosure/operate-data'
-        this.listPath3 = '/user-center/disclosure/sadety'
+        this.listPath1 = '/disclosure/qualification'
+        this.listPath2 = '/disclosure/operate-data'
+        this.listPath3 = '/disclosure/sadety'
+        this.listPath4 = '/disclosure/public-notice'
+        this.listPath5 = '/disclosure/confirmation-letter'
       }
       this._getDisclosureInfo()
       setTimeout(() => {

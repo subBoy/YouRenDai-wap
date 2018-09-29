@@ -1,7 +1,7 @@
 <template>
   <div class="access-wrapper">
     <top-tip ref="topTip">
-      <p class="caveatText">{{caveatText}}</p>
+      <p class="caveatText" v-html="caveatText"></p>
     </top-tip>
     <scroll class="access-scroll" ref="accessScroll"
       :data="accessList"
@@ -9,29 +9,37 @@
       @scrollToEnd="startLoad"
     >
       <div class="access-group">
-        <div class="access-input">
-          <div class="access-input-box">
-            <span class="title">{{accessTitle}}</span>
-            <div class="input-box">
-              <div class="input-box-wrapper">
-                <input class="access-input-sum" type="tel" v-model="sum" maxLength="19" @keyup="check">
-                <p class="desc" v-if="sum && (sum > 0 || sum !== '')">￥<span class="desc-sum">{{sum}}</span></p>
-                <p class="desc" v-else>{{descTxt}}</p>
+        <div class="access-group-ctr">
+          <slot name="recharge-tle"></slot>
+          <div class="access-input">
+            <div class="access-input-box border-1px-b" :class="{'is-with': isWith}">
+              <span class="title">{{accessTitle}}</span>
+              <div class="input-box">
+                <div class="input-box-wrapper">
+                  <input class="access-input-sum" type="tel" v-model="sum" maxLength="19" @keyup="check" :placeholder="descTxt">
+                </div>
+                <span class="withdraw-rule-btn" v-if="isWith" @click="lookRule">提现规则</span>
               </div>
             </div>
           </div>
+          <slot name="recharge-code"></slot>
         </div>
-        <slot name="recharge"></slot>
-        <div class="access-record-wrapper">
-          <div class="access-record-group">
-            <div class="access-record-title border-1px-b">{{recordTitle}}</div>
-            <!-- 无记录状态 -->
-            <div class="access-record-air" v-show="!accessList.length || accessList.length === 0">
-              <p class="desc">暂无记录</p>
-              <p class="desc">{{airTxt}}</p>
-              <div class="btn" @click="airRecord">{{airBtnTxt}}</div>
+        <div class="access-group-ctr">
+          <slot name="recharge"></slot>
+          <slot name="recharge-pay-type"></slot>
+        </div>
+        <div class="access-group-ctr">
+          <div class="access-record-wrapper">
+            <div class="access-record-group">
+              <div class="access-record-title border-1px-b">{{recordTitle}}</div>
+              <!-- 无记录状态 -->
+              <div class="access-record-air" v-show="!accessList.length || accessList.length === 0">
+                <p class="desc">暂无记录</p>
+                <p class="desc">{{airTxt}}</p>
+                <div class="btn" @click="airRecord">{{airBtnTxt}}</div>
+              </div>
+              <slot name="record-list"></slot>
             </div>
-            <slot name="record-list"></slot>
           </div>
         </div>
         <loading :title="loadTitle" v-show="hasMore"></loading>
@@ -82,40 +90,47 @@
       hasMore: {
         type: Boolean,
         default: true
+      },
+      isWith: {
+        type: Boolean,
+        default: false
       }
     },
-    data() {
+    data () {
       return {
         sum: null,
         pullup: true,
         loadTitle: '正在加载更多...'
       }
     },
-    created() {
+    created () {
       this.$emit('getSum', this.sum)
     },
     methods: {
-      caveat() {
+      caveat () {
         this.$refs.topTip.show()
       },
-      refresh() {
+      refresh () {
         this.$refs.accessScroll.refresh()
       },
-      startLoad() {
+      startLoad () {
         this.$emit('loadMore')
       },
-      check() {
+      lookRule () {
+        this.$emit('lookWithRule')
+      },
+      check () {
         this.sum = this.sum.replace(/[^\d.]/g, '')
         this.sum = this.sum.replace(/^\./g, '')
         this.sum = this.sum.replace(/\.{2,}/g, '.')
         this.sum = this.sum.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
       },
-      airRecord() {
+      airRecord () {
         this.$emit('airBtnMethod')
       }
     },
     watch: {
-      sum(newVal) {
+      sum (newVal) {
         this.$emit('getSum', newVal)
       }
     },
@@ -138,9 +153,8 @@
     bottom: 84px
     left: 0
     .caveatText
-      padding: 20px
+      padding: 10px 15px
       line-height: 16px
-      background-color: $btn-clo
       font-size: 12px
       color: #fff
     .access-scroll
@@ -148,22 +162,55 @@
       height: 100%;
       overflow: hidden
       .access-group
-        margin-top: 5px
+        padding: 5px 0
+        .access-group-ctr
+          margin: 5px auto
+          width: 90%
+          background-color: #FFF
+          border-radius: 15px
+          box-shadow: 0px 5px 5px -6px #ccc
+          overflow: hidden
         .access-input
           padding: 20px
           background-color: $color-text
           .access-input-box
             display: flex
+            &.is-with
+              position: relative
+              padding-bottom: 26px
+              .withdraw-rule-btn
+                display: inline-block
+                position: absolute
+                bottom: 0
+                right: 0
+                bg-image('ts')
+                padding-left: 15px
+                background-position: left center
+                background-size: 10px 10px
+                background-repeat: no-repeat
+                line-height: 26px
+                color: #ff4e49
+                font-size: 12px
             .title
               flex: 0 0 76px
               width: 76px
               line-height: 30px
               font-size: $font-size-medium
+            .recharge-input-code-btn
+              flex: 0 0 80px
+              width: 80px
+              line-height: 30px
+              font-size: 12px
+              text-align: right
+              color: #288cf0
+              &.not-click
+                color: #999
             .input-box
               flex: 1
               background-color: $color-background
               padding: 0 10px
               overflow: hidden
+              border-radius: 5px
               .input-box-wrapper
                 position: relative
                 .access-input-sum
@@ -171,9 +218,7 @@
                   top: 0
                   left: 0
                   width: 100%
-                  // line-height: 30px
                   height: 30px
-                  text-align: right
                   z-index: 10
                   outline: none
                   background-color: transparent
@@ -184,7 +229,8 @@
                   width: 100%
                   font-size: $font-size-small
                   color: $color-tle
-                  text-align: right
+                  &.styl-clo
+                    color: #c8c8c8;
                   .desc-sum
                     opacity: 0
         .access-record-wrapper
@@ -201,16 +247,18 @@
               padding: 16px 0 20px 0
               text-align: center
               .desc
-                line-height: 16px
+                line-height: 20px
                 font-size: $font-size-small
                 color: $color-q
               .btn
                 margin: 16px auto 0
+                padding-left: 2px
                 line-height: 30px
-                width: 100px
+                width: 35%
                 background-color: $btn-clo
                 color: $color-text
-                font-size: $font-size-medium-x
+                font-size: 14px
+                letter-spacing: 2px
                 border-radius: 15px
             .access-record-list
               .record-list
@@ -228,7 +276,7 @@
                     flex: 0 0 100px
                     line-height: 34px
                     font-size: $font-size-medium
-                    color: $color-q
+                    color: #323232
                   .text
                     flex: 1
                     line-height: 34px
@@ -236,7 +284,7 @@
                     color: $color-q
                     text-align: right
                     &.styl
-                      color: $color-tle
+                      color: #323232
                   .btn
                     flex: 1
                     padding: 10px 0 0

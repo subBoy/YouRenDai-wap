@@ -289,7 +289,7 @@ export function setCustomer(userId, lcNum) {
 }
 
 // 立即充值
-export function userRecharge(money, realName, idCard, mobilePhone, verificationCode) {
+export function userRecharge(userId, money, realName, idCard, mobilePhone, verificationCode) {
   if (debug) {
     url = '/api/userRecharge'
   } else {
@@ -298,11 +298,45 @@ export function userRecharge(money, realName, idCard, mobilePhone, verificationC
 
   const data = Object.assign({}, {
     cmd: 'recharge',
+    userId,
     money,
     realName,
     idCard,
     mobilePhone,
     verificationCode
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 充值回显
+export function rechargeCall (userId) {
+  if (debug) {
+    url = '/api/rechargeCall'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'bankLimit',
+    userId
   })
 
   return axios({
@@ -415,7 +449,7 @@ export function rechargeRecord(userId, page, rows) {
 }
 
 // 提现
-export function userWithdrawal(money) {
+export function userWithdrawal(userId, money) {
   if (debug) {
     url = '/api/userWithdrawal'
   } else {
@@ -424,6 +458,7 @@ export function userWithdrawal(money) {
 
   const data = Object.assign({}, {
     cmd: 'withdrawal',
+    user_id: userId,
     money,
     source: 'wap'
   })
@@ -527,15 +562,16 @@ export function submitInvestorNotice(userId, qaPaperId, qaAnsContent) {
 }
 
 // 获取平台奖励列表
-export function getRewardList (projectId, investmentAmount) {
+export function getRewardList (userId, projectId, investmentAmount) {
   if (debug) {
     url = '/api/getRewardList'
   } else {
-    url = '/front/userReward.do'
+    url = '/wap/wapUserAction.do'
   }
 
   const data = Object.assign({}, {
-    cmd: 'orderRewardList201702',
+    cmd: 'selectRewardList',
+    userId,
     project_id: projectId,
     investment_amount: investmentAmount
   })
@@ -676,6 +712,474 @@ export function getOperateData () {
 
   return axios.get(url, {
     params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 更改绑定手机号码验证码
+export function getChangeCode (loginName, telephone) {
+  if (debug) {
+    url = '/api/getChangeCode'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'sendTelCode',
+    loginName,
+    telephone,
+    state: 'bd'
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 充值手机号码验证码
+export function getRechargeCode (userId) {
+  if (debug) {
+    url = '/api/getRechargeCode'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'sendTelCode',
+    userId,
+    state: 'cz'
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 更改绑定手机号码
+export function getChangeIp (telephone, telcode) {
+  if (debug) {
+    url = '/api/getChangeIp'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'checkTelCode',
+    telephone,
+    telcode
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 绑定新手机号码验证码
+export function getNewCode (loginName, telephone, newTelephone) {
+  if (debug) {
+    url = '/api/getNewCode'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'sendTelCode',
+    loginName,
+    telephone,
+    newTelephone,
+    state: 'xb'
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 绑定新手机号码
+export function setNewIp (userId, telephone, telcode) {
+  if (debug) {
+    url = '/api/setNewIp'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'xwBindTelephone',
+    user_id: userId,
+    telephone,
+    telcode,
+    source: 'wap'
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 修改登录密码
+export function chengeSignPd (userId, checkCode, oldPassword, newPassWord, reNewPassWord) {
+  if (debug) {
+    url = '/api/chengeSignPd'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'updatePwd',
+    checkCode,
+    oldPassword,
+    newPassWord,
+    reNewPassWord,
+    userId
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 修改密码图形验证码
+export function getSignImg (userId) {
+  if (debug) {
+    url = '/api/getSignImg'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'checkCode',
+    userId,
+    _: +new Date()
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 风险评测
+export function judgeIrNe (userId) {
+  if (debug) {
+    url = '/api/judgeIrNe'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'checkQa',
+    userId
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+export function getIrNe (userId) {
+  if (debug) {
+    url = '/api/getIrNe'
+  } else {
+    url = '/qa/ans.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'submitQaAns',
+    userId
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 绑定或解绑银行开
+export function bindBank (userId, cmd) {
+  if (debug) {
+    url = '/api/bindBank'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd,
+    userId,
+    wap: 'WAP'
+  })
+
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 交易明细
+export function getDealRecord (userId, page, rows, one, type) {
+  if (debug) {
+    url = '/api/getDealRecord'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'accordingByConditionFind',
+    userId,
+    page,
+    rows,
+    one,
+    two: '',
+    type
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 回款日历
+export function getCalenderPayment (userId, dateTime) {
+  if (debug) {
+    url = '/api/getCalenderPayment'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'repaymentCalendar',
+    userId,
+    repayment_date: dateTime
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+export function getCPdataFuc (userId, page, rows, cmd2) {
+  if (debug) {
+    url = '/api/getCPdata'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'investrecord',
+    userId,
+    page,
+    rows,
+    cmd2
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+export function getCPdataFuc2 (userId, page, rows) {
+  if (debug) {
+    url = '/api/getCPdata2'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'liuBiaoList',
+    userId,
+    page,
+    rows
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+// 现金奖励明细
+export function getCashList (userId, starDate, endDate) {
+  if (debug) {
+    url = '/api/getCashList'
+  } else {
+    url = '/wap/wapUserAction.do'
+  }
+
+  const data = Object.assign({}, {
+    cmd: 'cashReward',
+    userId,
+    star_date: starDate,
+    end_date: endDate
+  })
+
+  return axios({
+    url,
+    method: 'post',
+    data,
+    transformRequest: [function (data) {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      ret = ret.substr(0, ret.length - 1)
+      return ret
+    }],
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   }).then((res) => {
     return Promise.resolve(res.data)
   })

@@ -1,5 +1,5 @@
 <template>
-  <div class="product-wrapper">
+  <div class="product-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :opcity="opcity" :goBack="goBack"></m-header>
     <div class="product">
       <scroll class="product-scroll"
@@ -68,7 +68,7 @@
     methods: {
       selectItem (item) {
         this.$router.push({
-          path: `/product-list/subscribe/${item.project_id}`
+          path: `/subscribe/${item.project_id}`
         })
       },
       loadMore () {

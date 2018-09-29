@@ -1,5 +1,5 @@
 <template>
-  <div class="packs-wrapper">
+  <div class="packs-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
     <div class="packs-number">
       <span class="name">累计优惠券</span>
@@ -100,7 +100,7 @@
       selectedItem(item) {
         if (this.projectId && this.projectId !== '') {
           this.$router.push({
-            path: `/product-list/subscribe/${this.projectId}`
+            path: `/subscribe/${this.projectId}`
           })
         } else {
           this.$router.push('/signIn')

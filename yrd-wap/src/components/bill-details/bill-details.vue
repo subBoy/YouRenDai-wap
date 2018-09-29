@@ -138,7 +138,7 @@
   }
 </script>
 
-<style lang="stylus" type="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 
@@ -180,11 +180,15 @@
         .invest-btn
           margin: 0 auto
           line-height: 28px
-          width: 110px
-          heigth: 28px
+          padding-left: 2px
+          width: 35%
+          height: 28px
           border-radius: 14px
           color: $color-text
           background-color: $btn-clo
+          box-shadow: 0px 5px 5px -6px #ccc
+          font-size: 14px
+          letter-spacing: 2px
         .not-investment-wrapper
           padding: 20px 0 30px
           text-align: center

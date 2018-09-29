@@ -1,5 +1,5 @@
 <template>
-  <div class="safety-wrapper">
+  <div class="safety-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" v-show="isWap" style="display: none"></m-header>
     <Scroll
       class="safety-group"

@@ -1,5 +1,5 @@
 <template>
-  <div class="notice-details-wrapper">
+  <div class="notice-details-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
     <scroll class="latest-news-details" ref="detailsScroll">
       <div class="news-details-group">
@@ -56,7 +56,7 @@
   }
 </script>
 
-<style lang="stylus" type="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 
@@ -95,6 +95,7 @@
           font-size: 12px
           color: #666
           text-indent: 2em
+          word-wrap: break-word
         .news-details-signature
           padding: 20px 0 40px 0
         .details-signature-txt

@@ -1,5 +1,5 @@
 <template>
-  <div class="repayment-plan-wrapper">
+  <div class="repayment-plan-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
     <scroll class="repayment-plan-scroll" :data="plans">
       <div class="repayment-plan-group">

@@ -1,5 +1,5 @@
 <template>
-  <div class="operate-data-wrapper">
+  <div class="operate-data-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" v-show="isWap" style="display: none"></m-header>
     <Scroll class="operate-data-group" ref="dataScroll" :style="positionTop">
       <div class="operate-data-scroll">
@@ -188,7 +188,7 @@
       } else {
         this.positionTop = 'top: 44px'
         this.isWap = true
-        this.listPath = '/user-center/disclosure/operate-data/report'
+        this.listPath = '/disclosure/operate-data/report'
       }
       this._getDisclosure()
       this._getOperateData()

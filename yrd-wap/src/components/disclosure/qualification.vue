@@ -1,5 +1,5 @@
 <template>
-  <div class="qualification-wrapper">
+  <div class="qualification-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" v-show="isWap" style="display: none"></m-header>
     <Scroll
       class="qualification-group"
@@ -35,7 +35,7 @@
         disclist: [],
         listenScroll: true,
         probeType: 3,
-        positionTop1: 'top: 160px'
+        positionTop1: 'top: 60px'
       }
     },
     created () {

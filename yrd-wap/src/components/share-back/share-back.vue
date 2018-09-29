@@ -1,5 +1,5 @@
 <template>
-  <div class="share-back-wrapper">
+  <div class="share-back-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity" :guideBool="guideBool" @logined="logined"></m-header>
     <scroll class="share-back-scroll" ref="backScroll">
       <div class="share-back-content">
@@ -99,6 +99,7 @@
       },
       qrcode () {
         $('#qrcode').qrcode({
+          render: 'canvas',
           text: this.inviteUrl,
           width: 110,
           height: 110

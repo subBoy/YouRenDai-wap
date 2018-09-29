@@ -4,8 +4,8 @@
       <div class="txt-group">
         <div class="txt">推荐给好友 我要分享~~</div>
       </div>
-      <router-link tag="div" class="invite-btn" to="/recommend/share-back">立即分享</router-link>
-      <router-link tag="p" class="success-details" to="/user-center/assets">查看详情>></router-link>
+      <router-link tag="div" class="invite-btn" to="/share-back">立即分享</router-link>
+      <router-link tag="p" class="success-details" to="/withdraw">查看详情>></router-link>
     </div>
   </success>
 </template>
@@ -26,7 +26,7 @@
   }
 </script>
 
-<style lang="stylus" type="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 

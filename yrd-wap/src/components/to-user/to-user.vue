@@ -1,5 +1,5 @@
 <template>
-  <div class="to-user-wrapper">
+  <div class="to-user-wrapper" @touchmove.prevent>
     <m-header :titleTxt="titleTxt" :isShow="isShow" :opcity="opcity"></m-header>
     <scroll class="to-user-scroll">
       <div class="to-user-bg">

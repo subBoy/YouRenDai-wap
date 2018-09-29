@@ -77,7 +77,6 @@
   import {subscription, getRewardList} from 'api/user'
   import {_UA} from 'common/js/ua'
   import {mapGetters} from 'vuex'
-
   export default {
     data() {
       return {
@@ -129,40 +128,33 @@
       submitFuc () {
         if (!this.realed) {
           const reg = /^[\u4e00-\u9fa5]+$/gi
-
           const reg2 = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/
-
           if (!this.realName || this.realName === '') {
             this.caveatText = '真实姓名不能为空！'
             this.caveat()
             return
           }
-
           if (!reg.test(this.realName)) {
             this.caveatText = '请输入中文名字！'
             this.caveat()
             return
           }
-
           if (this.realName.length < 2 || this.realName.length > 5) {
             this.caveatText = '请输入正确的姓名（长度2到5个汉字）！'
             this.caveat()
             return
           }
-
           if (this.idCard === '') {
             this.caveatText = '身份证号不能为空！'
             this.caveat()
             return
           }
-
           if (!reg2.test(this.idCard)) {
             this.caveatText = '身份证号格式错误, 请核对后重新输入！'
             this.caveat()
             return
           }
         }
-
         this._subscription()
       },
       logined (res) {
@@ -255,11 +247,9 @@
           this.rewardType += `${rewardItem.reward_type_name_ch},`
           this.rewardLines += `${rewardItem.rewardLines},`
         })
-
         this.reward = this.reward.substring(0, this.reward.length - 1)
         this.rewardType = this.rewardType.substring(0, this.rewardType.length - 1)
         this.rewardLines = this.rewardLines.substring(0, this.rewardLines.length - 1)
-
         subscription(this.changeLoginState, this.realName, this.idCard, this.reward, this.rewardLines, this.rewardType, this.projectId, this.loanMoney, this.projectType).then((res) => {
           this.reward = ''
           this.rewardType = ''
@@ -282,10 +272,9 @@
   }
 </script>
 
-<style lang="stylus" type="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
-
   .subscription-wrapper
     position: fixed
     top: 0

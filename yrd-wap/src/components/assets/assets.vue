@@ -1,6 +1,6 @@
 <template>
-  <div class="assets-wrapper">
-    <m-header :isShow="isShow" :opcity="opcity" :whiteIcon="whiteIcon" @logined="logined"></m-header>
+  <div class="assets-wrapper" @touchmove.prevent>
+    <m-header v-show="false" :isShow="isShow" :opcity="opcity" :whiteIcon="whiteIcon" @logined="logined"></m-header>
     <div class="assets-grounp">
       <scroll class="assets-scroll" :listenScroll="listenScroll" :probeType="probeType" @scroll="scroll" ref="scroll">
         <div>
@@ -10,6 +10,9 @@
                 <p class="balance">{{assetsInfo.activity}}<span class="util">元</span></p>
                 <p class="desc">账户余额</p>
               </div>
+              <div class="user-ct-set-btn-wrapper">
+                <a href="/loan/customer_service_wap.shtml" class="user-ct-set-btn-item item-1"></a>
+              </div>
               <div class="btns-wrapper">
                 <span class="withdraw btn" @click="GotoWithdraw">提现</span>
                 <span class="recharge btn" @click="GotoRecharge">立即充值</span>
@@ -18,24 +21,28 @@
           </div>
           <ul class="assets-details-wrapper">
             <li class="assets-details-item">
-              <span class="left">代收金额</span>
-              <span class="right">￥{{assetsInfo.duein}}</span>
+              <span class="left">累计收益</span>
+              <span class="right clo-styl">{{assetsInfo.rate}}元</span>
+            </li>
+            <li class="assets-details-item">
+              <span class="left">待收金额</span>
+              <span class="right">{{assetsInfo.duein}}元</span>
             </li>
             <li class="assets-details-item">
               <span class="left">已收金额</span>
-              <span class="right">￥{{assetsInfo.earnings}}</span>
+              <span class="right">{{assetsInfo.earnings}}元</span>
             </li>
             <li class="assets-details-item">
               <span class="left">下次回款</span>
-              <span class="right">￥{{assetsInfo.nextEearnings}}</span>
+              <span class="right">{{assetsInfo.nextEearnings}}元</span>
             </li>
             <li class="assets-details-item">
               <span class="left">下次回款日期</span>
               <span class="right">{{assetsInfo.repaymentDate}}</span>
             </li>
-            <li class="assets-details-item">
-              <span class="left">奖励金额</span>
-              <span class="right">￥{{assetsInfo.transferMoney}}</span>
+            <li class="assets-details-item" @click="gtCash">
+              <span class="left">现金奖励</span>
+              <span class="right"><span class="bg-styl">{{assetsInfo.transferMoney}}元</span></span>
             </li>
           </ul>
           <ul class="assets-operate-wrapper">
@@ -50,8 +57,8 @@
             <li class="assets-operate-item">
               <div class="assets-operate-group bg-2">
                 <div class="operate-group-text">
-                  <p class="desc">不知如何优化资产分配？</p>
-                  <span class="btn" @click="callMe">咨询客服</span>
+                  <p class="desc">我的回款收益</p>
+                  <span class="btn" @click="gotoCalendar">回款日历</span>
                 </div>
               </div>
             </li>
@@ -63,7 +70,6 @@
     <transition name="slide">
       <router-view></router-view>
     </transition>
-    <call ref="call"></call>
   </div>
 </template>
 
@@ -71,7 +77,6 @@
   import MHeader from 'components/m-header/m-header'
   import Scroll from 'base/scroll/scroll'
   import Tab from 'components/tab/tab'
-  import Call from 'base/call/call'
   import {getAssets} from 'api/user'
   import {mapGetters} from 'vuex'
 
@@ -114,11 +119,14 @@
           this.whiteIcon = true
         }
       },
-      billList () {
-        this.$router.push('/assets/bill-list')
+      gtCash () {
+        this.$router.push('/cash-detail')
       },
-      callMe () {
-        this.$refs.call.show()
+      billList () {
+        this.$router.push('/bill-list')
+      },
+      gotoCalendar () {
+        this.$router.push('/calendar-payment')
       },
       GotoWithdraw () {
         if (this.changeLoginState === '') {
@@ -127,11 +135,15 @@
             path: '/signIn'
           })
           return
-        } else {
-
+        }
+        if (!this.realNameOk) {
+          this.$router.push({
+            path: '/real-name'
+          })
+          return
         }
         this.$router.push({
-          path: '/user-center/withdraw'
+          path: '/withdraw'
         })
       },
       GotoRecharge () {
@@ -141,14 +153,15 @@
             path: '/signIn'
           })
           return
-        } else if (!this.realNameOk) {
+        }
+        if (!this.realNameOk) {
           this.$router.push({
-            path: '/user-center/real-name'
+            path: '/real-name'
           })
           return
         }
         this.$router.push({
-          path: '/user-center/recharge'
+          path: '/recharge'
         })
       },
       logined (res) {
@@ -167,8 +180,7 @@
     components: {
       MHeader,
       Scroll,
-      Tab,
-      Call
+      Tab
     }
   }
 </script>
@@ -204,6 +216,20 @@
           background-color: $color-theme
           .assets-info-grounp
             margin: 0 20px
+            .user-ct-set-btn-wrapper
+              display: flex
+              position: absolute
+              left: 85%
+              top: 0
+              right: 0
+              .user-ct-set-btn-item
+                flex: 1
+                display: block
+                height: 50px
+                background-position: center
+                background-size: 20px
+                &.item-1
+                  bg-image('kefu')
             .assets-info
               text-align: center
               color: $color-text
@@ -251,6 +277,16 @@
               flex: 1
               text-align: right
               color: $color-tle
+              &.clo-styl
+                color: #ff4e49
+                font-weight: bold
+              .bg-styl
+                display: inline-block
+                line-height: 20px
+                padding: 0 10px
+                border-radius: 10px
+                background-color: #ff4e49
+                color: #fff
         .assets-operate-wrapper
           margin: 0 15px
           display: flex
@@ -277,8 +313,8 @@
                   line-height: 10px
                   padding: 0 5px 15px
                   font-size: 10px
-                  color: $color-q
-                  white-space:nowrap
+                  color: #c8c8c8
+                  white-space: nowrap
                 .btn
                   display: block
                   margin: 0 auto
