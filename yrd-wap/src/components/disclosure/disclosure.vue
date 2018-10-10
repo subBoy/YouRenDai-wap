@@ -162,6 +162,7 @@
                 </li>
               </ul>
             </div>
+            <div class="disclosure-boos-qm">法定代表人签名：</div>
           </div>
           <div class="show-all-btn-wrapper">
             <span class="show-all-btn" v-show="!status1" @click="changstatus1">展开全部</span>
@@ -208,6 +209,8 @@
                 <div class="swiper-button-prev prev-btn"></div>
               </div>
             </div>
+            <div class="disclosure-hr"></div>
+            <div class="disclosure-boos-qm">法定代表人签名：</div>
           </div>
           <div class="show-all-btn-wrapper">
             <span class="show-all-btn" v-show="!status2" @click="changstatus2">展开全部</span>
@@ -302,6 +305,8 @@
                 </ul>
               </div>
             </div>
+            <div class="disclosure-hr"></div>
+            <div class="disclosure-boos-qm">法定代表人签名：</div>
           </div>
           <div class="show-all-btn-wrapper">
             <span class="show-all-btn" v-show="!status3" @click="changstatus3">展开全部</span>
@@ -498,6 +503,22 @@
         border-radius: 10px
         background-color: #fff
         box-shadow: 0px 0px 10px -2px #ccc
+        .disclosure-hr
+          width: 100%
+          height: 1px
+          background-color: #f0f0f0
+        .disclosure-boos-qm
+          display: flex
+          align-items: center
+          justify-content: flex-end
+          margin: 20px 20px 0
+          padding-right: 90px
+          height: 36px
+          background-position: right center 
+          background-repeat: no-repeat
+          background-size: 65px auto 
+          background-image: url(./qm.png)
+          font-size: 12px
         .disclosure-content-group-1
           overflow: hidden
           height: 131px
