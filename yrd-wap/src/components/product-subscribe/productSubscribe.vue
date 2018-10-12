@@ -13,7 +13,7 @@
           <progress-circle :percent="percent">
             <div class="subscribe-return">
               <h3 class="return">{{subscribe.yearRate}}<span class="unti">%</span></h3>
-              <p class="desc" @click="show1">历史参考年化回报率</p>
+              <p class="desc" @click="show1">年化借款利率</p>
             </div>
           </progress-circle>
         </div>
@@ -33,7 +33,7 @@
           <span class="item" v-for="item in incomeList"><em class="icon"></em>{{formatMoney(item)}} <span class="until" v-show="item === incomeList[incomeList.length - 1]">(元)</span></span>
         </div>
         <div class="icon-b">
-          <p class="desc-text">{{income.toFixed(2)}}(历史参考回报)</p>
+          <p class="desc-text">{{income.toFixed(2)}}(历史年化借款收益)</p>
         </div>
       </div>
       <div class="invest-amount">
@@ -63,7 +63,7 @@
         <div class="flag-win-ct">
           <div class="flag-win-box">
             <div class="flag-win-desc">
-              <p class="flag-win-dtxt">历史参考年化回报率</p>
+              <p class="flag-win-dtxt">年化借款利率</p>
               <p class="flag-win-dtxt">不等于实际收益承诺，出借需谨慎！</p>
             </div>
             <div class="flag-win-btn" @click="hide1">

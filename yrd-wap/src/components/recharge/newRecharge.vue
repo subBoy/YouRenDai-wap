@@ -36,7 +36,7 @@
           </div>
         </div>
       </div>
-      <div class="access-input" slot="recharge-code">
+      <!-- <div class="access-input" slot="recharge-code">
         <div class="access-input-box border-b-none">
           <span class="title">短信验证</span>
           <div class="input-box">
@@ -46,7 +46,7 @@
           </div>
           <div class="recharge-input-code-btn" :class="{'not-click': !codeClick}" v-html="codeBtnTxt" @click.stop="getRhCode"></div>
         </div>
-      </div>
+      </div> -->
       <div class="access-record-list" slot="record-list" v-show="accessList.length && accessList.length > 0">
         <ul class="record-list border-1px-b" v-for="item in accessList">
           <li class="record-item">
@@ -154,11 +154,11 @@
           this.caveat()
           return
         }
-        if (!this.verificationCode) {
-          this.caveatText = '请输入验证码'
-          this.caveat()
-          return
-        }
+        // if (!this.verificationCode) {
+        //   this.caveatText = '请输入验证码'
+        //   this.caveat()
+        //   return
+        // }
         if (!this.realNameOk) {
           const reg = /^[\u4e00-\u9fa5]+$/gi
 

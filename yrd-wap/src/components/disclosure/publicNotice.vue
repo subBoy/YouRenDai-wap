@@ -131,6 +131,9 @@
               <div class="disclosure-ct-list">
                 <img src="./txt-pig.jpg" width="100%" @load="refresh">
               </div>
+              <div class="disclosure-pm"></div>
+              <div class="disclosure-hr"></div>
+              <div class="disclosure-boos-qm">法定代表人签名：</div>
             </div>
           </div>
           <div class="show-all-btn-wrapper">
@@ -200,6 +203,25 @@
     left: 0
     z-index: 999
     background-color: #f2fdff
+    .disclosure-pm
+      width: 100%
+      height: 20px
+    .disclosure-hr
+      width: 100%
+      height: 1px
+      background-color: #f0f0f0
+    .disclosure-boos-qm
+      display: flex
+      align-items: center
+      justify-content: flex-end
+      margin: 20px 20px 0
+      padding-right: 90px
+      height: 36px
+      background-position: right center 
+      background-repeat: no-repeat
+      background-size: 65px auto 
+      background-image: url(./qm.png)
+      font-size: 12px
     .public-notice-group
       position: absolute
       top: 44px

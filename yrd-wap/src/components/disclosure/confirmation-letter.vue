@@ -13,6 +13,9 @@
         <img src="./banner5.jpg" class="cfn-letter-banner" @load="refresh" width="100%">
         <div class="scroll-group">
           <img src="./info.jpg" class="cfn-letter-ct-img" @load="refresh" width="90%">
+          <div class="disclosure-hr"></div>
+          <div class="disclosure-boos-qm">法定代表人签名：</div>
+          <div class="disclosure-pm"></div>
         </div>
       </div>
     </Scroll>
@@ -77,6 +80,25 @@
     left: 0
     z-index: 999
     background-color: $color-background
+    .disclosure-pm
+      width: 100%
+      height: 20px
+    .disclosure-hr
+      width: 100%
+      height: 1px
+      background-color: #f0f0f0
+    .disclosure-boos-qm
+      display: flex
+      align-items: center
+      justify-content: flex-end
+      margin: 20px 20px 0
+      padding-right: 90px
+      height: 36px
+      background-position: right center 
+      background-repeat: no-repeat
+      background-size: 65px auto 
+      background-image: url(./qm.png)
+      font-size: 12px
     .cfn-letter-group
       position: absolute
       top: 60px
