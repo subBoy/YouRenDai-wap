@@ -24,7 +24,7 @@
             </div>
           </div>
           <div class="recommed-group">
-            <ul class="recommed-group-list" :class="XNTime()">
+            <ul class="recommed-group-list">
               <li class="recommed-group-item">
                 <router-link tag="div" to="/platform">
                   <div class="item-icons item-icons-1"></div>
@@ -73,7 +73,7 @@
               </li>
             </ul>
           </div>
-          <div class="recommed-new-user" :class="XNTime()">
+          <div class="recommed-new-user">
             <div class="recommed-new-user-info">
               <p class="name">新手专享</p>
               <p class="desc"><span class="num">1888</span>元现金红包</p>
@@ -81,29 +81,45 @@
             </div>
           </div>
           <div class="project-wrapper" v-for="item in disclist">
-            <h3 class="name">智甄出借
-              <router-link class="list-btn" to="/product-list">查看更多</router-link>
+            <h3 class="name border-1px-b">智甄出借
+              <router-link class="list-btn" to="/product-list"></router-link>
               <!-- <span class="pro-bz" v-if="item.is_open === 'yes'"><span class="open-txt">{{item.content}}</span></span> -->
             </h3>
-            <div v-if="disclist.length" class="slider-wrapper" :class="XNTime()">
+            <div class="slider-wrapper">
               <div class="slider-content">
                 <div class="product-message-item swiper-slide swiper-no-swiping">
+                  <div class="info">
+                    <span class="desc hr-right">{{item.minimum_investment}}元起投</span>
+                    <span class="desc">{{item.time_limit}}个月期限</span>
+                  </div>
                   <p class="return"><span class="num">{{item.year_rate}}</span>%</p>
                   <div class="info">
-                    <span class="desc">{{item.time_limit}}个月</span>
-                    <span class="desc">剩余{{item.canrongzimoney}}元</span>
-                    <span class="desc">{{item.minimum_investment}}元起投</span>
+                    <span class="desc max-ft">年化借款利率</span>
                   </div>
                   <div class="details-btn" @click="selectItem(item)">
                     <span class="btn-txt">立即出借</span>
                   </div>
+                  <p class="index-loan-desc">
+                    <span class="index-loan-desc-txt">账户资金由新网银行进行存管</span>
+                  </p>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div class="index-new-add-box">
+            <div class="index-new-add-ctr">
+              <div class="idx-new-add-item" @click="gtYybg">
+                <img src="./ic_25.jpg" width="100%">
+              </div>
+              <div class="idx-new-add-item" @click="investorNotice">
+                <img src="./ic_27.jpg" width="100%">
               </div>
             </div>
           </div>
           <div class="scroll-ft-desc">
             <a href="/index.shtml?force=1" class="pc-link-btn">返回PC端</a>
-            <p class="desc-txt">Copyright @ Reserved 2013 </p>
+            <p class="desc-txt">市场有风险，出借需谨慎</p>
+            <p class="desc-txt">Copyright @ Reserved 2013</p>
             <p class="desc-txt">有人贷创建于贰零壹叁年 @ 2013 安信卓越版权所有</p>
           </div>
         </div>
@@ -140,11 +156,12 @@
   import {_UA} from 'common/js/ua'
   import {getLoginState} from 'api/sign'
   import {getIndexData} from 'api/index'
+  import {judgeIrNe} from 'api/user'
   import {mapGetters, mapActions} from 'vuex'
 
-  const STARTTIME = new Date('2018-02-09 17:00:00').getTime()
-  const ENDTIME = new Date('2018-02-21 23:59:59').getTime()
-  const NOWTIME = new Date().getTime()
+  // const STARTTIME = new Date('2018-02-09 17:00:00').getTime()
+  // const ENDTIME = new Date('2018-02-21 23:59:59').getTime()
+  // const NOWTIME = new Date().getTime()
   export default {
     data () {
       return {
@@ -174,12 +191,6 @@
       this.$refs.scroll.refresh()
     },
     methods: {
-      XNTime () {
-        if (STARTTIME < NOWTIME && NOWTIME < ENDTIME) {
-          return 'XN2018'
-        }
-        return ''
-      },
       scroll (pos) {
         if (pos.y < 0) {
           this.opcity = Math.abs(pos.y / 44)
@@ -217,7 +228,7 @@
         })
       },
       reception () {
-        this.alink = '/loan/activity/wap-novice.shtml'
+        this.alink = '/loan/h5/tiro/tiro.shtml?=wap'
         setTimeout(() => {
           document.getElementById('alink').click()
         }, 20)
@@ -240,6 +251,9 @@
       gtXszy () {
         this.$router.push('/novice')
       },
+      gtYybg () {
+        this.$router.push('/disclosure/operate-data/report')
+      },
       shareBack () {
         if (this.changeLoginState !== '') {
           this.$router.push('/share-back')
@@ -247,6 +261,28 @@
           this.changeReturnPath('/share-back')
           this.$router.push('/signIn')
         }
+      },
+      investorNotice () {
+        if (!this.changeLoginState) {
+          this.changeReturnPath('/review-result')
+          this.$router.push('/signIn')
+          return
+        }
+        const _this = this
+        judgeIrNe(_this.changeLoginState).then((res) => {
+          if (res.ret_code !== '1') {
+            this.topTipTxt = res.ret_msg
+            this.$refs.topTip.show()
+            return
+          }
+          if (res.ret_set.ans === 'n') {
+            // this.topTipTxt = '今年评测次数已用完<br/>不可再继续评测'
+            // this.$refs.topTip.show()
+            this.$router.push('/review-result')
+            return
+          }
+          this.$router.push('/investor-notice')
+        })
       },
       lookDis () {
         this.$router.push('/disclosure')
@@ -314,28 +350,43 @@
           left: 0
           width: 100%
           height: 100%
+      .index-new-add-box
+        padding: 20px 10px;
+        background-color: #FFF
+        .index-new-add-ctr
+          display: flex
+          .idx-new-add-item
+            padding: 0 10px
+            flex: 1
       .project-wrapper
+        margin-bottom: 5px
         background-color: $color-text
         .name
           position: relative
           line-height: 18px
-          padding: 25px 0
+          padding: 25px 0 25px 40px
           font-size: $font-size-large
-          text-align: center
+          font-weight: bold
+          background-image: url('./ic_17.jpg')
+          background-position: 15px center
+          background-size: 18px 18px
+          background-repeat: no-repeat
+          border-1px-b(#f5f5f5)
           .list-btn
+            display: block
             extend-click()
             position: absolute
             right: 0
-            top: 25px
-            display: inline-block
-            width: auto
-            padding-right: 10px
-            margin-right: 18px
+            top: 50%
+            width: 50px
+            height: 50px
+            transform: translateY(-50%)
             color: $color-q
             font-size: $font-size-small-s
-            bg-image('more')
-            background-size: 8px 10px
-            background-position: right center
+            background-image: url('./more.png')
+            background-repeat: no-repeat
+            background-size: 14px auto
+            background-position: center
           .pro-bz
             position: absolute
             left: 20px
@@ -358,31 +409,13 @@
         .slider-wrapper
           position: relative
           padding-bottom: 30px
-          &.XN2018
-            bg-image('/static/img/xn-2018-6')
-            background-size: 100% 90px
-            background-position: center
-            background-repeat: no-repeat
-            .slider-content
-              background: inherit
-              .product-message-item
-                .details-btn
-                  width: 228px
-                  height: 36px
-                  bg-image('/static/img/xn-2018-5')
-                  background-position: center
-                  background-size: 228px 36px
-                  background-repeat: no-repeat
-                  border-radius: 0px
-                  background-color: inherit
-                  .btn-txt
-                    color: #fdca83
           .slider-content
             background: $color-text
             .product-message-item
               position: relative
               width: 100%
               text-align: center
+              padding-top: 25px
               margin-bottom: 1px
               .name
                 position: relative
@@ -401,33 +434,70 @@
                   color: $color-q
                   font-size: $font-size-small-s
               .return
-                padding: 20px 0 30px 0
-                font-size: $font-size-medium
+                padding-bottom: 10px
+                font-size: 18px
                 color: $btn-clo
                 .num
-                  font-size: 40px
+                  font-size: 50px
+                  background: linear-gradient(to bottom, #ffd4d3, #ff4e49)
+                  -webkit-background-clip: text
+                  color: transparent
               .info
                 padding-bottom: 20px
                 font-size: 0
                 .desc
                   display: inline-block
-                  padding: 0 10px
-                  font-size: $font-size-small-s
+                  padding: 0 15px
+                  font-size: 12px
+                  color: #333
+                  &.hr-right
+                    position: relative
+                    &:after
+                      display: block
+                      position: absolute
+                      right: 0
+                      top: 50%
+                      transform: translateY(-50%)
+                      width: 1px
+                      height: 12px
+                      content: ''
+                      background-color: #f5f5f5
+                  &.max-ft
+                    font-size: 15px
+                    color: #333
+              .index-loan-desc
+                padding-top: 10px
+                text-align: center
+                font-size: 0
+                .index-loan-desc-txt
+                  display: inline-block
+                  line-height: 20px
+                  font-size: 10px
+                  padding-left: 22px
+                  background-image: url('./ic_21.jpg')
+                  background-repeat: no-repeat
+                  background-size: 20px auto
+                  background-position: left center
+                  color: #333
               .details-btn
-                position: relative
-                width: 172px
-                height: 36px
-                background-color: $btn-clo
-                border-radius: 18px
+                display: flex
+                justify-content: center
+                align-items: center
+                width: 120px
+                height: 32px
+                border-radius: 16px
                 margin: 0 auto
+                background-color: #ff4e49
+                background-image: -moz-linear-gradient(top, #fea6a3, #ff4e49)
+                background-image: -o-linear-gradient(top,#fea6a3, #ff4e49)
+                background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fea6a3), to(#ff4e49))
+                background-image: -webkit-linear-gradient(top, #fea6a3, #ff4e49);
+                box-shadow: 0px 2px 20px -6px #ccc
                 .btn-txt
-                  display: block
-                  position: absolute
-                  left: 0
-                  top: 50%
                   width: 100%
-                  transform: translate3d(0, -50%, 0)
-                  font-size: $font-size-medium-x
+                  font-size: 14px
+                  padding-left: 2px
+                  letter-spacing: 2px
                   color: $color-text
                   text-align: center
       .scroll-ft-desc
@@ -457,39 +527,6 @@
           margin-bottom: 5px
           padding: 25px 20px
           background-color: $color-text
-          &.XN2018
-            bg-image('/static/img/xn-2018-0')
-            background-repeat: no-repeat
-            background-size: 94% 100px
-            background-position: center
-            .recommed-group-item
-              .item-icons
-                &.item-icons-1
-                  bg-image('/static/img/xn-2018-1')
-                &.item-icons-2
-                  bg-image('/static/img/xn-2018-2')
-                &.item-icons-3
-                  bg-image('/static/img/xn-2018-3')
-                &.item-icons-4
-                  bg-image('/static/img/xn-2018-4')
-                .item-new-num-wrapper
-                  right: -14px
-                  top: -12px
-                  padding: 2px
-                  .item-new-num
-                    display: inline-block
-                    background-color: #ff5a00
-                    border-radius: 100%
-                    border: 2px solid #fff
-                    padding: 5px
-                    color: $color-text
-                    font-size: $font-size-medium-x
-                    min-width: 18px
-                    height: 18px
-                    text-align: center
-                    line-height: 18px
-              .item-text
-                color: #666
           .recommed-group-item
             flex: 1
             text-align: center
@@ -498,9 +535,9 @@
               position: relative
               display: inline-block
               margin: 0 auto
-              width: 45px
-              height: 45px
-              background-size: 45px 45px
+              width: 65px
+              height: 50px
+              background-size: 65px 50px
               .item-new-num-wrapper
                 position: absolute
                 right: -8px
@@ -514,19 +551,19 @@
                 font-size: $font-size-medium-x
                 transform: scale(0.5)
               &.item-icons-1
-                bg-image('lj')
+                background-image: url('./lj.jpg')
               &.item-icons-2
-                bg-image('xj')
+                background-image: url('./xj.jpg')
               &.item-icons-3
                 bg-image('fx')
               &.item-icons-4
                 bg-image('zx')
               &.item-icons-5
-                bg-image('xp')
+                background-image: url('./xp.jpg')
               &.item-icons-6
                 bg-image('kf')
               &.item-icons-7
-                bg-image('novice')
+                background-image: url('./novice.jpg')
             .item-text
               padding-top: 15px
               font-size: $font-size-small
@@ -538,9 +575,6 @@
         bg-image('new-user')
         background-size: 90px 90px
         background-position: 90% center
-        &.XN2018
-          background-size: 116px 98px
-          bg-image('/static/img/xn-2018-12')
         .recommed-new-user-info
           width: 200px
           text-align: center

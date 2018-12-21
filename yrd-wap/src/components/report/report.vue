@@ -13,13 +13,13 @@
             <div class="report-slide-config">
               <div class="report-slide-title">产品服务</div>
               <div class="report-slide-main">
-                <div class="report-slide-item animated" :class="{slideInLeft: slide2}">
-                  <p class="report-slide-desc">网站安全监测保护升级</p>
-                  <img src="./item-2-1.jpg" width="36%">
+                <div class="report-slide-item report-slide2-item animated" :class="{slideInLeft: slide2}">
+                  <p class="report-slide-desc"></p>
+                  <img src="./item-2-1.jpg" width="80%">
                 </div>
-                <div class="report-slide-item animated" :class="{slideInRight: slide2}">
-                  <p class="report-slide-desc">移动端操作流程优化，提高用户体验</p>
-                  <img src="./item-2-2.jpg" width="36%">
+                <div class="report-slide-item report-slide2-item animated" :class="{slideInRight: slide2}">
+                  <p class="report-slide-desc"></p>
+                  <img src="./item-2-2.jpg" width="80%">
                 </div>
               </div>
             </div>
@@ -49,11 +49,11 @@
               <div class="report-slide-main">
                 <div class="report-slide-item report-slide-box-shadow">
                   <p class="report-slide-sub-title">性别占比</p>
-                  <img class="animated" :class="{bounceIn: slide4}" src="./item-4-1.png" width="80%">
+                  <img class="animated" :class="{bounceIn: slide4}" src="./item-4-1.png" width="75%">
                 </div>
                 <div class="report-slide-item">
-                  <p class="report-slide-sub-title">人数占比</p>
-                  <p class="report-slide-sub-title report-slide-desc-sub">金额占比</p>
+                  <p class="report-slide-sub-title">出借人数</p>
+                  <p class="report-slide-sub-title report-slide-desc-sub">出借金额</p>
                   <img class="animated item-4-img" :class="{pulse: slide4}" src="./item-4-2.png" width="86%">
                 </div>
               </div>
@@ -89,14 +89,14 @@
             </div>
           </div>
         </div>
-        <div class="swiper-slide">
+        <!-- <div class="swiper-slide">
           <div class="report-slide-group">
             <div class="report-slide-config">
               <div class="report-slide-title">运营数据—期限分布</div>
               <div class="report-slide-main">
                 <div class="report-slide-item report-slide-box-shadow">
-                  <p class="report-slide-sub-title">人数</p>
-                  <div class="silde-distribute">
+                  <p class="report-slide-sub-title">人数占比</p>
+                  <div class="silde-distribute esp">
                     <div class="silde-distribute-item" v-for="(item, index) in pNumData" :class="'item-styl-' + index">
                       <p class="silde-distribute-pn">{{item.viewVal}}%</p>
                       <div class="silde-distribute-svg" :style="{height: item.pnH + 'px'}"></div>
@@ -105,8 +105,8 @@
                   </div>
                 </div>
                 <div class="report-slide-item">
-                  <p class="report-slide-sub-title">金额</p>
-                  <div class="silde-distribute">
+                  <p class="report-slide-sub-title">金额占比</p>
+                  <div class="silde-distribute esp">
                     <div class="silde-distribute-item" v-for="(item, index) in feData" :class="'item-styl-' + index">
                       <p class="silde-distribute-pn">{{item.viewVal}}%</p>
                       <div class="silde-distribute-svg" :style="{height: item.pnH + 'px'}"></div>
@@ -117,7 +117,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="swiper-slide">
           <div class="report-slide-group">
             <div class="report-slide-config">
@@ -125,11 +125,11 @@
               <div class="report-slide-main">
                 <div class="report-slide-item">
                   <p class="report-slide-sub-title">人数占比</p>
-                  <img class="animated mt-10" :class="{rotateInUpLeft: slide7}" src="./item-7-1.png" width="80%">
+                  <img class="animated mt-10" :class="{rotateInUpLeft: slide7}" src="./item-7-1.png" width="75%">
                 </div>
                 <div class="report-slide-item">
                   <p class="report-slide-sub-title">金额占比</p>
-                  <img class="animated mt-10" :class="{rotateInUpLeft: slide7}" src="./item-7-2.png" width="80%">
+                  <img class="animated mt-10" :class="{rotateInUpLeft: slide7}" src="./item-7-2.png" width="75%">
                 </div>
               </div>
             </div>
@@ -140,11 +140,13 @@
             <div class="report-slide-config">
               <div class="report-slide-title">风险控制</div>
               <div class="report-slide-main">
-                <div class="report-slide-item">
+                <div class="report-slide-item report-slide-box-shadow">
                   <div class="report-slide-risk animated" :class="{bounceInLeft: slide8}">
                     <div class="report-slide-risk-txt">
                       <p class="report-slide-risk-desc">逾期金额：0 元</p>
                       <p class="report-slide-risk-desc">逾期笔数：0 笔</p>
+                      <p class="report-slide-risk-desc">代偿金额：0 元</p>
+                      <p class="report-slide-risk-desc">代偿笔数：0 笔</p>
                     </div>
                     <div class="report-slide-risk-img">
                       <img src="./item-8-1.png" width="70%">
@@ -154,8 +156,10 @@
                 <div class="report-slide-item">
                   <div class="report-slide-risk animated" :class="{bounceInRight: slide8}">
                     <div class="report-slide-risk-txt">
-                      <p class="report-slide-risk-desc">代偿金额：0 元</p>
-                      <p class="report-slide-risk-desc">代偿笔数：0 笔</p>
+                      <p class="report-slide-risk-desc">金额逾期率：0 %</p>
+                      <p class="report-slide-risk-desc">逾期90天：0 万元<span class="report-slide-risk-desc-sp">(不含) 以上金额</span></p>
+                      <p class="report-slide-risk-desc">逾期90天：0 笔<span class="report-slide-risk-desc-sp">(不含) 以上笔数</span></p>
+                      <p class="report-slide-risk-desc">逾期90天：0 %<span class="report-slide-risk-desc-sp">(不含) 以上逾期率</span></p>
                     </div>
                     <div class="report-slide-risk-img">
                       <img src="./item-8-2.png" width="70%">
@@ -166,7 +170,7 @@
             </div>
           </div>
         </div>
-        <div class="swiper-slide">
+        <!-- <div class="swiper-slide">
           <div class="report-slide-group">
             <div class="report-slide-config">
               <div class="report-slide-title">大事件</div>
@@ -180,7 +184,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="swiper-button-next"></div>
     </div>
@@ -222,32 +226,32 @@
         plData: [
           {
             tle: '20-29岁',
-            endVal: 27.27,
-            endValStr: '27.27',
+            endVal: 18.75,
+            endValStr: '18.75',
             startVal: 3.4,
             viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '30-39岁',
-            endVal: 24.24,
-            endValStr: '24.24',
+            endVal: 25.00,
+            endValStr: '25.00',
             startVal: 2.0,
             viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '40-49岁',
-            endVal: 24.24,
-            endValStr: '24.24',
+            endVal: 25.00,
+            endValStr: '25.00',
             startVal: 2.5,
             viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '50岁以上',
-            endVal: 24.24,
-            endValStr: '24.24',
+            endVal: 31.25,
+            endValStr: '31.25',
             startVal: 2.3,
             viewVal: '0.00',
             pnH: 0
@@ -256,59 +260,33 @@
         smData: [
           {
             tle: '20-29岁',
-            endVal: 20.64,
-            endValStr: '20.64',
+            endVal: 13.84,
+            endValStr: '13.84',
             startVal: 1.7,
             viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '30-39岁',
-            endVal: 15.76,
-            endValStr: '15.76',
+            endVal: 19.26,
+            endValStr: '19.26',
             startVal: 0.9,
             viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '40-49岁',
-            endVal: 32.37,
-            endValStr: '32.37',
+            endVal: 51.15,
+            endValStr: '51.15',
             startVal: 4.9,
             viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '50岁以上',
-            endVal: 31.23,
-            endValStr: '31.23',
+            endVal: 15.75,
+            endValStr: '15.75',
             startVal: 2.7,
-            viewVal: '0.00',
-            pnH: 0
-          }
-        ],
-        feData: [
-          {
-            tle: '3个月',
-            endVal: 32.50,
-            endValStr: '32.50',
-            startVal: 3.7,
-            viewVal: '0.00',
-            pnH: 0
-          },
-          {
-            tle: '6个月',
-            endVal: 31.65,
-            endValStr: '31.65',
-            startVal: 2.0,
-            viewVal: '0.00',
-            pnH: 0
-          },
-          {
-            tle: '12个月',
-            endVal: 35.85,
-            endValStr: '35.85',
-            startVal: 4.4,
             viewVal: '0.00',
             pnH: 0
           }
@@ -316,24 +294,50 @@
         pNumData: [
           {
             tle: '3个月',
-            endVal: 44.90,
-            endValStr: '44.90',
+            endVal: 46.88,
+            endValStr: '46.88',
             startVal: 3.7,
             viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '6个月',
-            endVal: 24.49,
-            endValStr: '24.49',
+            endVal: 15.62,
+            endValStr: '15.62',
             startVal: 2.0,
             viewVal: '0.00',
             pnH: 0
           },
           {
             tle: '12个月',
-            endVal: 30.61,
-            endValStr: '30.61',
+            endVal: 37.50,
+            endValStr: '37.50',
+            startVal: 4.4,
+            viewVal: '0.00',
+            pnH: 0
+          }
+        ],
+        feData: [
+          {
+            tle: '3个月',
+            endVal: 50.74,
+            endValStr: '50.74',
+            startVal: 3.7,
+            viewVal: '0.00',
+            pnH: 0
+          },
+          {
+            tle: '6个月',
+            endVal: 8.34,
+            endValStr: '8.34',
+            startVal: 2.0,
+            viewVal: '0.00',
+            pnH: 0
+          },
+          {
+            tle: '12个月',
+            endVal: 40.92,
+            endValStr: '40.92',
             startVal: 4.4,
             viewVal: '0.00',
             pnH: 0
@@ -497,61 +501,64 @@
       reportSwiper() {
         const _this = this
         this.swiper = new Swiper('.report-swiper-container', {
-          nextButton: '.swiper-button-next',
-          paginationClickable: true,
+          navigation: {
+            nextEl: '.swiper-button-next'
+          },
           direction: 'vertical',
           loop: true,
-          onSlideChangeStart: function(swiper) {
-            const realIndex = swiper.realIndex
-            _this.slide1 = false
-            _this.slide2 = false
-            _this.slide3 = false
-            _this.slide4 = false
-            _this.slide5 = false
-            _this.slide6 = false
-            _this.slide7 = false
-            _this.slide8 = false
-            _this.slide9 = false
-            _this.init()
-            if (realIndex === 0) {
-              _this.slide1 = true
-              return
-            }
-            if (realIndex === 1) {
-              _this.slide2 = true
-              return
-            }
-            if (realIndex === 2) {
-              _this.slide3 = true
-              return
-            }
-            if (realIndex === 3) {
-              _this.slide4 = true
-              return
-            }
-            if (realIndex === 4) {
-              _this.tweenLiteTo1(5)
-              _this.tweenLiteTo2(5)
-              _this.slide5 = true
-              return
-            }
-            if (realIndex === 5) {
-              _this.slide6 = true
-              _this.tweenLiteTo3(5)
-              _this.tweenLiteTo4(5)
-              return
-            }
-            if (realIndex === 6) {
-              _this.slide7 = true
-              return
-            }
-            if (realIndex === 7) {
-              _this.slide8 = true
-              return
-            }
-            if (realIndex === 8) {
-              _this.slide9 = true
-              return
+          on: {
+            slideChangeTransitionStart: function () {
+              const realIndex = this.realIndex
+              _this.slide1 = false
+              _this.slide2 = false
+              _this.slide3 = false
+              _this.slide4 = false
+              _this.slide5 = false
+              _this.slide6 = false
+              _this.slide7 = false
+              _this.slide8 = false
+              _this.slide9 = false
+              _this.init()
+              if (realIndex === 0) {
+                _this.slide1 = true
+                return
+              }
+              if (realIndex === 1) {
+                _this.slide2 = true
+                return
+              }
+              if (realIndex === 2) {
+                _this.slide3 = true
+                return
+              }
+              if (realIndex === 3) {
+                _this.slide4 = true
+                return
+              }
+              if (realIndex === 4) {
+                _this.tweenLiteTo1(5)
+                _this.tweenLiteTo2(5)
+                _this.slide5 = true
+                return
+              }
+              // if (realIndex === 5) {
+              //   _this.slide6 = true
+              //   _this.tweenLiteTo3(5)
+              //   _this.tweenLiteTo4(5)
+              //   return
+              // }
+              if (realIndex === 5) {
+                _this.slide7 = true
+                return
+              }
+              if (realIndex === 6) {
+                _this.slide8 = true
+                return
+              }
+              // if (realIndex === 8) {
+              //   _this.slide9 = true
+              //   return
+              // }
             }
           }
         })
@@ -600,7 +607,7 @@
         .report-slide
           width: 80%
           .slide-item-1
-            padding-bottom: 50%
+            padding-bottom: 18%
         .report-slide-group
           width: 86%
           .report-slide-config
@@ -639,9 +646,11 @@
                 justify-content: center
                 align-items: center
                 height: 45%
+                &.report-slide2-item
+                  height: 40%
                 &.report-slide-box-shadow
                   border-radius: 0 0 15px 15px
-                  box-shadow: 0 1px 20px -5px #9acb38
+                  box-shadow: 0 1px 20px -5px #3c88f1
                   .report-slide-sub-title
                     top: 0
                 .report-slide-desc 
@@ -652,15 +661,15 @@
                   position: absolute
                   top: 10%
                   left: 10%
-                  color: #9acb38
+                  color: #3c88f1
                   font-size: 14px
                   z-index: 10
                   &.report-slide-desc-sub
                     left: 60%
                 .item2-img
-                  padding-top: 5%
+                  margin-top: 16%
                 .item-4-img
-                  padding-top: 10%
+                  padding-top: 18%
                 .mt-10
                   margin-top: 20px
                 .silde-distribute 
@@ -671,6 +680,9 @@
                   bottom: 0
                   left: 5%
                   z-index: 1
+                  &.esp
+                    left: 20%
+                    right: 20%
                   .silde-distribute-item
                     position: relative
                     display: flex
@@ -680,32 +692,37 @@
                     flex: 1
                     &.silde-distribute-2
                       .silde-distribute-pn 
-                        color: #fc872a
+                        color: #969696
                       .silde-distribute-svg
-                        background-color: #fc872a
+                        background-color: #7a65ef
+                        background-image: -webkit-linear-gradient(top, #7756e5, #9121d8)
                     &.item-styl-0
                       .silde-distribute-pn 
-                        color: #ffeb96
+                        color: #ff0000
                       .silde-distribute-svg
-                        background-color: #ffeb96
+                        background-color: #ff0000
+                        background-image: -webkit-linear-gradient(top, #ff8989, #ff0000)
                     &.item-styl-1
                       .silde-distribute-pn 
-                        color: #ffcf01
+                        color: #fecf31
                       .silde-distribute-svg
-                        background-color: #ffcf01
+                        background-color: #fecf31
+                        background-image: -webkit-linear-gradient(top, #fbe174, #fecf31)
                     &.item-styl-2
                       .silde-distribute-pn 
-                        color: #fc872a
+                        color: #9121d8
                       .silde-distribute-svg
-                        background-color: #fc872a
+                        background-color: #9121d8
+                        background-image: -webkit-linear-gradient(top, #7756e5, #9121d8)
                     .silde-distribute-pn 
-                      line-height: 14px
+                      line-height: 20px
                       font-size: 10px
-                      color: #ffcf00
+                      color: #969696
                     .silde-distribute-svg
                       margin-bottom: 2px
                       width: 20px
-                      background-color: #ffcf00
+                      background-color: #02a1fb
+                      background-image: -webkit-linear-gradient(top, #ff8989, #ff0000)
                       border-radius: 10px 10px 0 0
                     .silde-distribute-name
                       line-height: 30px
@@ -722,13 +739,19 @@
                   .report-slide-risk-txt
                     flex: 1
                     display: flex
-                    align-items: center
+                    align-items: start
                     justify-content: center
                     flex-flow: column
                     .report-slide-risk-desc
+                      position: relative
                       padding: 10% 0
                       font-size: 14px
-                      color: #9acb38
+                      color: #3c88f1
+                      .report-slide-risk-desc-sp
+                        position: absolute
+                        top: 27px
+                        left: 0
+                        font-size: 8px
                   .report-slide-risk-img
                     flex: 1
                     display: flex

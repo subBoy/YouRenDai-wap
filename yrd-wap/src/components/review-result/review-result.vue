@@ -10,11 +10,11 @@
 						<div class="review-result-ct">
 							<p class="review-result-desc">您当前测评结果为：</p>
 							<h3 class="review-result-name" v-html="userType"></h3>
-							<p class="review-result-desc-1">  以上评估仅供参考，并未完全包含所有影响风险承受能力的因素，您可根据自身风险承受能力的变化，申请重新评估，但一年不超过<span class="review-result-num" v-html="thisResult.total">3</span>次；</p>
-							<p class="review-result-desc-2">您今年剩余测评次数为<span class="review-result-num-s" v-html="thisResult.balance">2</span>次</p>
+							<p class="review-result-desc-1">  以上评估仅供参考，并未完全包含所有影响风险承受能力的因素，您可根据自身风险承受能力的变化，申请重新评估，但一年不超过<span class="review-result-num" v-html="thisResult.total"></span>次；</p>
+							<p class="review-result-desc-2">您今年剩余测评次数为<span class="review-result-num-s" v-html="thisResult.balance"></span>次</p>
 						</div>
 						<div class="sign-deal-btn" @click="sdGolist">去出借</div>
-						<div class="review-result-btn" @click="sdGoback">重新测评</div>
+						<div class="review-result-btn" v-if="thisResult.balance > 0" @click="sdGoback">重新测评</div>
 					</div>
 				</div>
 			</div>
@@ -40,9 +40,9 @@
 	      userInfo: {},
 	      topTipTxt: '',
 	      thisResult: {
-	      	balance: this.$route.params.balance,
+	      	balance: this.$route.params.balance || 0,
 	      	code: this.$route.params.type,
-	      	total: this.$route.params.total
+	      	total: this.$route.params.total || 3
 	      }
 	    }
 	  },
@@ -81,6 +81,7 @@
     	},
     	setUserInfo (res) {
         this.userInfo = res
+        this.$set(this.thisResult, 'code', res.isEvaluatedCode)
       }
     },
 	  components: {

@@ -25,7 +25,6 @@
     methods: {
       _swiper () {
         this.mySwiper = new Swiper('#swiper-y', {
-          paginationClickable: true,
           direction: 'vertical',
           spaceBetween: 0,
           loop: true

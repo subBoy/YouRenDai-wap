@@ -56,6 +56,9 @@ const dealRecord = () => import('components/deal-record/deal-record')
 const Subscription = () => import('components/subscription/newSubscription')
 const publicNotice = () => import('components/disclosure/publicNotice')
 const confirmationLetter = () => import('components/disclosure/confirmation-letter')
+const Partner = () => import('components/disclosure/partner')
+const Audit = () => import('components/disclosure/audit')
+const auditDetail = () => import('components/disclosure/audit-detail')
 const cashDetail = () => import('components/cash-detail/cash-detail')
 const productSubscribe = () => import('components/product-subscribe/productSubscribe')
 const Novice = () => import('components/novice/novice')
@@ -90,6 +93,10 @@ const routes = [
   {
     path: '/investor-notice',
     component: InvestorNotice
+  },
+  {
+    path: '/review-result',
+    component: reviewResult
   },
   {
     path: '/review-result/:type/:total/:balance',
@@ -236,6 +243,20 @@ const routes = [
     component: Disclosure,
     children: [
       {
+        path: 'partner',
+        component: Partner
+      },
+      {
+        path: 'audit',
+        component: Audit,
+        children: [
+          {
+            path: 'audit-detail',
+            component: auditDetail
+          }
+        ]
+      },
+      {
         path: 'qualification',
         component: Qualification
       },
@@ -326,6 +347,24 @@ const routes = [
     path: '/app-disclosure',
     component: Disclosure,
     children: [
+      {
+        path: 'partner',
+        component: Partner
+      },
+      {
+        path: 'audit',
+        component: Audit
+      },
+      {
+        path: 'audit',
+        component: Audit,
+        children: [
+          {
+            path: 'audit-detail',
+            component: auditDetail
+          }
+        ]
+      },
       {
         path: 'qualification',
         component: Qualification

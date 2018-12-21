@@ -172,13 +172,20 @@
           const _this = this
           setTimeout(() => {
             this.guideSilde2 = new Swiper('.swiper-container-2', {
-              loop: true,
-              pagination: '.swiper-pagination',
-              prevButton: '.swiper-button-prev',
-              nextButton: '.swiper-button-next',
               autoHeight: true,
-              onSlideChangeEnd: function() {
-                _this.refresh()
+              loop: true,
+              pagination: {
+                el: '.swiper-pagination',
+                clickable: true
+              },
+              navigation: {
+                nextEl: '.swiper-button-prev',
+                prevEl: '.swiper-button-next'
+              },
+              on: {
+                slideChangeTransitionEnd: function () {
+                  _this.refresh()
+                }
               }
             })
           }, 20)
@@ -203,12 +210,19 @@
         const _this = this
         this.guideSilde = new Swiper('.swiper-container-1', {
           loop: true,
-          pagination: '.swiper-pagination',
-          prevButton: '.swiper-button-prev',
-          nextButton: '.swiper-button-next',
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true
+          },
+          navigation: {
+            nextEl: '.swiper-button-prev',
+            prevEl: '.swiper-button-next'
+          },
           autoHeight: true,
-          onSlideChangeEnd: function() {
-            _this.refresh()
+          on: {
+            slideChangeTransitionEnd: function () {
+              _this.refresh()
+            }
           }
         })
       },

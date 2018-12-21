@@ -81,3 +81,17 @@ export function setNexty(nexty) {
 export function getNexty() {
   return storage.get(NEXTY, '')
 }
+
+// 财务审计数据存取
+const AUDITITEM = '__audititem__'
+
+export function setAuditItem (audititem) {
+  let returnVal = storage.get(AUDITITEM, '')
+  returnVal = audititem
+  storage.set(AUDITITEM, returnVal)
+  return returnVal
+}
+
+export function getAuditItem () {
+  return storage.get(AUDITITEM, '')
+}

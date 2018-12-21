@@ -83,6 +83,9 @@
     },
     computed: {
       bgColor () {
+        if (this.opcity > 0.3) {
+          return `background-color: rgba(255, 255, 255, ${this.opcity}); box-shadow: 0px 1px 10px -4px #ccc`
+        }
         return `background-color: rgba(255, 255, 255, ${this.opcity})`
       },
       ...mapGetters([

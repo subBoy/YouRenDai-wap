@@ -117,8 +117,9 @@
             return
           }
           if (res.ret_set.ans === 'n') {
-            this.topTipTxt = '今年评测次数已用完<br/>不可再继续评测'
-            this.$refs.topTip.show()
+            // this.topTipTxt = '今年评测次数已用完<br/>不可再继续评测'
+            // this.$refs.topTip.show()
+            this.$router.push('/review-result')
             return
           }
           this.$router.push('/investor-notice')

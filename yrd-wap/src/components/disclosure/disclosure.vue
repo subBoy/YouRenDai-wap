@@ -24,7 +24,7 @@
                   <span class="ct-item-desc">有人贷</span>
                 </li>
                 <li class="ct-item">
-                  <span class="ct-item-title">从业机构编码</span>
+                  <span class="ct-item-title">统一社会信用代码</span>
                   <span class="ct-item-desc">91110105069564306U</span>
                 </li>
                 <li class="ct-item">
@@ -35,10 +35,10 @@
                   <span class="ct-item-title">注册地址</span>
                   <span class="ct-item-desc">北京市朝阳区王四营甲 2 号观 107 号</span>
                 </li>
-                <!-- <li class="ct-item">
-                  <span class="ct-item-title">办公地址</span>
-                  <span class="ct-item-desc">北京市东城区广渠门内大街 41 号雍贵中心 B 座 8 层</span>
-                </li> -->
+                <li class="ct-item">
+                  <span class="ct-item-title">联系地址</span>
+                  <span class="ct-item-desc">北京市朝阳区王四营甲 2 号观 107 号</span>
+                </li>
                 <li class="ct-item">
                   <span class="ct-item-title">成立时间</span>
                   <span class="ct-item-desc">2013 年 06 月 05 日</span>
@@ -65,6 +65,12 @@
                     <router-link tag="a" class="item-desc-btn" :to="listPath1">查看详情</router-link>
                   </span>
                 </li>
+                <li class="ct-item">
+                  <span class="ct-item-title">股东信息</span>
+                  <span class="ct-item-desc">
+                    <router-link tag="a" class="item-desc-btn" :to="listPath6">查看详情</router-link>
+                  </span>
+                </li>
               </ul>
             </div>
             <div class="second-title">平台信息</div>
@@ -85,7 +91,7 @@
                   <span class="ct-item-desc">有人贷</span>
                 </li>
                 <li class="ct-item">
-                  <span class="ct-item-title">微信</span>
+                  <span class="ct-item-title">微信公众号</span>
                   <span class="ct-item-desc">有人 E 助手（anxin-yourendai）<br/>有人微助手（yourendai2014）</span>
                 </li>
                 <li class="ct-item">
@@ -108,10 +114,6 @@
                   </span>
                 </li>
                 <li class="ct-item">
-                  <span class="ct-item-title">微信公众账号</span>
-                  <span class="ct-item-desc">有人 E 助手、 有人微助手</span>
-                </li>
-                <li class="ct-item">
                   <span class="ct-item-title">商务合作</span>
                   <span class="ct-item-desc"><a href="tel:010-53358917" class="call-me">010-53358917</a></span>
                 </li>
@@ -126,9 +128,9 @@
             <div class="second-title">备案信息</div>
             <div class="disclosure-ct-list">
               <ul class="list-wrapper">
-                <li class="ct-item">
+                <li class="ct-item" v-if="disData && disData.filingInformation">
                   <span class="ct-item-title">电信业务经营许可信息</span>
-                  <span class="ct-item-desc" v-html="disData.f1"></span>
+                  <span class="ct-item-desc" v-html="disData.filingInformation.f1"></span>
                 </li>
                 <li class="ct-item">
                   <span class="ct-item-title">资金存管银行</span>
@@ -144,9 +146,9 @@
                     <span class="desc-has-icon">公安网备 31011502000216</span>
                   </span>
                 </li> -->
-                <li class="ct-item">
+                <li class="ct-item" v-if="disData && disData.filingInformation">
                   <span class="ct-item-title">在地方金融局的备案登记信息</span>
-                  <span class="ct-item-desc" v-html="disData.f2"></span>
+                  <span class="ct-item-desc" v-html="disData.filingInformation.f2"></span>
                 </li>
                 <li class="ct-item">
                   <span class="ct-item-title">网站 ICP 备案号</span>
@@ -207,6 +209,70 @@
                 </div>
                 <div class="swiper-button-next next-btn"></div>
                 <div class="swiper-button-prev prev-btn"></div>
+              </div>
+            </div>
+            <div class="second-title">从业人员</div>
+            <p class="de-staff-desc" v-if="disData && disData.filingInformation">截至{{disData.practitioners.practitionersInfo.statisticalTime}}共{{disData.practitioners.practitionersInfo.practitionersNumber}}名员工，人员构成，年龄结构、学历结构分布如下：</p>
+            <div class="staff-svg-wrapper" v-if="disData && disData.filingInformation">
+              <div class="staff-svg-group">
+                <div class="staff-svg-box">
+                  <div class="staff-svg-item" v-html="run(practitionersList)">
+                  </div>
+                  <div class="staff-svg-desc">
+                    <div class="staff-svg-desc-list">
+                      <div class="staff-svg-desc-item" v-for="item in practitionersList">
+                        <span class="item-nuit" :style="setBg(item.bgCor)"></span>
+                        <span class="item-desc-txt" v-html="item.distributionType"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="staff-svg-item-tle">
+                  <p class="staff-svg-item-tle-txt">
+                    <span class="tle-nuit"></span>
+                    <span class="tle-txt">人员分布：IT人员与非IT人员</span>
+                  </p>
+                </div>
+              </div>
+              <div class="staff-svg-group">
+                <div class="staff-svg-box">
+                  <div class="staff-svg-item" v-html="run(ageList)">
+                  </div>
+                  <div class="staff-svg-desc">
+                    <div class="staff-svg-desc-list">
+                      <div class="staff-svg-desc-item" v-for="item in ageList">
+                        <span class="item-nuit" :style="setBg(item.bgCor)"></span>
+                        <span class="item-desc-txt" v-html="item.distributionType"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="staff-svg-item-tle">
+                  <p class="staff-svg-item-tle-txt">
+                    <span class="tle-nuit"></span>
+                    <span class="tle-txt">年龄分布：20-25 26-30 31-35 36岁以上</span>
+                  </p>
+                </div>
+              </div>
+              <div class="staff-svg-group">
+                <div class="staff-svg-box">
+                  <div class="staff-svg-item" v-html="run(educationList)">
+                  </div>
+                  <div class="staff-svg-desc">
+                    <div class="staff-svg-desc-list">
+                      <div class="staff-svg-desc-item" v-for="item in educationList">
+                        <span class="item-nuit" :style="setBg(item.bgCor)"></span>
+                        <span class="item-desc-txt" v-html="item.distributionType"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="staff-svg-item-tle">
+                  <p class="staff-svg-item-tle-txt">
+                    <span class="tle-nuit"></span>
+                    <span class="tle-txt">学历分布：大专及以下 本科 硕士及博士以上</span>
+                  </p>
+                </div>
               </div>
             </div>
             <div class="disclosure-hr"></div>
@@ -318,9 +384,9 @@
           </div>
           <div class="disclosure-ct-list">
             <ul class="ct-item-sj-group">
-              <li class="ct-item-sj">
+              <router-link class="ct-item-sj" tag="li" :to="listPath7">
                 <img class="ct-item-sj-img" src="./ct-7-1.png" width="80%">
-              </li>
+              </router-link>
               <li class="ct-item-sj">
                 <img class="ct-item-sj-img" src="./ct-7-2.png" width="80%">
               </li>
@@ -392,7 +458,13 @@
         listPath3: '/disclosure/sadety',
         listPath4: '/disclosure/public-notice',
         listPath5: '/disclosure/confirmation-letter',
-        disData: {}
+        listPath6: '/disclosure/partner',
+        listPath7: '/disclosure/audit',
+        listPath8: '/disclosure/compliance',
+        disData: {},
+        practitionersList: [],
+        educationList: [],
+        ageList: []
       }
     },
     created () {
@@ -405,6 +477,9 @@
         this.listPath3 = '/app-disclosure/sadety'
         this.listPath4 = '/app-disclosure/public-notice'
         this.listPath5 = '/app-disclosure/confirmation-letter'
+        this.listPath6 = '/app-disclosure/partner'
+        this.listPath7 = '/app-disclosure/audit'
+        this.listPath8 = '/app-disclosure/compliance'
       } else {
         this.positionTop = 'top: 44px'
         this.isWap = true
@@ -413,6 +488,9 @@
         this.listPath3 = '/disclosure/sadety'
         this.listPath4 = '/disclosure/public-notice'
         this.listPath5 = '/disclosure/confirmation-letter'
+        this.listPath6 = '/disclosure/partner'
+        this.listPath7 = '/disclosure/audit'
+        this.listPath8 = '/disclosure/compliance'
       }
       this._getDisclosureInfo()
       setTimeout(() => {
@@ -425,10 +503,90 @@
           this.$refs.disclosureScroll.refresh()
         }, 20)
       },
+      setBg (bgc) {
+        const bg = bgc
+        return `background-color: ${bg}`
+      },
       _getDisclosureInfo () {
         getDisclosureInfo().then((res) => {
           this.disData = res.data
+          let _practitionersList = this.disData.practitioners.practitionersList
+          this.practitionersList.push(Object.assign(_practitionersList[1], {bgCor: '#ff4d49'}))
+          this.practitionersList.push(Object.assign(_practitionersList[0], {bgCor: '#5962ff'}))
+          let _ageList = this.disData.practitioners.ageList
+          this.ageList.push(Object.assign(_ageList[1], {bgCor: '#ff4d49'}))
+          this.ageList.push(Object.assign(_ageList[2], {bgCor: '#5962ff'}))
+          this.ageList.push(Object.assign(_ageList[3], {bgCor: '#f7622e'}))
+          this.ageList.push(Object.assign(_ageList[0], {bgCor: '#ffc700'}))
+          let _educationList = this.disData.practitioners.educationList
+          this.educationList.push(Object.assign(_educationList[2], {bgCor: '#5962ff'}))
+          this.educationList.push(Object.assign(_educationList[0], {bgCor: '#f7622e'}))
+          this.educationList.push(Object.assign(_educationList[1], {bgCor: '#ffc700'}))
         })
+      },
+      run (itemArr) {
+        let itemHtml = '<svg class="svg-wrapper" version="1.1" xmlns="http://www.w3.org/2000/svg" width="2000" height="2000"><circle cx="1000" cy="1000" r="600" fill="#e1f0ff"/>'
+        const _this = this
+        let rotateDeg = 0
+        for (let i = 0; i < itemArr.length; i++) {
+          (function (i) {
+            let _deg = parseFloat(itemArr[i].percentage) * 3.6
+            if (itemArr[i - 1]) {
+              rotateDeg += parseFloat(itemArr[i - 1].percentage) * 3.6
+            }
+            itemHtml += _this._drawArcByRadiusDeg(1000, 400, 600, _deg, rotateDeg, 1, itemArr[i].bgCor, itemArr[i].percentage)
+          })(i)
+        }
+        itemHtml += '<circle cx="1000" cy="1000" r="500" fill="#fff"/></svg>'
+        return itemHtml
+      },
+      _drawArcByRadiusDeg (startX, startY, r, deg, rotateDeg, clockwise, bgCor, textTxt) {
+        let cw = typeof clockwise !== 'undefined' ? clockwise : 1
+        let x = r * (Math.sin(deg * Math.PI / 180) + 1) + 400
+        let y = (cw === 1 ? 1 : -1) * r * (1 - Math.cos(deg * Math.PI / 180)) + 400
+        let bigOrSmall = deg > 180 ? 1 : 0
+        let line = ` L 1000 1000 L ${startX} ${startY} Z`
+        const bdeg = (deg / 2) + rotateDeg
+        const textVal = textTxt
+        let Txtx = r * (Math.sin(bdeg * Math.PI / 180) + 1) + 400
+        let Txty = (cw === 1 ? 1 : -1) * r * (1 - Math.cos(bdeg * Math.PI / 180)) + 400
+        let addX = 0
+        let addY = 0
+        if (Txtx > 400 && Txtx < 1000 && Txty > 400 && Txty < 1000) {
+          addX = -240
+          addY = -50
+        }
+        if (Txtx > 1000 && Txtx < 1600 && Txty > 400 && Txty < 1000) {
+          addX = 240
+          addY = -50
+        }
+        if (Txtx > 400 && Txtx < 1000 && Txty > 1000 && Txty < 1600) {
+          addX = -240
+          addY = 50
+        }
+        if (Txtx >= 1000 && Txtx <= 1600 && Txty >= 1000 && Txty <= 1600) {
+          addX = 240
+          addY = 50
+        }
+        if (Txtx >= 800 && Txtx <= 1200 && Txty < 1000) {
+          addX = 0
+          addY = -60
+        }
+        if (Txtx >= 800 && Txtx <= 1200 && Txty > 1000) {
+          addX = 0
+          addY = 60
+        }
+        if (Txtx < 1000 && Txty >= 800 && Txty <= 1200) {
+          addX = -250
+          addY = 0
+        }
+        if (Txtx > 1000 && Txty >= 800 && Txty <= 1200) {
+          addX = 250
+          addY = 0
+        }
+        Txtx = Txtx + addX
+        Txty = Txty + addY
+        return `<path d="M ${startX} ${startY} A ${r} ${r} 1 ${bigOrSmall} ${cw} ${x} ${y} ${line}" transform="rotate(${rotateDeg}, 1000, 1000)" stroke="${bgCor}" fill="${bgCor}" fill-opacity="1"/><path fill="${bgCor}" transform="rotate(${bdeg}, 1000, 1000)" stroke="#fff" d="M 970 350 L 1030 350 L 1000 450  Z"/><text x="${Txtx}" y="${Txty}" fill="${bgCor}" text-anchor="middle" style="font-size:100px;">${textVal}</text>`
       },
       changstatus1 () {
         this.status1 = !this.status1
@@ -442,15 +600,25 @@
       _swiper () {
         this.mySwiper2 = new Swiper('#swiper-container02', {
           loop: true,
-          paginationClickable: true,
-          nextButton: '.next-btn',
-          prevButton: '.prev-btn'
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true
+          },
+          navigation: {
+            nextEl: '.next-btn',
+            prevEl: '.prev-btn'
+          }
         })
         this.mySwiper3 = new Swiper('#swiper-container03', {
           loop: true,
-          paginationClickable: true,
-          nextButton: '.next-btn-1',
-          prevButton: '.prev-btn-1'
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true
+          },
+          navigation: {
+            nextEl: '.next-btn-1',
+            prevEl: '.prev-btn-1'
+          }
         })
       }
     },
@@ -577,6 +745,74 @@
           line-height: 30px
           font-size: 12px
           color: #323232
+        .de-staff-desc
+          padding: 0 10px
+          line-height: 22px
+          font-size: 10px
+          color: #323232
+        .staff-svg-wrapper
+          padding-bottom: 30px
+          .staff-svg-group
+            position: relative
+            .staff-svg-item-tle
+              display: flex
+              position: absolute
+              left: 0px
+              right: 0px
+              top: auto
+              bottom: -10px
+              height: 40px
+              justify-content: center
+              align-items: center
+              .staff-svg-item-tle-txt
+                display: flex
+                align-items: center
+                .tle-nuit
+                  display: block
+                  flex: 0 0 10px
+                  margin-right: 10px
+                  width: 10px
+                  height: 10px
+                  border-radius: 50%
+                  background-color: #ff4d49
+                .tle-txt
+                  flex: 1
+                  font-size: 12px
+          .staff-svg-box
+            position: relative
+            margin: 0 auto
+            width: 200px
+            height: 200px
+            .staff-svg-desc
+              display: flex
+              position: absolute
+              top: 50px
+              right: 50px
+              bottom: 50px
+              left: 50px
+              align-items: center
+              justify-content: center
+              .staff-svg-desc-item
+                display: flex
+                align-items: center
+                padding: 5px 0
+                .item-nuit
+                  display: block
+                  flex: 0 0 5px
+                  margin-right: 5px
+                  width: 5px
+                  height: 5px
+                  border-radius: 50%
+                .item-desc-txt
+                  flex: 1
+                  font-size: 10px
+            .staff-svg-item
+              margin: 0 auto
+              width: 200px
+              height: 200px
+              .svg-wrapper
+                transform: scale(0.1)
+                transform-origin: 0 0
         .disclosure-ct-list
           padding: 0 10px
           .list-wrapper

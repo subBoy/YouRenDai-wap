@@ -77,11 +77,13 @@
       },
       _swiper () {
         this.mySwiper = new Swiper('#swiper-container', {
-          loop: true,
-          paginationClickable: true,
-          pagination: '.swiper-pagination',
           spaceBetween: 15,
-          autoHeight: true
+          autoHeight: true,
+          loop: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true
+          }
         })
       }
     },

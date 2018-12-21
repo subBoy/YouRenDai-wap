@@ -116,22 +116,6 @@
       this.project_id = this.$route.params.id
 
       this._getSubscribeData()
-      if (parseInt(this.subscribe.surplus) === 0) {
-        this.investAmount = 0
-        this.addBool = false
-        this.removeBool = false
-        return
-      }
-      this.addBool = true
-      this.removeBool = true
-      if (this.investAmount <= 100) {
-        this.removeBool = false
-      } else if (this.investAmount >= parseInt(this.subscribe.surplus)) {
-        this.addBool = false
-      }
-      setTimeout(() => {
-        this._invest()
-      }, 20)
     },
     computed: {
       ...mapGetters([
@@ -326,6 +310,19 @@
               this.removeBool = false
             }
 
+            if (parseInt(this.subscribe.surplus) === 0) {
+              this.investAmount = 0
+              this.addBool = false
+              this.removeBool = false
+              return
+            }
+            this.addBool = true
+            this.removeBool = true
+            if (this.investAmount <= 100) {
+              this.removeBool = false
+            } else if (this.investAmount >= parseInt(this.subscribe.surplus)) {
+              this.addBool = false
+            }
             setTimeout(() => {
               this._psInit()
               this._invest()

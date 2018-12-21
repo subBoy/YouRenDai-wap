@@ -150,9 +150,14 @@
       _swiper () {
         this.mySwiper = new Swiper('#swiper-container', {
           loop: true,
-          paginationClickable: true,
-          nextButton: '.next-btn',
-          prevButton: '.prev-btn'
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true
+          },
+          navigation: {
+            nextEl: '.next-btn',
+            prevEl: '.prev-btn'
+          }
         })
       }
     },
